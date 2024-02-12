@@ -10,6 +10,8 @@ namespace EF_Entities
     {
         public int GroupYear { get; set; }
         public int GroupNumber { get; set; }
-
+        
+        public ICollection<StudentEntity> Students { get; set; }
+        
     }
 }

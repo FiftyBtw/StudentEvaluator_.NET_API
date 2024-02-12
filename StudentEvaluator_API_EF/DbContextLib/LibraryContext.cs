@@ -28,6 +28,23 @@ namespace EF_DbContextLib
             }
 
         }
+        
+        // Méthode appelée lors de la création du modèle de la base de données
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Appelle la méthode de la classe de base pour effectuer la configuration initiale du modèle
+            base.OnModelCreating(modelBuilder);
+            
+            // Configure la clé primaire composite pour GroupStudent
+            modelBuilder.Entity<GroupEntity>()
+                .HasKey(g => new { g.GroupYear, g.GroupNumber });
+
+            // Configure la relation entre les entités StudentEntity et GroupEntity
+            modelBuilder.Entity<StudentEntity>()
+                .HasOne<GroupEntity>(s => s.Group)
+                .WithMany(g => g.Students)
+                .HasForeignKey(s => new { s.GroupYear, s.GroupNumber });
+        }
     }
 
 }

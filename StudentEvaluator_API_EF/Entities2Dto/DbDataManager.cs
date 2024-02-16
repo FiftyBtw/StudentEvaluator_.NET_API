@@ -1,4 +1,6 @@
 ﻿using API_Dto;
+using EF_DbContextLib;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,29 +11,55 @@ namespace Entities2Dto
 {
     public class DbDataManager : IStudentService
     {
+        private readonly LibraryContext _libraryContext;
+
+        public DbDataManager(LibraryContext libraryContext)
+        {
+            _libraryContext = libraryContext;
+        }
+
+
         public Task<bool> DeleteStudent(long id)
         {
-            throw new NotImplementedException();
+            _libraryContext.StudentSet.Where(b => b.Id == id).ExecuteDelete();
+            _libraryContext.SaveChangesAsync();
+            var student = _libraryContext.StudentSet.FirstOrDefault(b => b.Id == id);
+            if (student == null)
+            {
+                return Task.FromResult(true);
+            }
+            else return Task.FromResult(false);
+
         }
 
-        public Task<IEnumerable<StudentDto>> GetStudentById(long id)
+        public async Task<StudentDto?> GetStudentById(long id)
         {
-            throw new NotImplementedException();
+            var student = _libraryContext.StudentSet.FirstOrDefault(s => s.Id == id)?.ToDto();
+            return await Task.FromResult(student);
         }
 
-        public Task<IEnumerable<StudentDto>> GetStudents()
+        public async Task<PageReponseDto<StudentDto>> GetStudents(int index, int count)
         {
-            throw new NotImplementedException();
+            var students = _libraryContext.StudentSet.ToDtos();
+
+            return await Task.FromResult(new PageReponseDto<StudentDto>(students.Count(),students.Skip(index*count).Take(count)));
         }
 
-        public Task<StudentDto> PostStudent(StudentDto book)
+        public Task<StudentDto?> PostStudent(StudentDto student)
         {
-            throw new NotImplementedException();
+            _libraryContext.StudentSet.AddAsync(student.ToEntity());
+            _libraryContext.SaveChanges();
+            return Task.FromResult(student);
+
         }
 
-        public Task<StudentDto?> PutStudent(long id, StudentDto book)
+        public Task<StudentDto?> PutStudent(long id, StudentDto student)
         {
-            throw new NotImplementedException();
+            var oldStudent = _libraryContext.StudentSet.FirstOrDefault(b => b.Id == id);
+            oldStudent = student.ToEntity();
+            _libraryContext.SaveChanges();
+            return Task.FromResult(student);
+
         }
-    }
+    }   
 }

@@ -8,6 +8,6 @@ namespace API_Dto
 {
     internal interface IGroupService
     {
-        public IEnumerable<GroupDto> GetGroups();
+        public PageReponseDto<GroupDto> GetGroups();
     }
 }

@@ -1,4 +1,5 @@
-﻿namespace EF_Entities
+﻿using System;
+namespace EF_Entities
 {
     public class StudentEntity
     {

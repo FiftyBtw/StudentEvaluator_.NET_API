@@ -50,5 +50,61 @@ namespace API_EF.Controllers
             else return Ok(book);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> PostStudent([FromBody] StudentDto student)
+        {
+            if (_studentService == null)
+            {
+                return StatusCode(500);
+            }
+            var studentDto = await _studentService.PostStudent(student);
+            if (studentDto == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                return Ok(studentDto);
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> PutBook(long id, [FromBody] StudentDto student)
+        {
+            if (_studentService == null)
+            {
+                return StatusCode(500);
+            }
+            var studentDto = await _studentService.PutStudent(id, student);
+            if (studentDto == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                return Ok(studentDto);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteStudent(long id)
+        {
+            if (_studentService == null)
+            {
+                return StatusCode(500);
+            }
+            else
+            {
+                bool b = await _studentService.DeleteStudent(id);
+                if (b)
+                {
+                    return Ok(b);
+                }
+                else
+                { return BadRequest(); }
+            }
+        }
+
+
     }
 }

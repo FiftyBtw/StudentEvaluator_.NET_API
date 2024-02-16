@@ -533,3 +533,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+/StudentEvaluator_API_EF/API_EF/StudentEvaluator_API_EF.db
+/StudentEvaluator_API_EF/API_EF/StudentEvaluator_API_EF.db-shm
+/StudentEvaluator_API_EF/API_EF/StudentEvaluator_API_EF.db-wal
+/StudentEvaluator_API_EF/EF_StubbedContextLib/Migrations
+*.db

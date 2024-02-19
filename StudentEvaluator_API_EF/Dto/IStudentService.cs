@@ -8,7 +8,7 @@ namespace API_Dto
 {
     public interface IStudentService
     {
-        public Task<PageReponseDto<StudentDto>> GetStudents(int index,int count);
+        public Task<PageReponseDto<StudentDto>> GetStudents(int? index = null, int? count = null);
         public Task<StudentDto?> GetStudentById(long id);
         public Task<StudentDto?> PostStudent(StudentDto book);
 

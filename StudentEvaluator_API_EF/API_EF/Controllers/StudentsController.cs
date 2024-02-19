@@ -16,7 +16,7 @@ namespace API_EF.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetStudents(int index, int count)
+        public async Task<IActionResult> GetStudents(int? index, int? count)
         {
             if (_studentService == null)
             {
@@ -34,8 +34,7 @@ namespace API_EF.Controllers
 
         }
 
-        [HttpGet]
-        [Route("id/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetStudentById(long id)
         {
             if (_studentService == null)

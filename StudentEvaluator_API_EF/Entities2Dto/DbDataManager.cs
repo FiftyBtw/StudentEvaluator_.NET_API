@@ -54,11 +54,18 @@ namespace Entities2Dto
             return await Task.FromResult(student);
         }
 
-        public async Task<PageReponseDto<StudentDto>> GetStudents(int index, int count)
+        public async Task<PageReponseDto<StudentDto>> GetStudents(int? index = null, int? count = null)
         {
             var students = _libraryContext.StudentSet.ToDtos();
 
-            return await Task.FromResult(new PageReponseDto<StudentDto>(students.Count(),students.Skip(index*count).Take(count)));
+            if (index != null && count != null)
+            {
+                return new PageReponseDto<StudentDto>(students.Count(), students.Skip((int)index).Take((int)count));
+            }
+            else
+            {
+                return new PageReponseDto<StudentDto>(students.Count(), students);
+            }
         }
 
         public Task<GroupDto?> PostGroup(GroupDto book)

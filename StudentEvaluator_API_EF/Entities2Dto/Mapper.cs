@@ -49,22 +49,22 @@ namespace Entities2Dto
 
         public static IEnumerable<StudentDto> ToDtos(this IEnumerable<StudentEntity> entities)
         {
-            IEnumerable<StudentDto> books = new List<StudentDto>();
+            IEnumerable<StudentDto> groups = new List<StudentDto>();
             foreach (var entity in entities)
             {
-                (books as List<StudentDto>).Add(entity.ToDto());
+                (groups as List<StudentDto>).Add(entity.ToDto());
             }
-            return books;
+            return groups;
         }
 
         public static IEnumerable<GroupDto> ToDtos(this IEnumerable<GroupEntity> entities)
         {
-            IEnumerable<GroupDto> books = new List<GroupDto>();
+            IEnumerable<GroupDto> groups = new List<GroupDto>();
             foreach (var entity in entities)
             {
-                (books as List<GroupDto>).Add(entity.ToDto());
+                (groups as List<GroupDto>).Add(entity.ToDto());
             }
-            return books;
+            return groups;
         }
 
 

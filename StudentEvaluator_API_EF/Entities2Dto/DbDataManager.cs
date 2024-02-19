@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Entities2Dto
 {
-    public class DbDataManager : IStudentService
+    public class DbDataManager : IStudentService , IGroupService
     {
         private readonly LibraryContext _libraryContext;
 
@@ -18,6 +18,10 @@ namespace Entities2Dto
             _libraryContext = libraryContext;
         }
 
+        public Task<bool> DeleteGroup(long id)
+        {
+            throw new NotImplementedException();
+        }
 
         public Task<bool> DeleteStudent(long id)
         {
@@ -30,6 +34,18 @@ namespace Entities2Dto
             }
             else return Task.FromResult(false);
 
+        }
+
+        public Task<GroupDto?> GetGroupByIds(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<PageReponseDto<GroupDto>> GetGroups(int index, int count)
+        {
+            var groups = _libraryContext.GroupSet.ToDtos();
+
+            return await Task.FromResult(new PageReponseDto<GroupDto>(groups.Count(), groups.Skip(index * count).Take(count)));
         }
 
         public async Task<StudentDto?> GetStudentById(long id)
@@ -45,6 +61,11 @@ namespace Entities2Dto
             return await Task.FromResult(new PageReponseDto<StudentDto>(students.Count(),students.Skip(index*count).Take(count)));
         }
 
+        public Task<GroupDto?> PostGroup(GroupDto book)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<StudentDto?> PostStudent(StudentDto student)
         {
             _libraryContext.StudentSet.AddAsync(student.ToEntity());
@@ -53,11 +74,21 @@ namespace Entities2Dto
 
         }
 
+        public Task<GroupDto?> Putgroup(long id, GroupDto book)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<StudentDto?> PutStudent(long id, StudentDto student)
         {
             var oldStudent = _libraryContext.StudentSet.FirstOrDefault(b => b.Id == id);
-            oldStudent = student.ToEntity();
-            _libraryContext.SaveChanges();
+            if(oldStudent == null) return Task.FromResult<StudentDto?>(null);
+            oldStudent.Name=student.Name;
+            oldStudent.Lastname=student.Lastname;
+            oldStudent.UrlPhoto=student.UrlPhoto;
+            oldStudent.GroupNumber = student.Group.GroupNumber;
+            oldStudent.GroupYear = student.Group.GroupYear;
+            var nbModif = _libraryContext.SaveChanges();
             return Task.FromResult(student);
 
         }

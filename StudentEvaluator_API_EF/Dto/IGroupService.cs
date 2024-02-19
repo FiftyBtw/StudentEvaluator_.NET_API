@@ -6,8 +6,15 @@ using System.Threading.Tasks;
 
 namespace API_Dto
 {
-    internal interface IGroupService
+    public interface IGroupService
     {
-        public PageReponseDto<GroupDto> GetGroups();
+        public Task<PageReponseDto<GroupDto>> GetGroups(int index,int count);
+
+        public Task<GroupDto?> GetGroupByIds(long id);
+        public Task<GroupDto?> PostGroup(GroupDto book);
+
+        public Task<GroupDto?> Putgroup(long id, GroupDto book);
+
+        public Task<bool> DeleteGroup(long id);
     }
 }

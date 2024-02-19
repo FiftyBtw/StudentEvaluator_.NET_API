@@ -11,12 +11,13 @@ namespace API_Dto
     {
         public int GroupYear { get; set; }
         public int GroupNumber { get; set; }
-
+        public IEnumerable<StudentDto> Students { get; set; } = new List<StudentDto>();
         public GroupDto() { }
-        public GroupDto(int groupYear, int groupNumber)
+        public GroupDto(int groupYear, int groupNumber, IEnumerable<StudentDto> students)
         {
             GroupYear = groupYear;
             GroupNumber = groupNumber;
+            Students = students;
         }
     }
 

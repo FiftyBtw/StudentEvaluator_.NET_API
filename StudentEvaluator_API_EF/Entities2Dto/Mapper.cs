@@ -13,9 +13,18 @@ namespace Entities2Dto
                 Name = student.Name,
                 Lastname = student.Lastname,
                 UrlPhoto = student.UrlPhoto,
+                Group = new GroupDto { GroupYear = student.GroupYear, GroupNumber = student.GroupNumber},
             };
         }
-
+        public static GroupDto ToDto(this GroupEntity group)
+        {
+            return new GroupDto
+            {
+                GroupNumber = group.GroupNumber,
+                GroupYear = group.GroupYear,
+                Students = group.Students?.ToDtos(),
+            };
+        }
         public static StudentEntity ToEntity(this StudentDto student)
         {
             return new StudentEntity
@@ -24,6 +33,17 @@ namespace Entities2Dto
                 Name = student.Name,
                 Lastname = student.Lastname,
                 UrlPhoto = student.UrlPhoto,
+                GroupNumber = student.Group.GroupNumber,
+                GroupYear = student.Group.GroupYear,
+            };
+        }
+
+        public static GroupEntity ToEntity(this GroupDto group)
+        {
+            return new GroupEntity
+            {
+               GroupNumber = group.GroupNumber,
+               GroupYear = group.GroupYear,
             };
         }
 
@@ -36,6 +56,17 @@ namespace Entities2Dto
             }
             return books;
         }
+
+        public static IEnumerable<GroupDto> ToDtos(this IEnumerable<GroupEntity> entities)
+        {
+            IEnumerable<GroupDto> books = new List<GroupDto>();
+            foreach (var entity in entities)
+            {
+                (books as List<GroupDto>).Add(entity.ToDto());
+            }
+            return books;
+        }
+
 
     }
 }

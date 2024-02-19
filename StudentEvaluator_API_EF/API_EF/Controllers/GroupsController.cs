@@ -5,24 +5,24 @@ namespace API_EF.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class StudentsController : ControllerBase
+    public class GroupsController : ControllerBase
     {
 
-        private readonly IStudentService _studentService;
+        private readonly IGroupService  _groupService;
 
-        public StudentsController(IStudentService studentService)
+        public GroupsController(IGroupService groupService)
         {
-            _studentService = studentService;
+            _groupService = groupService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetStudents(int index, int count)
+        public async Task<IActionResult> GetGroups(int index, int count)
         {
-            if (_studentService == null)
+            if (_groupService == null)
             {
                 return StatusCode(500);
             }
-            var data = await _studentService.GetStudents(index, count);
+            var data = await _groupService.GetGroups(index, count);
             if (data == null)       
             {
                 return StatusCode(204);
@@ -36,13 +36,13 @@ namespace API_EF.Controllers
 
         [HttpGet]
         [Route("id/{id}")]
-        public async Task<IActionResult> GetStudentById(long id)
+        public async Task<IActionResult> GetGroupById(long id)
         {
-            if (_studentService == null)
+            if (_groupService == null)
             {
                 return StatusCode(500);
             }
-            var book = await _studentService.GetStudentById(id);
+            var book = await _groupService.GetGroupByIds(id);
             if(book == null)
             {
                 return StatusCode(201);
@@ -51,13 +51,13 @@ namespace API_EF.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostStudent([FromBody] StudentDto student)
+        public async Task<IActionResult> PostGroup([FromBody] GroupDto group)
         {
-            if (_studentService == null)
+            if (_groupService == null)
             {
                 return StatusCode(500);
             }
-            var studentDto = await _studentService.PostStudent(student);
+            var studentDto = await _groupService.PostGroup(group);
             if (studentDto == null)
             {
                 return BadRequest();
@@ -69,13 +69,13 @@ namespace API_EF.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutStudent(long id, [FromBody] StudentDto student)
+        public async Task<IActionResult> PutGroup(long id, [FromBody] GroupDto group)
         {
-            if (_studentService == null)
+            if (_groupService == null)
             {
                 return StatusCode(500);
             }
-            var studentDto = await _studentService.PutStudent(id, student);
+            var studentDto = await _groupService.Putgroup(id, group);
             if (studentDto == null)
             {
                 return BadRequest();
@@ -89,13 +89,13 @@ namespace API_EF.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteStudent(long id)
         {
-            if (_studentService == null)
+            if (_groupService == null)
             {
                 return StatusCode(500);
             }
             else
             {
-                bool b = await _studentService.DeleteStudent(id);
+                bool b = await _groupService.DeleteGroup(id);
                 if (b)
                 {
                     return Ok(b);

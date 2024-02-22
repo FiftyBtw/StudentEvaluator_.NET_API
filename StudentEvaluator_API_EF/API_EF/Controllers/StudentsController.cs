@@ -1,4 +1,5 @@
 using API_Dto;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_EF.Controllers
@@ -25,7 +26,7 @@ namespace API_EF.Controllers
             var data = await _studentService.GetStudents(index, count);
             if (data == null)       
             {
-                return StatusCode(204);
+                return NoContent();
             }
             else
             {
@@ -44,7 +45,7 @@ namespace API_EF.Controllers
             var book = await _studentService.GetStudentById(id);
             if(book == null)
             {
-                return StatusCode(201);
+                return NotFound();
             }
             else return Ok(book);
         }
@@ -75,14 +76,8 @@ namespace API_EF.Controllers
                 return StatusCode(500);
             }
             var studentDto = await _studentService.PutStudent(id, student);
-            if (studentDto == null)
-            {
-                return BadRequest();
-            }
-            else
-            {
-                return Ok(studentDto);
-            }
+            if (studentDto == null) return NotFound();
+            else return Ok(studentDto);           
         }
 
         [HttpDelete]
@@ -100,7 +95,7 @@ namespace API_EF.Controllers
                     return Ok(b);
                 }
                 else
-                { return BadRequest(); }
+                { return NotFound(); }
             }
         }
 

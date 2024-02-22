@@ -23,29 +23,22 @@ namespace API_EF.Controllers
                 return StatusCode(500);
             }
             var data = await _groupService.GetGroups(index, count);
-            if (data == null)       
-            {
-                return StatusCode(204);
-            }
-            else
-            {
-                return Ok(data);
-            }
-
+            if (data == null) return NoContent();
+            else return Ok(data);
         }
 
         [HttpGet]
-        [Route("id/{id}")]
-        public async Task<IActionResult> GetGroupById(long id)
+        [Route("{gyear}/{gnumber}")]
+        public async Task<IActionResult> GetGroupById(int gyear,int gnumber)
         {
             if (_groupService == null)
             {
                 return StatusCode(500);
             }
-            var book = await _groupService.GetGroupByIds(id);
+            var book = await _groupService.GetGroupByIds(gyear,gnumber);
             if(book == null)
             {
-                return StatusCode(201);
+                return NotFound();
             }
             else return Ok(book);
         }
@@ -69,16 +62,16 @@ namespace API_EF.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutGroup(long id, [FromBody] GroupDto group)
+        public async Task<IActionResult> PutGroup(int gyear, int gnumber, [FromBody] GroupDto group)
         {
             if (_groupService == null)
             {
                 return StatusCode(500);
             }
-            var studentDto = await _groupService.Putgroup(id, group);
+            var studentDto = await _groupService.Putgroup(gyear,gnumber, group);
             if (studentDto == null)
             {
-                return BadRequest();
+                return NotFound();
             }
             else
             {
@@ -87,7 +80,7 @@ namespace API_EF.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteStudent(long id)
+        public async Task<IActionResult> DeleteStudent(int gyear, int gnumber)
         {
             if (_groupService == null)
             {
@@ -95,13 +88,9 @@ namespace API_EF.Controllers
             }
             else
             {
-                bool b = await _groupService.DeleteGroup(id);
-                if (b)
-                {
-                    return Ok(b);
-                }
-                else
-                { return BadRequest(); }
+                bool b = await _groupService.DeleteGroup(gyear,gnumber);
+                if (b) return Ok(b);
+                else return NotFound(); 
             }
         }
 

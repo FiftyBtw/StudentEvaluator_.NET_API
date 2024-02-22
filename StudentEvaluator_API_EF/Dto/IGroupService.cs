@@ -10,11 +10,11 @@ namespace API_Dto
     {
         public Task<PageReponseDto<GroupDto>> GetGroups(int index,int count);
 
-        public Task<GroupDto?> GetGroupByIds(long id);
+        public Task<GroupDto?> GetGroupByIds(int gyear, int gnumber);
         public Task<GroupDto?> PostGroup(GroupDto book);
 
-        public Task<GroupDto?> Putgroup(long id, GroupDto book);
+        public Task<GroupDto?> Putgroup(int gyear, int gnumber, GroupDto book);
 
-        public Task<bool> DeleteGroup(long id);
+        public Task<bool> DeleteGroup(int gyear, int gnumber);
     }
 }

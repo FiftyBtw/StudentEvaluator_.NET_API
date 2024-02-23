@@ -6,10 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using API_Dto;
+
 
 namespace Entities2Dto
 {
-    public class DbDataManager : IStudentService , IGroupService
+    public class DbDataManager : IStudentService , IGroupService, ICriteriaService
     {
         private readonly LibraryContext _libraryContext;
 
@@ -118,6 +120,24 @@ namespace Entities2Dto
             _libraryContext.SaveChanges();
             return Task.FromResult(student);
 
+        }
+        
+        public Task<PageReponseDto<TextCriteriaDto>> GetTextCriterions(int? index, int? count)
+        {
+            var criterions = _libraryContext.TextCriteriaSet.ToDtos();
+            
+            if (index != null && count != null)
+            {
+                return Task.FromResult(new PageReponseDto<TextCriteriaDto>(criterions.Count(), criterions.Skip((int)index).Take((int)count)));
+            }
+
+            return Task.FromResult(new PageReponseDto<TextCriteriaDto>(criterions.Count(), criterions));
+        }
+        
+        public Task<TextCriteriaDto?> GetTextCriterionByIds(long id)
+        {
+            var criterion = _libraryContext.TextCriteriaSet.FirstOrDefault(s => s.Id == id)?.ToDto();
+            return Task.FromResult(criterion);
         }
     }   
 }

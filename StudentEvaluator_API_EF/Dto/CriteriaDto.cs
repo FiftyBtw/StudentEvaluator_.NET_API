@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace API_Dto
 {
-    public abstract class CriteriaDto
+    public class CriteriaDto
     {
         public long Id { get; set; }
 
@@ -14,6 +14,6 @@ namespace API_Dto
 
         public long ValueEvaluation { get; set; }
 
-        public TemplateDto? Template { get; set; }
+        public long TemplateId { get; set; }
     }
 }

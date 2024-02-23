@@ -1,6 +1,6 @@
 namespace EF_Entities;
 
-public abstract class CriteriaEntity
+public class CriteriaEntity
 {
     public long Id { get; set; }
     
@@ -8,6 +8,6 @@ public abstract class CriteriaEntity
     
     public long ValueEvaluation { get; set; }
     
-    public long? TemplateId { get; set; }
-    public TemplateEntity? Template { get; set; }
+    public long TemplateId { get; set; }
+    public TemplateEntity Template { get; set; }
 }

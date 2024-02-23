@@ -47,7 +47,7 @@ namespace EF_StubbedContextLib
            
             // Configure les données initiales (stub) pour l'entité SliderCriteriaEntity
             modelBuilder.Entity<SliderCriteriaEntity>().HasData(
-                new SliderCriteriaEntity { Id = 1, Name = "Quiz 1", ValueEvaluation = 3, Value = 2 },
+                new SliderCriteriaEntity { Id = 1, Name = "Quiz 1", ValueEvaluation = 3, Value = 2, TemplateId = 1},
                 new SliderCriteriaEntity { Id = 2, Name = "Quiz 2", ValueEvaluation = 2, Value = 3, TemplateId = 3},
                 new SliderCriteriaEntity { Id = 3, Name = "Présentation en Classe", ValueEvaluation = 1, Value = 7, TemplateId = 2 }
             );
@@ -57,6 +57,12 @@ namespace EF_StubbedContextLib
                 new RadioCriteriaEntity { Id = 5, Name = "Type de Quiz", ValueEvaluation = 1, SelectedOption = "", Options = ["Quiz 1", "Quiz 2"], TemplateId = 3 },
                 new RadioCriteriaEntity { Id = 6, Name = "Type de Présentation", ValueEvaluation = 1, SelectedOption = "Individuelle", Options = ["Individuelle", "Groupe"], TemplateId = 3 }
                 
+            );
+
+            modelBuilder.Entity<TextCriteriaEntity>().HasData(
+                new TextCriteriaEntity { Id = 7, Name = "Commentaire", ValueEvaluation = 1, TemplateId = 1, Text = "Commentaire1"},
+                new TextCriteriaEntity { Id = 8, Name = "Commentaire", ValueEvaluation = 1, TemplateId = 2, Text = "Commentaire 2"},
+                new TextCriteriaEntity { Id = 9, Name = "Commentaire", ValueEvaluation = 1, TemplateId = 3, Text = "Commentaire3"}
             );
 
         }

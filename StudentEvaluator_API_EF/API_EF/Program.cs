@@ -14,7 +14,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<DbDataManager>(provider => new DbDataManager(new StubbedContext()));
 builder.Services.AddScoped<IStudentService>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<IGroupService>(x => x.GetRequiredService<DbDataManager>());
-
+builder.Services.AddScoped<ICriteriaService>(x => x.GetRequiredService<DbDataManager>());
 
 var app = builder.Build();
 

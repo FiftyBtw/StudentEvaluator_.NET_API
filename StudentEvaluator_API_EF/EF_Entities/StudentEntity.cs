@@ -12,6 +12,8 @@ namespace EF_Entities
         public int GroupNumber { get; set; }
 
         public GroupEntity Group { get; set; }
+        
+        public ICollection<EvaluationEntity> Evaluations { get; set; }
 
     }
 }

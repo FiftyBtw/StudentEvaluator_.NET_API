@@ -2,8 +2,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EF_Entities;
 
-[Table("Teacher")]
 public class TeacherEntity : UserEntity
 {
-    public ICollection<TemplateEntity> Templates { get; set; }
+    public IEnumerable<TemplateEntity> Templates { get; set; }
+    
+    public ICollection<EvaluationEntity> Evaluations { get; set; }
 }

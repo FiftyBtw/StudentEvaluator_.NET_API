@@ -8,6 +8,6 @@ namespace API_Dto
 {
     public class TeacherDto : UserDto
     {
-        public ICollection<TemplateDto> Templates { get; set; }
+        public IEnumerable<TemplateDto> Templates { get; set; }
     }
 }

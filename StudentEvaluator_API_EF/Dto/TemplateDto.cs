@@ -12,7 +12,7 @@ namespace API_Dto
 
         public string Name { get; set; }
 
-        public ICollection<CriteriaDto>? Criteria { get; set; }
+        public IEnumerable<CriteriaDto>? Criteria { get; set; }
 
         public TeacherDto? Teacher { get; set; }
     }

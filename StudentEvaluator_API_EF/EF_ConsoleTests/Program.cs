@@ -40,6 +40,7 @@ class Program
             var newGroup = new GroupEntity { GroupYear = 2, GroupNumber = 1 };
             context.GroupSet.Add(newGroup);
             await context.SaveChangesAsync();
+            
         }
     }
 }

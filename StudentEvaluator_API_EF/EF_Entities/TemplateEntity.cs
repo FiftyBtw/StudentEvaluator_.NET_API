@@ -6,8 +6,10 @@ public class TemplateEntity
     
     public string Name { get; set; }
     
-    public ICollection<CriteriaEntity>? Criteria { get; set; }
+    public IEnumerable<CriteriaEntity>? Criteria { get; set; }
     
     public long? TeacherId { get; set; }
     public TeacherEntity? Teacher { get; set; }
+    
+    public ICollection<EvaluationEntity>? Evaluations { get; set; }
 }

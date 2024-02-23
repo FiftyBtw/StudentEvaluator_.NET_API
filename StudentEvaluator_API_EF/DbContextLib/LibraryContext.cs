@@ -13,6 +13,7 @@ namespace EF_DbContextLib
         public DbSet<TeacherEntity> TeacherSet { get; set; }
         // Propriété DbSet pour représenter l'ensemble de templates dans la base de données
         public DbSet<TemplateEntity> TemplateSet { get; set; }
+
         // Propriété DbSet pour représenter l'ensemble de sliderCriteria dans la base de données
         public DbSet<SliderCriteriaEntity> SliderCriteriaSet { get; set; }
         // Propriété DbSet pour représenter l'ensemble de textCriteria dans la base de données
@@ -50,6 +51,17 @@ namespace EF_DbContextLib
             // Configure la clé primaire composite pour GroupStudent
             modelBuilder.Entity<GroupEntity>()
                 .HasKey(g => new { g.GroupYear, g.GroupNumber });
+            
+            // Configure la clé primaire pour EvaluationEntity
+            modelBuilder.Entity<CriteriaEntity>()
+                .HasDiscriminator<string>("criteria_type")
+                .HasValue<SliderCriteriaEntity>("slider")
+                .HasValue<TextCriteriaEntity>("text")
+                .HasValue<RadioCriteriaEntity>("radio");
+            
+            modelBuilder.Entity<UserEntity>()
+                .HasDiscriminator<string>("user_type")
+                .HasValue<TeacherEntity>("teacher");    
 
             // Configure la relation entre les entités StudentEntity et GroupEntity
             modelBuilder.Entity<StudentEntity>()
@@ -86,11 +98,16 @@ namespace EF_DbContextLib
                 .HasForeignKey(c => c.TemplateId)
                 .IsRequired(false);
             
-            /* TODO : À décommenter si nécessaire si ajout de ICollection<Evaluation> Evaluations { get; set; } dans les entités
             // Configure la relation entre les entités EvaluationEntity et TemplateEntity
             modelBuilder.Entity<EvaluationEntity>()
                 .HasOne(e => e.Template)
                 .WithMany(t => t.Evaluations)
+                .HasForeignKey(e => e.TemplateId)
+                .IsRequired(false);
+            
+            modelBuilder.Entity<TemplateEntity>()
+                .HasMany(t => t.Evaluations)
+                .WithOne(e => e.Template)
                 .HasForeignKey(e => e.TemplateId)
                 .IsRequired(false);
             
@@ -101,15 +118,25 @@ namespace EF_DbContextLib
                 .HasForeignKey(e => e.TeacherId)
                 .IsRequired(false);
             
+            modelBuilder.Entity<TeacherEntity>()
+                .HasMany(t => t.Evaluations)
+                .WithOne(e => e.Teacher)
+                .HasForeignKey(e => e.TeacherId)
+                .IsRequired(false);
+            
             // Configure la relation entre les entités EvaluationEntity et StudentEntity
             modelBuilder.Entity<EvaluationEntity>()
                 .HasOne(e => e.Student)
                 .WithMany(s => s.Evaluations)
                 .HasForeignKey(e => e.StudentId)
                 .IsRequired(false);
-            */
-            
-            
+
+            modelBuilder.Entity<StudentEntity>()
+                .HasMany(e => e.Evaluations)
+                .WithOne(s => s.Student)
+                .HasForeignKey(e => e.StudentId)
+                .IsRequired(false);
+
         }
     }
 

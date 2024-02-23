@@ -1,72 +1,33 @@
-﻿using API_Dto;
-using EF_Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Entities2Dto
 {
-    public static class Mapper
+    public class Mapper<T,U>
     {
-        public static StudentDto ToDto (this StudentEntity student)
+        public Dictionary<T, U> map = new Dictionary<T,U>();
+
+        public U? GetDto(T entity)
         {
-            return new StudentDto
-            {
-                Id = student.Id,
-                Name = student.Name,
-                Lastname = student.Lastname,
-                UrlPhoto = student.UrlPhoto,
-                Group = new GroupDto { GroupYear = student.GroupYear, GroupNumber = student.GroupNumber},
-            };
-        }
-        public static GroupDto ToDto(this GroupEntity group)
-        {
-            return new GroupDto
-            {
-                GroupNumber = group.GroupNumber,
-                GroupYear = group.GroupYear,
-                Students = group.Students?.ToDtos(),
-            };
-        }
-        public static StudentEntity ToEntity(this StudentDto student)
-        {
-            return new StudentEntity
-            {
-                Id = student.Id,
-                Name = student.Name,
-                Lastname = student.Lastname,
-                UrlPhoto = student.UrlPhoto,
-                GroupNumber = student.Group.GroupNumber,
-                GroupYear = student.Group.GroupYear,
-            };
+            if (map.ContainsKey(entity)) return map[entity];
+            else return default;
+         
         }
 
-        public static GroupEntity ToEntity(this GroupDto group)
+        public T? GetEntity(U dto)
         {
-            return new GroupEntity
+            foreach (KeyValuePair<T, U> pair in map)
             {
-               GroupNumber = group.GroupNumber,
-               GroupYear = group.GroupYear,
-            };
-        }
-
-        public static IEnumerable<StudentDto> ToDtos(this IEnumerable<StudentEntity> entities)
-        {
-            IEnumerable<StudentDto> groups = new List<StudentDto>();
-            foreach (var entity in entities)
-            {
-                (groups as List<StudentDto>).Add(entity.ToDto());
+                if (pair.Value.Equals(dto)) return pair.Key;
             }
-            return groups;
+            return default;
         }
-
-        public static IEnumerable<GroupDto> ToDtos(this IEnumerable<GroupEntity> entities)
+        public void Set(T entity, U dto)
         {
-            IEnumerable<GroupDto> groups = new List<GroupDto>();
-            foreach (var entity in entities)
-            {
-                (groups as List<GroupDto>).Add(entity.ToDto());
-            }
-            return groups;
+            map.Add(entity,dto);
         }
-
-
     }
 }

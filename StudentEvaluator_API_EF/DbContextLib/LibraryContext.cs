@@ -10,7 +10,7 @@ namespace EF_DbContextLib
         // Propriété DbSet pour représenter l'ensemble de groupes dans la base de données
         public DbSet<GroupEntity> GroupSet { get; set; }
         // Propriété DbSet pour représenter l'ensemble de teachers dans la base de données
-        public DbSet<TeacherEntity> TeacherSet { get; set; }
+        public DbSet<UserEntity> UserSet { get; set; }
         // Propriété DbSet pour représenter l'ensemble de templates dans la base de données
         public DbSet<TemplateEntity> TemplateSet { get; set; }
 
@@ -27,7 +27,7 @@ namespace EF_DbContextLib
 
         public LibraryContext() { }
 
-        public LibraryContext(DbContextOptions<LibraryContext> options) : base(options) { }
+        public LibraryContext(DbContextOptions options) : base(options) { }
 
 
         // Méthode appelée lors de la configuration du contexte de la base de données

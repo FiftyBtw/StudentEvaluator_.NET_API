@@ -8,7 +8,7 @@ public class TemplateEntity
     
     public IEnumerable<CriteriaEntity>? Criteria { get; set; }
     
-    public long? TeacherId { get; set; }
+    public long TeacherId { get; set; }
     public TeacherEntity? Teacher { get; set; }
     
     public ICollection<EvaluationEntity>? Evaluations { get; set; }

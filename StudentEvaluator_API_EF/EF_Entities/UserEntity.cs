@@ -1,7 +1,7 @@
 namespace EF_Entities;
 
 
-public abstract class UserEntity
+public class UserEntity
 {
     public long Id { get; set; }
     

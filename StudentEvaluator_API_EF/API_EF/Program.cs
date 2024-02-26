@@ -1,6 +1,8 @@
 using API_Dto;
+using EF_DbContextLib;
 using EF_StubbedContextLib;
 using Entities2Dto;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,8 @@ builder.Services.AddScoped<DbDataManager>(provider => new DbDataManager(new Stub
 builder.Services.AddScoped<IStudentService>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<IGroupService>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<ICriteriaService>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<IUserService>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<ITemplateService>(x => x.GetRequiredService<DbDataManager>());
 
 var app = builder.Build();
 
@@ -30,5 +34,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+var scope = app.Services.CreateScope();
+
 
 app.Run();

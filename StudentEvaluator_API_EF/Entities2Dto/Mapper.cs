@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Entities2Dto
+﻿namespace Entities2Dto
 {
     public class Mapper<T,U>
     {
@@ -13,8 +7,8 @@ namespace Entities2Dto
         public U? GetDto(T entity)
         {
             if (map.ContainsKey(entity)) return map[entity];
-            else return default;
-         
+            return default;
+
         }
 
         public T? GetEntity(U dto)

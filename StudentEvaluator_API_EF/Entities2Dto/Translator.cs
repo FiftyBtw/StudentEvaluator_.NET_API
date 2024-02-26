@@ -11,7 +11,11 @@ namespace Entities2Dto
         
         public static Mapper<CriteriaEntity, CriteriaDto> CriteriaMapper { get; set; } = new Mapper<CriteriaEntity, CriteriaDto>();
         public static Mapper<TextCriteriaEntity, TextCriteriaDto> TextCriteriaMapper { get; set; } = new Mapper<TextCriteriaEntity, TextCriteriaDto>();
+        public static Mapper<SliderCriteriaEntity, SliderCriteriaDto> SliderCriteriaMapper { get; set; } = new Mapper<SliderCriteriaEntity, SliderCriteriaDto>();
         public static Mapper<TemplateEntity, TemplateDto> TemplateMapper { get; set; } = new Mapper<TemplateEntity, TemplateDto>();
+        
+        public static Mapper<TeacherEntity, TeacherDto> TeacherMapper { get; set; } = new Mapper<TeacherEntity, TeacherDto>();
+        public static Mapper<UserEntity, UserDto> UserMapper { get; set; } = new Mapper<UserEntity, UserDto>();
 
         public static StudentDto ToDto (this StudentEntity student)
         {
@@ -29,7 +33,8 @@ namespace Entities2Dto
                 StudentMapper.Set(student, studentDto);               
                 return studentDto;
             }
-            else return studentDto;
+
+            return studentDto;
         }
         public static GroupDto ToDto(this GroupEntity group)
         {
@@ -45,8 +50,9 @@ namespace Entities2Dto
                 GroupMapper.Set(group, groupDto);
                 return groupDto;
             }
-            else return groupDto;
-         
+
+            return groupDto;
+
         }
         public static StudentEntity ToEntity(this StudentDto student)
         {
@@ -64,8 +70,9 @@ namespace Entities2Dto
                 StudentMapper.Set(studentEntity, student);
                 return studentEntity;
             }
-            else return studentEntity;
-         
+
+            return studentEntity;
+
         }
 
         public static GroupEntity ToEntity(this GroupDto group)
@@ -80,7 +87,8 @@ namespace Entities2Dto
                     Students = group.Students.ToEntities(),
                 };
             }
-            else return groupEntity;
+
+            return groupEntity;
         }
 
         public static IEnumerable<StudentDto> ToDtos(this IEnumerable<StudentEntity> entities)
@@ -125,6 +133,10 @@ namespace Entities2Dto
             return groups;
         }
         
+        
+        
+        // Criteria
+        
         public static CriteriaDto ToDto(this CriteriaEntity criteria)
         {
             var criteriaDto = CriteriaMapper.GetDto(criteria);
@@ -140,7 +152,8 @@ namespace Entities2Dto
                 CriteriaMapper.Set(criteria, criteriaDto);
                 return criteriaDto;
             }
-            else return criteriaDto;
+
+            return criteriaDto;
         }
         
         
@@ -157,7 +170,8 @@ namespace Entities2Dto
                     TemplateId = criteria.TemplateId,
                 };
             }
-            else return criteriaEntity;
+
+            return criteriaEntity;
         }
         
         public static IEnumerable<CriteriaDto> ToDtos(this IEnumerable<CriteriaEntity> entities)
@@ -180,6 +194,9 @@ namespace Entities2Dto
             return criterias;
         }
         
+        
+        // TextCriteria
+        
         public static TextCriteriaDto ToDto(this TextCriteriaEntity textCriteria)
         {
             var textCriteriaDto = TextCriteriaMapper.GetDto(textCriteria);
@@ -196,7 +213,8 @@ namespace Entities2Dto
                 TextCriteriaMapper.Set(textCriteria, textCriteriaDto);
                 return textCriteriaDto;
             }
-            else return textCriteriaDto;
+
+            return textCriteriaDto;
         }
         
         
@@ -214,7 +232,8 @@ namespace Entities2Dto
                     Text = textCriteria.Text,
                 };
             }
-            else return textCriteriaEntity;
+
+            return textCriteriaEntity;
         }
         
         public static IEnumerable<TextCriteriaDto> ToDtos(this IEnumerable<TextCriteriaEntity> entities)
@@ -237,6 +256,72 @@ namespace Entities2Dto
             return textCriterias;
         }
         
+        
+        // SliderCriteria
+        
+        public static SliderCriteriaDto ToDto(this SliderCriteriaEntity sliderCriteria)
+        {
+           var sliderCriteriaDto = SliderCriteriaMapper.GetDto(sliderCriteria);
+            if (sliderCriteriaDto == null)
+            {
+             sliderCriteriaDto = new SliderCriteriaDto
+             {
+                  Id = sliderCriteria.Id,
+                  Name = sliderCriteria.Name,
+                  ValueEvaluation = sliderCriteria.ValueEvaluation,
+                  TemplateId = sliderCriteria.TemplateId,
+                  Value = sliderCriteria.Value
+             };
+             SliderCriteriaMapper.Set(sliderCriteria, sliderCriteriaDto);
+             return sliderCriteriaDto;
+            }
+
+            return sliderCriteriaDto;
+        }
+        
+        
+        public static SliderCriteriaEntity ToEntity(this SliderCriteriaDto sliderCriteria)
+        {
+            var sliderCriteriaEntity = SliderCriteriaMapper.GetEntity(sliderCriteria);
+            if (sliderCriteriaEntity == null)
+            {
+                return new SliderCriteriaEntity
+                {
+                    Id = sliderCriteria.Id,
+                    Name = sliderCriteria.Name,
+                    ValueEvaluation = sliderCriteria.ValueEvaluation,
+                    TemplateId = sliderCriteria.TemplateId,
+                    Value = sliderCriteria.Value
+                };
+            }
+
+            return sliderCriteriaEntity;
+        }
+        
+        
+        public static IEnumerable<SliderCriteriaDto> ToDtos(this IEnumerable<SliderCriteriaEntity> entities)
+        {
+            IEnumerable<SliderCriteriaDto> sliderCriterias = new List<SliderCriteriaDto>();
+            foreach (var entity in entities)
+            {
+                (sliderCriterias as List<SliderCriteriaDto>).Add(entity.ToDto());
+            }
+            return sliderCriterias;
+        }
+        
+        
+        public static IEnumerable<SliderCriteriaEntity> ToEntities(this IEnumerable<SliderCriteriaDto> dtos)
+        {
+            IEnumerable<SliderCriteriaEntity> sliderCriterias = new List<SliderCriteriaEntity>();
+            foreach (var dto in dtos)
+            {
+                (sliderCriterias as List<SliderCriteriaEntity>).Add(dto.ToEntity());
+            }
+            return sliderCriterias;
+        }
+        
+        // Template
+        
         public static TemplateDto ToDto(this TemplateEntity template)
         {
             var templateDto = TemplateMapper.GetDto(template);
@@ -247,12 +332,13 @@ namespace Entities2Dto
                     Id = template.Id,
                     Name = template.Name,
                     Criteria = template.Criteria.ToDtos(),
-                    Teacher = template.Teacher.ToDto(),
+                    TeacherId = template.TeacherId
                 };
                 TemplateMapper.Set(template, templateDto);
                 return templateDto;
             }
-            else return templateDto;
+
+            return templateDto;
         }
         
         
@@ -268,7 +354,8 @@ namespace Entities2Dto
                     Criteria = template.Criteria.ToEntities(),
                 };
             }
-            else return templateEntity;
+
+            return templateEntity;
         }
         
         public static IEnumerable<TemplateDto> ToDtos(this IEnumerable<TemplateEntity> entities)
@@ -291,6 +378,7 @@ namespace Entities2Dto
             return templates;
         }
         
+        //Teacher
         
         public static TeacherDto ToDto(this TeacherEntity teacher)
         {
@@ -337,6 +425,39 @@ namespace Entities2Dto
             return teachers;
         }
         
+        // User
+        
+        public static UserDto ToDto(this UserEntity user)
+        {
+            return new UserDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Password = user.Password,
+                roles = user.roles,
+            };
+        }
+        
+        public static UserEntity ToEntity(this UserDto user)
+        {
+            return new UserEntity
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Password = user.Password,
+                roles = user.roles,
+            };
+        }
+        
+        public static IEnumerable<UserDto> ToDtos(this IEnumerable<UserEntity> entities)
+        {
+            IEnumerable<UserDto> users = new List<UserDto>();
+            foreach (var entity in entities)
+            {
+                (users as List<UserDto>).Add(entity.ToDto());
+            }
+            return users;
+        }
         
     }
 }

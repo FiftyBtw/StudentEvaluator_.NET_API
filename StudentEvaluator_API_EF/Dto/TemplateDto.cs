@@ -14,6 +14,6 @@ namespace API_Dto
 
         public IEnumerable<CriteriaDto>? Criteria { get; set; }
 
-        public TeacherDto? Teacher { get; set; }
+        public long TeacherId { get; set; }
     }
 }

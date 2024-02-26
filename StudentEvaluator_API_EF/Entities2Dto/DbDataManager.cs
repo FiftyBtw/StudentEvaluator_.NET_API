@@ -7,11 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using API_Dto;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 
 namespace Entities2Dto
 {
-    public class DbDataManager : IStudentService , IGroupService, ICriteriaService
+    public class DbDataManager : IStudentService , IGroupService, ICriteriaService, ILessonService
     {
         private readonly LibraryContext _libraryContext;
 
@@ -58,7 +59,6 @@ namespace Entities2Dto
         public async Task<PageReponseDto<GroupDto>> GetGroups(int index, int count)
         {
             var groups = _libraryContext.GroupSet.ToDtos();
-
             return await Task.FromResult(new PageReponseDto<GroupDto>(groups.Count(), groups.Skip(index * count).Take(count)));
         }
 
@@ -97,7 +97,7 @@ namespace Entities2Dto
 
         }
 
-        public Task<GroupDto?> Putgroup(int gyear, int gnumber, GroupDto newGroup)
+        public Task<GroupDto?> PutGroup(int gyear, int gnumber, GroupDto newGroup)
         {
             var group = _libraryContext.GroupSet.FirstOrDefault(g => g.GroupYear == gyear && g.GroupNumber == gnumber);
             if (group == null) return Task.FromResult<GroupDto?>(null);
@@ -138,6 +138,59 @@ namespace Entities2Dto
         {
             var criterion = _libraryContext.TextCriteriaSet.FirstOrDefault(s => s.Id == id)?.ToDto();
             return Task.FromResult(criterion);
+        }
+
+
+        //Lessons
+
+        public Task<PageReponseDto<LessonDto>> GetLessons(int index, int count)
+        {
+            var lessons = _libraryContext.LessonSet.ToDtos();
+            return Task.FromResult(new PageReponseDto<LessonDto>(lessons.Count(), lessons.Skip(index * count).Take(count)));
+        }
+
+        public Task<LessonDto?> GetLessonById(long id)
+        {
+            var lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id == id)?.ToDto();
+            return Task.FromResult(lesson);
+        }
+
+
+        public Task<LessonDto?> PutLesson(long id, LessonDto newLesson)
+        {
+            var lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id==id);
+            if (lesson == null) return Task.FromResult<LessonDto?>(null);
+            lesson.Id = newLesson.Id;
+            lesson.CourseName = newLesson.CourseName;
+            lesson.Classroom = newLesson.Classroom;
+            lesson.Date = newLesson.Date;
+            lesson.Start = newLesson.Start;
+            lesson.End = newLesson.End;
+            lesson.Teacher = newLesson.Teacher.ToEntity();
+            
+            _libraryContext.SaveChanges();
+            return Task.FromResult(newLesson);
+        }
+
+        public Task<bool> DeleteLesson(long id)
+        {
+            var lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id == id);
+            if (lesson == null) return Task.FromResult(false);
+
+            _libraryContext.LessonSet.Where(l => l.Id == id).ExecuteDelete();
+            _libraryContext.SaveChangesAsync();
+
+            lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id == id);
+
+            if (lesson == null) return Task.FromResult(true);
+            else return Task.FromResult(false);
+        }
+
+        public Task<LessonDto?> PostLesson(LessonDto lesson)
+        {
+            _libraryContext.LessonSet.AddAsync(lesson.ToEntity());
+            _libraryContext.SaveChanges();
+            return Task.FromResult(lesson);
         }
     }   
 }

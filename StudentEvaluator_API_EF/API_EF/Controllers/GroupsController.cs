@@ -68,7 +68,7 @@ namespace API_EF.Controllers
             {
                 return StatusCode(500);
             }
-            var studentDto = await _groupService.Putgroup(gyear,gnumber, group);
+            var studentDto = await _groupService.PutGroup(gyear,gnumber, group);
             if (studentDto == null)
             {
                 return NotFound();

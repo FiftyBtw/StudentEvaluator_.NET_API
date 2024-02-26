@@ -18,6 +18,11 @@ namespace Entities2Dto
             var studentDto = StudentMapper.GetDto(student);
             if ( studentDto == null)
             {
+                if (student.Group == null)
+                {
+                    student.Group = new GroupEntity { GroupNumber = student.GroupNumber, GroupYear = student.GroupYear };
+
+                }
                 studentDto = new StudentDto
                 {
                     Id = student.Id,
@@ -25,6 +30,7 @@ namespace Entities2Dto
                     Lastname = student.Lastname,
                     UrlPhoto = student.UrlPhoto,
                     Group = student.Group.ToDto(),
+                   
                 };
                 StudentMapper.Set(student, studentDto);               
                 return studentDto;
@@ -336,7 +342,45 @@ namespace Entities2Dto
             }
             return teachers;
         }
-        
-        
+
+        public static LessonDto ToDto(this LessonEntity lesson)
+        {
+            return new LessonDto
+            {
+               Id=lesson.Id,
+               Classroom=lesson.Classroom,
+               CourseName=lesson.CourseName,
+               Date=lesson.Date,
+               Start=lesson.Start,
+               End=lesson.End,
+               Teacher=lesson.Teacher?.ToDto(),
+               
+            };
+        }
+
+        public static LessonEntity ToEntity(this LessonDto lessonDto)
+        {
+            return new LessonEntity
+            {
+                Id = lessonDto.Id,
+                Classroom = lessonDto.Classroom,
+                CourseName = lessonDto.CourseName,
+                Date = lessonDto.Date,
+                Start = lessonDto.Start,
+                End = lessonDto.End,
+                Teacher = lessonDto.Teacher.ToEntity(),
+            };
+        }
+
+        public static IEnumerable<LessonDto> ToDtos(this IEnumerable<LessonEntity> entities)
+        {
+            IEnumerable<LessonDto> lessons = new List<LessonDto>();
+            foreach (var entity in entities)
+            {
+                (lessons as List<LessonDto>).Add(entity.ToDto());
+            }
+            return lessons;
+        }
+
     }
 }

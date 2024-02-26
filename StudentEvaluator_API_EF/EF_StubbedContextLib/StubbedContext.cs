@@ -51,18 +51,25 @@ namespace EF_StubbedContextLib
                 new SliderCriteriaEntity { Id = 2, Name = "Quiz 2", ValueEvaluation = 2, Value = 3, TemplateId = 3},
                 new SliderCriteriaEntity { Id = 3, Name = "Présentation en Classe", ValueEvaluation = 1, Value = 7, TemplateId = 2 }
             );
-            
+            // Configure les données initiales (stub) pour l'entité RadioCriteriaEntity
             modelBuilder.Entity<RadioCriteriaEntity>().HasData(
                 new RadioCriteriaEntity { Id = 4, Name = "Type d’Examen", ValueEvaluation = 1, SelectedOption = "mi-semestre", Options = ["mi-semestre", "examen final"], TemplateId = 1 },
                 new RadioCriteriaEntity { Id = 5, Name = "Type de Quiz", ValueEvaluation = 1, SelectedOption = "", Options = ["Quiz 1", "Quiz 2"], TemplateId = 3 },
                 new RadioCriteriaEntity { Id = 6, Name = "Type de Présentation", ValueEvaluation = 1, SelectedOption = "Individuelle", Options = ["Individuelle", "Groupe"], TemplateId = 3 }
                 
             );
-
+            // Configure les données initiales (stub) pour l'entité TextCriteriaEntity
             modelBuilder.Entity<TextCriteriaEntity>().HasData(
                 new TextCriteriaEntity { Id = 7, Name = "Commentaire", ValueEvaluation = 1, TemplateId = 1, Text = "Commentaire1"},
                 new TextCriteriaEntity { Id = 8, Name = "Commentaire", ValueEvaluation = 1, TemplateId = 2, Text = "Commentaire 2"},
                 new TextCriteriaEntity { Id = 9, Name = "Commentaire", ValueEvaluation = 1, TemplateId = 3, Text = "Commentaire3"}
+            );
+
+            // Configure les données initiales (stub) pour l'entité LessonEntity
+            modelBuilder.Entity<LessonEntity>().HasData(
+                new LessonEntity { Id=1 , Classroom="A23", CourseName="Introduction au SQL", Date=new DateOnly(2023,10,30), Start=new TimeOnly(9,0), End=new TimeOnly(11,0), GroupYear=1, GroupNumber=2, TeacherEntityId=1 },
+                new LessonEntity { Id = 2, Classroom = "B23", CourseName = "Bases du développement Web", Date = new DateOnly(2023, 10, 31), Start = new TimeOnly(14, 0), End = new TimeOnly(16, 0), GroupYear = 1, GroupNumber = 3, TeacherEntityId = 2 },
+                new LessonEntity { Id = 3, Classroom = "Amphi A", CourseName = "Fondamentaux de JavaScript", Date = new DateOnly(2023, 11, 02), Start = new TimeOnly(10, 0), End = new TimeOnly(12, 0), GroupYear = 1, GroupNumber = 1, TeacherEntityId = 3 }
             );
 
         }

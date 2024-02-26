@@ -12,7 +12,7 @@ namespace Entities2Dto
 
         public U? GetDto(T entity)
         {
-            if (map.ContainsKey(entity)) return map[entity];
+            if (map.TryGetValue(entity, out U? value)) return value;
             else return default;
          
         }

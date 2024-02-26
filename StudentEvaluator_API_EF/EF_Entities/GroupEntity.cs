@@ -12,6 +12,8 @@ namespace EF_Entities
         public int GroupNumber { get; set; }
         
         public IEnumerable<StudentEntity> Students { get; set; }
+
+        public IEnumerable<LessonEntity> Lessons { get; set; } = new List<LessonEntity>();
         
     }
 }

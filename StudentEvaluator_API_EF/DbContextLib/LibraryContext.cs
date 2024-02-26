@@ -22,6 +22,8 @@ namespace EF_DbContextLib
         public DbSet<RadioCriteriaEntity> RadioCriteriaSet { get; set; }
         // Propriété DbSet pour représenter l'ensemble des evaluations dans la base de données
         public DbSet<EvaluationEntity> EvaluationSet { get; set; }
+        // Propriété DbSet pour représenter l'ensemble des cours dans la base de données
+        public DbSet<LessonEntity> LessonSet { get; set; }
 
         public LibraryContext() { }
 
@@ -137,6 +139,17 @@ namespace EF_DbContextLib
                 .HasForeignKey(e => e.StudentId)
                 .IsRequired(false);
 
+
+            //Configure la relation entre les entités LessonEntity et GroupEntity
+            modelBuilder.Entity<LessonEntity>()
+               .HasOne<GroupEntity>(s => s.Group)
+               .WithMany(g => g.Lessons)
+               .HasForeignKey(s => new { s.GroupYear, s.GroupNumber });
+
+            modelBuilder.Entity<GroupEntity>()
+                .HasMany(g => g.Lessons)
+                .WithOne(s => s.Group)
+                .HasForeignKey(s => new { s.GroupYear, s.GroupNumber });
         }
     }
 

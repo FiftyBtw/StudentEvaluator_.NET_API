@@ -273,10 +273,8 @@ namespace Entities2Dto
             if (template == null) return Task.FromResult(true);
             return Task.FromResult(false);
         }
-    }
 
-
-        //Lessons
+        //Lesson
 
         public Task<PageReponseDto<LessonDto>> GetLessons(int index, int count)
         {
@@ -290,10 +288,9 @@ namespace Entities2Dto
             return Task.FromResult(lesson);
         }
 
-
         public Task<LessonDto?> PutLesson(long id, LessonDto newLesson)
         {
-            var lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id==id);
+            var lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id == id);
             if (lesson == null) return Task.FromResult<LessonDto?>(null);
             lesson.Id = newLesson.Id;
             lesson.CourseName = newLesson.CourseName;
@@ -302,7 +299,7 @@ namespace Entities2Dto
             lesson.Start = newLesson.Start;
             lesson.End = newLesson.End;
             lesson.Teacher = newLesson.Teacher.ToEntity();
-            
+
             _libraryContext.SaveChanges();
             return Task.FromResult(newLesson);
         }
@@ -320,12 +317,12 @@ namespace Entities2Dto
             if (lesson == null) return Task.FromResult(true);
             else return Task.FromResult(false);
         }
-
         public Task<LessonDto?> PostLesson(LessonDto lesson)
         {
             _libraryContext.LessonSet.AddAsync(lesson.ToEntity());
             _libraryContext.SaveChanges();
             return Task.FromResult(lesson);
         }
-    }   
+    }
+
 }

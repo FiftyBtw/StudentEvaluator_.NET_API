@@ -471,8 +471,6 @@ namespace Entities2Dto
         }
 
         
-        // User
-        
         public static UserDto ToDto(this UserEntity user)
         {
             return new UserDto
@@ -504,6 +502,6 @@ namespace Entities2Dto
             }
             return users;
         }
-        
+       
     }
 }

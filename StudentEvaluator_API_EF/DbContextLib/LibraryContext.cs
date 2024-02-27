@@ -99,33 +99,33 @@ namespace EF_DbContextLib
                 .WithMany(t => t.Criteria)
                 .HasForeignKey(c => c.TemplateId)
                 .IsRequired(false);
-            
+
             // Configure la relation entre les entités EvaluationEntity et TemplateEntity
             modelBuilder.Entity<EvaluationEntity>()
                 .HasOne(e => e.Template)
                 .WithMany(t => t.Evaluations)
                 .HasForeignKey(e => e.TemplateId)
                 .IsRequired(false);
-            
+
             modelBuilder.Entity<TemplateEntity>()
                 .HasMany(t => t.Evaluations)
                 .WithOne(e => e.Template)
                 .HasForeignKey(e => e.TemplateId)
                 .IsRequired(false);
-            
-            // Configure la relation entre les entités EvaluationEntity et TeacherEntity
+
+            //  Configure la relation entre les entités EvaluationEntity et TeacherEntity
             modelBuilder.Entity<EvaluationEntity>()
                 .HasOne(e => e.Teacher)
                 .WithMany(t => t.Evaluations)
                 .HasForeignKey(e => e.TeacherId)
                 .IsRequired(false);
-            
+
             modelBuilder.Entity<TeacherEntity>()
                 .HasMany(t => t.Evaluations)
                 .WithOne(e => e.Teacher)
                 .HasForeignKey(e => e.TeacherId)
                 .IsRequired(false);
-            
+
             // Configure la relation entre les entités EvaluationEntity et StudentEntity
             modelBuilder.Entity<EvaluationEntity>()
                 .HasOne(e => e.Student)

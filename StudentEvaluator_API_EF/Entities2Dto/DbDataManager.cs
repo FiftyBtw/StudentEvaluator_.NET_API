@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Entities2Dto
 {
-    public class DbDataManager : IStudentService, IGroupService, ICriteriaService, IUserService, ITemplateService, ILessonService
+    public class DbDataManager : IStudentService, IGroupService, ICriteriaService, IUserService, ITemplateService, ILessonService, IEvaluationService
     {
         private readonly LibraryContext _libraryContext;
 
@@ -322,6 +322,69 @@ namespace Entities2Dto
             _libraryContext.LessonSet.AddAsync(lesson.ToEntity());
             _libraryContext.SaveChanges();
             return Task.FromResult(lesson);
+        }
+
+        public Task<PageReponseDto<LessonDto>> GetLessonsByTeacherId(long id, int index, int count)
+        {
+            var lessons = _libraryContext.LessonSet.Where(l => l.TeacherEntityId == id).ToDtos();
+            return Task.FromResult(new PageReponseDto<LessonDto>(lessons.Count(),lessons.Skip(count*index).Take(count)));
+        }
+
+
+        //Evaluations
+        public Task<PageReponseDto<EvaluationDto>> GetEvaluations(int index, int count)
+        {
+            var evals = _libraryContext.EvaluationSet.ToDtos();
+            return Task.FromResult(new PageReponseDto<EvaluationDto>(evals.Count(), evals.Skip(count * index).Take(count)));
+        }
+
+        public Task<EvaluationDto?> GetEvaluationById(long id)
+        {
+            var eval = _libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == id)?.ToDto();
+            return Task.FromResult(eval);
+        }
+
+        public Task<PageReponseDto<EvaluationDto>> GetEvaluationsByTeacherId(long id, int index, int count)
+        {
+            var evals = _libraryContext.EvaluationSet.Where(e => e.TeacherId == id).ToDtos();
+            return Task.FromResult(new PageReponseDto<EvaluationDto>(evals.Count(), evals.Skip(count * index).Take(count)));
+        }
+
+        public Task<EvaluationDto?> PostEvaluation(EvaluationDto eval)
+        {
+            _libraryContext.EvaluationSet.AddAsync(eval.ToEntity());
+            _libraryContext.SaveChanges();
+            return Task.FromResult(eval);
+        }
+
+        public Task<EvaluationDto?> PutEvaluation(long id, EvaluationDto newEval)
+        {
+            var eval = _libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == id);
+            if (eval == null) return Task.FromResult<EvaluationDto?>(null);
+            eval.Id = newEval.Id;
+            eval.CourseName = newEval.CourseName;
+            eval.PairName = newEval.PairName;
+            eval.Grade = newEval.Grade;
+            eval.Date = newEval.Date;
+
+            eval.Teacher = newEval.Teacher.ToEntity();
+
+            _libraryContext.SaveChanges();
+            return Task.FromResult(newEval);
+        }
+
+        public Task<bool> DeleteEvaluation(long id)
+        {
+            var eval = _libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == id);
+            if (eval == null) return Task.FromResult(false);
+
+            _libraryContext.EvaluationSet.Where(e => e.Id == id).ExecuteDelete();
+            _libraryContext.SaveChangesAsync();
+
+            eval = _libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == id);
+
+            if (eval == null) return Task.FromResult(true);
+            else return Task.FromResult(false);
         }
     }
 

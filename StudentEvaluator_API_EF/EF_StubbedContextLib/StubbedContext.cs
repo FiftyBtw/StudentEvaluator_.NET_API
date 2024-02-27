@@ -40,7 +40,7 @@ namespace EF_StubbedContextLib
             
             // Configure les données initiales (stub) pour l'entité TemplateEntity
             modelBuilder.Entity<TemplateEntity>().HasData(
-                new TemplateEntity { Id = 1, Name = "Évaluation Générale", Criteria = [] },
+                new TemplateEntity { Id = 1, Name = "Évaluation Générale",TeacherId=1, Criteria = [] },
                 new TemplateEntity { Id = 2, Name = "Contrôle Continu", TeacherId = 2, Criteria = [] },
                 new TemplateEntity { Id = 3, Name = "Examen Mi-Semestre", TeacherId = 1, Criteria = [] }
             );
@@ -72,6 +72,12 @@ namespace EF_StubbedContextLib
                 new LessonEntity { Id = 3, Classroom = "Amphi A", CourseName = "Fondamentaux de JavaScript", Date = new DateOnly(2023, 11, 02), Start = new TimeOnly(10, 0), End = new TimeOnly(12, 0), GroupYear = 1, GroupNumber = 1, TeacherEntityId = 3 }
             );
 
+            // Configure les données initales (stub) pour l'entité EvluationEntity
+            modelBuilder.Entity<EvaluationEntity>().HasData(
+                new EvaluationEntity { Id=1, Grade=10, CourseName="Introduction au SQL", Date=new DateOnly(2023,11,05), PairName="Marie Durand", StudentId=1, TeacherId=1, TemplateId=1 },
+                new EvaluationEntity { Id = 2, Grade = 13, CourseName = "Bases du développement Web", Date = new DateOnly(2023, 11, 09), PairName = "Sophie Leroy", StudentId = 2, TeacherId = 2, TemplateId = 2 },
+                 new EvaluationEntity { Id = 3, Grade = 15, CourseName = "Fondamentaux de JavaScript", Date = new DateOnly(2023, 11, 15), PairName = "Sophie Leroy", StudentId = 1, TeacherId = 3, TemplateId = 3 }
+            );
         }
     }
 

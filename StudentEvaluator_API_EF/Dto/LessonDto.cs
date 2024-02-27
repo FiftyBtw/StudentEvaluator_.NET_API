@@ -16,5 +16,7 @@ namespace API_Dto
         public string Classroom { get; set; }
         public TeacherDto Teacher { get; set; } 
         public GroupDto Group { get; set; } 
+
+        public IEnumerable<EvaluationDto> Evaluations { get; set; } = new List<EvaluationDto>();
     }
 }

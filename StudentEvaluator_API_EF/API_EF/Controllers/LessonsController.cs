@@ -43,6 +43,19 @@ namespace API_EF.Controllers
             else return Ok(lesson);
         }
 
+        [HttpGet]
+        [Route("teacher/{id}")]
+        public async Task<IActionResult> GetLessonsByTeacherId(long id,int index = 0, int count = 10)
+        {
+            if (_lessonService == null)
+            {
+                return StatusCode(500);
+            }
+            var data = await _lessonService.GetLessonsByTeacherId(id,index,count);
+            if (data == null) return NoContent();
+            else return Ok(data);
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostLesson([FromBody] LessonDto lesson)
         {

@@ -20,6 +20,7 @@ builder.Services.AddScoped<ICriteriaService>(x => x.GetRequiredService<DbDataMan
 builder.Services.AddScoped<ILessonService>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<IUserService>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<ITemplateService>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<IEvaluationService>(x => x.GetRequiredService<DbDataManager>());
 
 var app = builder.Build();
 

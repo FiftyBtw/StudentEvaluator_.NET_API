@@ -456,7 +456,8 @@ namespace Entities2Dto
                 Date = lessonDto.Date,
                 Start = lessonDto.Start,
                 End = lessonDto.End,
-                Teacher = lessonDto.Teacher.ToEntity(),
+                Teacher = lessonDto.Teacher?.ToEntity(),
+                Group = lessonDto.Group ?.ToEntity(),
             };
         }
 
@@ -502,6 +503,50 @@ namespace Entities2Dto
             }
             return users;
         }
-       
+
+
+        public static EvaluationDto ToDto(this EvaluationEntity eval)
+        {
+            return new EvaluationDto
+            {
+                Id = eval.Id,
+                CourseName = eval.CourseName,
+                Grade = eval.Grade,
+                PairName = eval.PairName,
+                Date = eval.Date,
+
+                Student = eval.Student?.ToDto(),
+                Template =eval.Template?.ToDto(),
+                Teacher = eval.Teacher?.ToDto(),
+
+            };
+        }
+
+        public static EvaluationEntity ToEntity(this EvaluationDto evalDto)
+        {
+            return new EvaluationEntity
+            {
+                Id = evalDto.Id,
+                CourseName = evalDto.CourseName,
+                Grade = evalDto.Grade,
+                PairName = evalDto.PairName,
+                Date = evalDto.Date,
+
+                Student = evalDto.Student?.ToEntity(),
+                Template = evalDto.Template?.ToEntity(),
+                Teacher = evalDto.Teacher?.ToEntity(),
+
+            };
+        }
+
+        public static IEnumerable<EvaluationDto> ToDtos(this IEnumerable<EvaluationEntity> entities)
+        {
+            IEnumerable<EvaluationDto> evals = new List<EvaluationDto>();
+            foreach (var entity in entities)
+            {
+                (evals as List<EvaluationDto>).Add(entity.ToDto());
+            }
+            return evals;
+        }
     }
 }

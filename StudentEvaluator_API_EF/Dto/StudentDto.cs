@@ -10,6 +10,8 @@ namespace API_Dto
         public string UrlPhoto { get; set; }
         public GroupDto Group { get; set; }
 
+       
+
     }
 
 }

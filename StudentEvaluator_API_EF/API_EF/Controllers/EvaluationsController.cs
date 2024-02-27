@@ -55,7 +55,6 @@ namespace API_EF.Controllers
             if (data == null) return NoContent();
             else return Ok(data);
         }
-
         [HttpPost]
         public async Task<IActionResult> PostEvaluation([FromBody] EvaluationDto eval)
         {

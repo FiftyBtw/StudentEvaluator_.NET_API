@@ -8,7 +8,6 @@ namespace API_Dto
         public string Name { get; set; }
         public string Lastname { get; set; }
         public string UrlPhoto { get; set; }
-
         public int GroupYear { get; set; }
         public int GroupNumber { get; set; }
     }

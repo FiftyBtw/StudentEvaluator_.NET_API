@@ -91,7 +91,7 @@ namespace API_EF.Controllers
                 return Ok(lessonDto);
             }
         }
-*/
+
         [HttpDelete]
         public async Task<IActionResult> DeleteLesson(long id)
         {

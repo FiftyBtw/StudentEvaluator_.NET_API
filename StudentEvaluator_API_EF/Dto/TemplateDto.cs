@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EF_Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace API_Dto
 
         public IEnumerable<CriteriaDto>? Criteria { get; set; }
 
-        public IEnumerable<EvaluationDto>? Evaluation { get; set; }
+        public EvaluationEntity? Evaluation { get; set; }
         public long TeacherId { get; set; }
     }
 }

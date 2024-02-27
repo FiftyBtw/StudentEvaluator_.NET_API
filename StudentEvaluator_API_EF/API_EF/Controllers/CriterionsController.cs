@@ -15,6 +15,9 @@ public class CriterionsController : ControllerBase
     }
     
     [HttpGet("texts")]
+    [ProducesResponseType(200, Type= typeof(PageReponseDto<TextCriteriaDto>[]))]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
     public async Task<IActionResult> GetTextCriterions(int? index, int? count)
     {
         if (_criteriaService == null) {
@@ -30,6 +33,9 @@ public class CriterionsController : ControllerBase
     }
     
     [HttpGet("texts/{id}")]
+    [ProducesResponseType(200, Type= typeof(TextCriteriaDto))] 
+    [ProducesResponseType(400)]
+    [ProducesResponseType(500)]
     public async Task<IActionResult> GetTextCriterionById(long id)
     {
         if (_criteriaService == null) {

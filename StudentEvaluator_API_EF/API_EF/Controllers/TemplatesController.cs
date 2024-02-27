@@ -14,14 +14,17 @@ public class TemplatesController : ControllerBase
         _templateService = templateService;
     }
     
-    [HttpGet]
-    public async Task<IActionResult> GetTemplatesByUserId(long userId, int index = 1, int count = 10)
+    [HttpGet("/user/{id}")]
+    [ProducesResponseType(200, Type = typeof(PageReponseDto<TemplateDto>))]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(500)]
+    public async Task<IActionResult> GetTemplatesByUserId(long id, int index = 0, int count = 10)
     {
         if (_templateService == null)
         {
             return StatusCode(500);
         }
-        var data = await _templateService.GetTemplatesByUserId(userId, index, count);
+        var data = await _templateService.GetTemplatesByUserId(id, index, count);
         if (data == null)
         {
             return NoContent();
@@ -32,14 +35,14 @@ public class TemplatesController : ControllerBase
         }
     }
     
-    [HttpGet("empty")]
-    public async Task<IActionResult> GetEmptyTemplatesByUserId(long userId, int index = 1, int count = 10)
+    [HttpGet("/user/{id}/models")]
+    public async Task<IActionResult> GetEmptyTemplatesByUserId(long id, int index = 0, int count = 10)
     {
         if (_templateService == null)
         {
             return StatusCode(500);
         }
-        var data = await _templateService.GetEmptyTemplatesByUserId(userId, index, count);
+        var data = await _templateService.GetEmptyTemplatesByUserId(id, index, count);
         if (data == null)
         {
             return NoContent();
@@ -87,13 +90,13 @@ public class TemplatesController : ControllerBase
     }
     
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutTemplate(long userId, long templateId, [FromBody] TemplateDto template)
+    public async Task<IActionResult> PutTemplate(long id, TemplateDto template)
     {
         if (_templateService == null)
         {
             return StatusCode(500);
         }
-        var data = await _templateService.PutTemplate(userId, templateId, template);
+        var data = await _templateService.PutTemplate(id, template);
         if (data == null)
         {
             return StatusCode(500);
@@ -105,13 +108,13 @@ public class TemplatesController : ControllerBase
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteTemplate(long userId, long templateId)
+    public async Task<IActionResult> DeleteTemplate(long id)
     {
         if (_templateService == null)
         {
             return StatusCode(500);
         }
-        var data = await _templateService.DeleteTemplate(userId, templateId);
+        var data = await _templateService.DeleteTemplate(id);
         if (data == false)
         {
             return StatusCode(500);

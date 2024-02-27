@@ -33,7 +33,8 @@ namespace Entities2Dto
                     Name = student.Name,
                     Lastname = student.Lastname,
                     UrlPhoto = student.UrlPhoto,
-                    Group = student.Group.ToDto(),
+                    GroupNumber = student.GroupNumber,
+                    GroupYear = student.GroupYear,
                    
                 };
                 StudentMapper.Set(student, studentDto);               
@@ -71,7 +72,8 @@ namespace Entities2Dto
                     Name = student.Name,
                     Lastname = student.Lastname,
                     UrlPhoto = student.UrlPhoto,
-                    Group = student.Group.ToEntity(),
+                    GroupNumber = student.GroupNumber,
+                    GroupYear = student.GroupYear
                 };
                 StudentMapper.Set(studentEntity, student);
                 return studentEntity;
@@ -137,67 +139,6 @@ namespace Entities2Dto
                 (groups as List<GroupEntity>).Add(dto.ToEntity());
             }
             return groups;
-        }
-        
-        
-        
-        // Criteria
-        
-        public static CriteriaDto ToDto(this CriteriaEntity criteria)
-        {
-            var criteriaDto = CriteriaMapper.GetDto(criteria);
-            if (criteriaDto == null)
-            {
-                criteriaDto = new CriteriaDto
-                {
-                    Id = criteria.Id,
-                    Name = criteria.Name,
-                    ValueEvaluation = criteria.ValueEvaluation,
-                    TemplateId = criteria.TemplateId
-                };
-                CriteriaMapper.Set(criteria, criteriaDto);
-                return criteriaDto;
-            }
-
-            return criteriaDto;
-        }
-        
-        
-        public static CriteriaEntity ToEntity(this CriteriaDto criteria)
-        {
-            var criteriaEntity = CriteriaMapper.GetEntity(criteria);
-            if (criteriaEntity == null)
-            {
-                return new CriteriaEntity
-                {
-                    Id = criteria.Id,
-                    Name = criteria.Name,
-                    ValueEvaluation = criteria.ValueEvaluation,
-                    TemplateId = criteria.TemplateId,
-                };
-            }
-
-            return criteriaEntity;
-        }
-        
-        public static IEnumerable<CriteriaDto> ToDtos(this IEnumerable<CriteriaEntity> entities)
-        {
-            IEnumerable<CriteriaDto> criterias = new List<CriteriaDto>();
-            foreach (var entity in entities)
-            {
-                (criterias as List<CriteriaDto>).Add(entity.ToDto());
-            }
-            return criterias;
-        }
-        
-        public static IEnumerable<CriteriaEntity> ToEntities(this IEnumerable<CriteriaDto> dtos)
-        {
-            IEnumerable<CriteriaEntity> criterias = new List<CriteriaEntity>();
-            foreach (var dto in dtos)
-            {
-                (criterias as List<CriteriaEntity>).Add(dto.ToEntity());
-            }
-            return criterias;
         }
         
         
@@ -330,6 +271,8 @@ namespace Entities2Dto
         
         public static TemplateDto ToDto(this TemplateEntity template)
         {
+            var converter = new CriteriaDtoConverter();
+    
             var templateDto = TemplateMapper.GetDto(template);
             if (templateDto == null)
             {
@@ -337,11 +280,10 @@ namespace Entities2Dto
                 {
                     Id = template.Id,
                     Name = template.Name,
-                    Criteria = template.Criteria.ToDtos(),
+                    Criteria = template.Criteria.Select(converter.ConvertToDto).ToList(),
                     TeacherId = template.TeacherId
                 };
                 TemplateMapper.Set(template, templateDto);
-                return templateDto;
             }
 
             return templateDto;
@@ -357,7 +299,7 @@ namespace Entities2Dto
                 {
                     Id = template.Id,
                     Name = template.Name,
-                    Criteria = template.Criteria.ToEntities(),
+                    //Criteria = template.Criteria.ToEntities(),
                 };
             }
 

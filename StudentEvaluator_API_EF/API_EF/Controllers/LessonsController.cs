@@ -43,6 +43,7 @@ namespace API_EF.Controllers
             else return Ok(lesson);
         }
 
+        /*
         [HttpPost]
         public async Task<IActionResult> PostLesson([FromBody] LessonDto lesson)
         {
@@ -78,7 +79,7 @@ namespace API_EF.Controllers
                 return Ok(lessonDto);
             }
         }
-
+*/
         [HttpDelete]
         public async Task<IActionResult> DeleteLesson(long id)
         {

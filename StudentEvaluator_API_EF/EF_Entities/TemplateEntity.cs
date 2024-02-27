@@ -11,5 +11,6 @@ public class TemplateEntity
     public long TeacherId { get; set; }
     public TeacherEntity? Teacher { get; set; }
     
-    public ICollection<EvaluationEntity>? Evaluations { get; set; }
+    public long? EvaluationId { get; set; }
+    public EvaluationEntity? Evaluation { get; set; }
 }

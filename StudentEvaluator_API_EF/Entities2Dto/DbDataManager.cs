@@ -114,8 +114,8 @@ namespace Entities2Dto
             oldStudent.Name = student.Name;
             oldStudent.Lastname = student.Lastname;
             oldStudent.UrlPhoto = student.UrlPhoto;
-            oldStudent.GroupNumber = student.Group.GroupNumber;
-            oldStudent.GroupYear = student.Group.GroupYear;
+            oldStudent.GroupNumber = student.GroupNumber;
+            oldStudent.GroupYear = student.GroupYear;
             _libraryContext.SaveChanges();
             return Task.FromResult(student);
 
@@ -213,7 +213,7 @@ namespace Entities2Dto
 
         public Task<PageReponseDto<TemplateDto>> GetTemplatesByUserId(long userId, int index, int count)
         {
-            var templates = _libraryContext.TemplateSet.Where(t => t.TeacherId == userId).ToDtos();
+            var templates = _libraryContext.TemplateSet.Include(c => c.Criteria).Where(t => t.TeacherId == userId).ToDtos();
             return Task.FromResult(new PageReponseDto<TemplateDto>(templates.Count(),
                 templates.Skip(index * count).Take(count)));
         }
@@ -223,8 +223,7 @@ namespace Entities2Dto
             // Récupérer les templates qui n'ont pas de critères ou qui n'ont jamais été utilisé pour une évaluation
             var templates = _libraryContext.TemplateSet
                 .Where(t => t.TeacherId == userId && 
-                            !t.Criteria.Any() || 
-                            !t.Evaluations.Any())  
+                            !t.Criteria.Any())  
                 .ToDtos();            
             return Task.FromResult(new PageReponseDto<TemplateDto>(templates.Count(),
                 templates.Skip(index * count).Take(count)));
@@ -247,29 +246,29 @@ namespace Entities2Dto
             return Task.FromResult(template);
         }
         
-        public Task<TemplateDto?> PutTemplate(long userId, long templateId, TemplateDto template)
+        public Task<TemplateDto?> PutTemplate(long templateId, TemplateDto template)
         {
-            var oldTemplate = _libraryContext.TemplateSet
-                .Where(t => t.TeacherId == userId && t.Id == templateId)
-                .FirstOrDefault();
+            var converter = new CriteriaDtoConverter();
+            var oldTemplate = _libraryContext.TemplateSet.FirstOrDefault(t => t.Id == templateId);
             if (oldTemplate == null) return Task.FromResult<TemplateDto?>(null);
             oldTemplate.Name = template.Name;
-            oldTemplate.Criteria = template.Criteria.ToEntities();
+            oldTemplate.Criteria = template.Criteria.Select(converter.ConvertToEntity).ToList();
             _libraryContext.SaveChanges();
             return Task.FromResult(template);
         }
         
-        public Task<bool> DeleteTemplate(long userId, long templateId)
+        public Task<bool> DeleteTemplate(long templateId)
         {
-            var template = _libraryContext.TemplateSet
-                .Where(t => t.TeacherId == userId && t.Id == templateId)
-                .FirstOrDefault();
+            var template = _libraryContext.TemplateSet.Include(t => t.Criteria).FirstOrDefault(t => t.Id == templateId);
             if (template == null) return Task.FromResult(false);
-            _libraryContext.TemplateSet.Where(t => t.TeacherId == userId && t.Id == templateId).ExecuteDelete();
+            foreach(var criteria in template.Criteria)
+            {
+                _libraryContext.CriteriaSet.Where(c => c.Id == criteria.Id).ExecuteDelete();
+            }
+            
+            _libraryContext.TemplateSet.Where(t => t.Id == templateId).ExecuteDelete();
             _libraryContext.SaveChangesAsync();
-            template = _libraryContext.TemplateSet
-                .Where(t => t.TeacherId == userId && t.Id == templateId)
-                .FirstOrDefault();
+            template = _libraryContext.TemplateSet.FirstOrDefault(t => t.Id == templateId);
             if (template == null) return Task.FromResult(true);
             return Task.FromResult(false);
         }

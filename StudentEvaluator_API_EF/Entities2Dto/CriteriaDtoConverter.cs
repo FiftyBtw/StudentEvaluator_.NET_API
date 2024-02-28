@@ -3,12 +3,12 @@ using EF_Entities;
 
 namespace Entities2Dto;
 
-public class CriteriaDtoConverter
+public static class CriteriaDtoConverter
 {
-    private readonly Dictionary<Type, Func<CriteriaEntity, CriteriaDto>> _entityToDtoConverters;
-    private readonly Dictionary<Type, Func<CriteriaDto, CriteriaEntity>> _dtoToEntityConverters;
+    private static readonly Dictionary<Type, Func<CriteriaEntity, CriteriaDto>> _entityToDtoConverters;
+    private static readonly Dictionary<Type, Func<CriteriaDto, CriteriaEntity>> _dtoToEntityConverters;
 
-    public CriteriaDtoConverter()
+    static CriteriaDtoConverter()
     {
         _entityToDtoConverters = new Dictionary<Type, Func<CriteriaEntity, CriteriaDto>>
         {
@@ -25,7 +25,7 @@ public class CriteriaDtoConverter
         };
     }
     
-    public CriteriaDto ConvertToDto(CriteriaEntity entity)
+    public static CriteriaDto ConvertToDto(CriteriaEntity entity)
     {
         if (entity == null) return null;
 
@@ -38,7 +38,7 @@ public class CriteriaDtoConverter
         throw new ArgumentException($"No converter available for {entityType.Name}");
     }
 
-    public CriteriaEntity ConvertToEntity(CriteriaDto dto)
+    public static CriteriaEntity ConvertToEntity(CriteriaDto dto)
     {
         if (dto == null) return null;
 
@@ -51,7 +51,7 @@ public class CriteriaDtoConverter
         throw new ArgumentException($"No converter available for {dtoType.Name}");
     }
 
-    private SliderCriteriaDto ConvertSliderToDto(SliderCriteriaEntity entity)
+    private static SliderCriteriaDto ConvertSliderToDto(SliderCriteriaEntity entity)
     {
         return new SliderCriteriaDto
         {
@@ -63,7 +63,7 @@ public class CriteriaDtoConverter
         };
     }
 
-    private RadioCriteriaDto ConvertRadioToDto(RadioCriteriaEntity entity)
+    private static RadioCriteriaDto ConvertRadioToDto(RadioCriteriaEntity entity)
     {
         return new RadioCriteriaDto
         {
@@ -76,7 +76,7 @@ public class CriteriaDtoConverter
         };
     }
 
-    private TextCriteriaDto ConvertTextToDto(TextCriteriaEntity entity)
+    private static TextCriteriaDto ConvertTextToDto(TextCriteriaEntity entity)
     {
         return new TextCriteriaDto
         {
@@ -88,7 +88,7 @@ public class CriteriaDtoConverter
         };
     }
     
-    private SliderCriteriaEntity ConvertSliderToEntity(SliderCriteriaDto dto)
+    private static SliderCriteriaEntity ConvertSliderToEntity(SliderCriteriaDto dto)
     {
         return new SliderCriteriaEntity
         {
@@ -100,7 +100,7 @@ public class CriteriaDtoConverter
         };
     }
     
-    private RadioCriteriaEntity ConvertRadioToEntity(RadioCriteriaDto dto)
+    private static RadioCriteriaEntity ConvertRadioToEntity(RadioCriteriaDto dto)
     {
         return new RadioCriteriaEntity
         {
@@ -113,7 +113,7 @@ public class CriteriaDtoConverter
         };
     }
     
-    private TextCriteriaEntity ConvertTextToEntity(TextCriteriaDto dto)
+    private static TextCriteriaEntity ConvertTextToEntity(TextCriteriaDto dto)
     {
         return new TextCriteriaEntity
         {
@@ -125,5 +125,3 @@ public class CriteriaDtoConverter
         };
     }
 }
-    
-    

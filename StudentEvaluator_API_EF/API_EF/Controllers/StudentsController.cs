@@ -17,7 +17,7 @@ namespace API_EF.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetStudents(int? index, int? count)
+        public async Task<IActionResult> GetStudents(int index = 0 , int count = 10)
         {
             if (_studentService == null)
             {

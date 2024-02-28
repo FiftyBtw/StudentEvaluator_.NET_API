@@ -15,7 +15,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetUsers(int index = 1, int count = 10)
+    public async Task<IActionResult> GetUsers(int index = 0, int count = 10)
     {
         if (_userService == null)
         {

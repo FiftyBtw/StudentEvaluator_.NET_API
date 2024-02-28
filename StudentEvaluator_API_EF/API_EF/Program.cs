@@ -24,20 +24,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.UseAllOfToExtendReferenceSchemas();
-    c.UseAllOfForInheritance();
-    c.UseOneOfForPolymorphism();
-    c.SelectDiscriminatorNameUsing(baseType =>
-    {
-        if (baseType == typeof(CriteriaDto))
-        {
-            return "criteriaType";
-        }
-        return null;
-    });
-});
+builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<DbDataManager>(provider => new DbDataManager(new StubbedContext()));
 builder.Services.AddScoped<IStudentService>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<IGroupService>(x => x.GetRequiredService<DbDataManager>());
@@ -49,7 +36,7 @@ builder.Services.AddScoped<IEvaluationService>(x => x.GetRequiredService<DbDataM
 
 builder.Services.AddDbContext<StubbedContext>(options =>
 {
-    options.UseSqlite("Data Source=StudentEvaluator_API_EF.db");
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 var app = builder.Build();

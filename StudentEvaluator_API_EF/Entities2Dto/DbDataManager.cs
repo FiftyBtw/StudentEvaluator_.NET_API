@@ -86,7 +86,7 @@ namespace Entities2Dto
         {
             _libraryContext.StudentSet.AddAsync(student.ToEntity());
             _libraryContext.SaveChanges();
-            return Task.FromResult(student);
+            return Task.FromResult(_libraryContext.StudentSet.FirstOrDefault(s => s.Name.Equals(student.Name) && s.Lastname.Equals(student.Lastname)).ToDto());
 
         }
 
@@ -111,7 +111,7 @@ namespace Entities2Dto
             oldStudent.GroupNumber = student.GroupNumber;
             oldStudent.GroupYear = student.GroupYear;
             _libraryContext.SaveChanges();
-            return Task.FromResult(student);
+            return Task.FromResult(oldStudent.ToDto());
 
         }
         

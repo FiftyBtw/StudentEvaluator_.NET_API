@@ -11,8 +11,8 @@ namespace API_Dto
         public int nbElement { get; set; }
         public IEnumerable<T> Data { get; set; }
 
-        public PageReponseDto(int nbE, IEnumerable<T> data) { 
-            nbElement= nbE;
+        public PageReponseDto(int nbelement, IEnumerable<T> data) { 
+            nbElement= nbelement;
             Data = data;
         }
     }

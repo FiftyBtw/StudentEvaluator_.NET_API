@@ -3,19 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API_EF", "API_EF\API_EF.csproj", "{4267D3E9-5EBC-4305-9CA1-ED9B119A8B40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API_EF", "API_EF\API_EF.csproj", "{4267D3E9-5EBC-4305-9CA1-ED9B119A8B40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API_Dto", "Dto\API_Dto.csproj", "{88819C95-E28E-47B7-BEF2-58A0173261BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API_Dto", "Dto\API_Dto.csproj", "{88819C95-E28E-47B7-BEF2-58A0173261BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF_DbContextLib", "DbContextLib\EF_DbContextLib.csproj", "{E3601AF6-00CF-43FA-86B6-F256746BDC77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EF_DbContextLib", "DbContextLib\EF_DbContextLib.csproj", "{E3601AF6-00CF-43FA-86B6-F256746BDC77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF_Entities", "EF_Entities\EF_Entities.csproj", "{77FA9776-519E-4A05-9395-4F939A552D74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EF_Entities", "EF_Entities\EF_Entities.csproj", "{77FA9776-519E-4A05-9395-4F939A552D74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF_StubbedContextLib", "EF_StubbedContextLib\EF_StubbedContextLib.csproj", "{8AD73D16-871F-4909-810A-743F26F30FA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EF_StubbedContextLib", "EF_StubbedContextLib\EF_StubbedContextLib.csproj", "{8AD73D16-871F-4909-810A-743F26F30FA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities2Dto", "Entities2Dto\Entities2Dto.csproj", "{BBB261A0-CC10-4539-A905-8865BD7860EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities2Dto", "Entities2Dto\Entities2Dto.csproj", "{BBB261A0-CC10-4539-A905-8865BD7860EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF_ConsoleTests", "EF_ConsoleTests\EF_ConsoleTests.csproj", "{D7545DDA-933C-4FD4-ABEE-26ABFC846E29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EF_ConsoleTests", "EF_ConsoleTests\EF_ConsoleTests.csproj", "{D7545DDA-933C-4FD4-ABEE-26ABFC846E29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API_ConsoleTests", "API_ConsoleTests\API_ConsoleTests.csproj", "{2C595CEE-A738-495F-8575-2AF173A734A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{D7545DDA-933C-4FD4-ABEE-26ABFC846E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7545DDA-933C-4FD4-ABEE-26ABFC846E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7545DDA-933C-4FD4-ABEE-26ABFC846E29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C595CEE-A738-495F-8575-2AF173A734A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C595CEE-A738-495F-8575-2AF173A734A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C595CEE-A738-495F-8575-2AF173A734A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C595CEE-A738-495F-8575-2AF173A734A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -10,6 +10,11 @@ namespace API_Dto
         public string UrlPhoto { get; set; }
         public int GroupYear { get; set; }
         public int GroupNumber { get; set; }
+
+        public override string ToString()
+        {
+            return "Student : " + Id + ", " + Name + " " + Lastname + ", " + GroupYear + "A G" + GroupNumber + ".";
+        }
     }
 
 }

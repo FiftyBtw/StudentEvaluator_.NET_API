@@ -5,7 +5,6 @@ namespace Entities2Dto
 {
     public static class Translator
     {
-
         public static Mapper<StudentEntity,StudentDto> StudentMapper { get; set; } = new Mapper<StudentEntity, StudentDto>();
         public static Mapper<GroupEntity, GroupDto> GroupMapper { get; set; } = new Mapper<GroupEntity, GroupDto>();
         
@@ -267,12 +266,58 @@ namespace Entities2Dto
             return sliderCriterias;
         }
         
+        // RadioCriteria
+        
+        public static RadioCriteriaDto ToDto(this RadioCriteriaEntity radioCriteria)
+        {
+            return new RadioCriteriaDto
+            {
+                Id = radioCriteria.Id,
+                Name = radioCriteria.Name,
+                ValueEvaluation = radioCriteria.ValueEvaluation,
+                TemplateId = radioCriteria.TemplateId,
+                Options = radioCriteria.Options,
+                SelectedOption = radioCriteria.SelectedOption
+            };
+        }
+        
+        public static RadioCriteriaEntity ToEntity(this RadioCriteriaDto radioCriteria)
+        {
+            return new RadioCriteriaEntity
+            {
+                Id = radioCriteria.Id,
+                Name = radioCriteria.Name,
+                ValueEvaluation = radioCriteria.ValueEvaluation,
+                TemplateId = radioCriteria.TemplateId,
+                Options = radioCriteria.Options,
+                SelectedOption = radioCriteria.SelectedOption
+            };
+        }
+        
+        public static IEnumerable<RadioCriteriaDto> ToDtos(this IEnumerable<RadioCriteriaEntity> entities)
+        {
+            IEnumerable<RadioCriteriaDto> radioCriterias = new List<RadioCriteriaDto>();
+            foreach (var entity in entities)
+            {
+                (radioCriterias as List<RadioCriteriaDto>).Add(entity.ToDto());
+            }
+            return radioCriterias;
+        }
+        
+        public static IEnumerable<RadioCriteriaEntity> ToEntities(this IEnumerable<RadioCriteriaDto> dtos)
+        {
+            IEnumerable<RadioCriteriaEntity> radioCriterias = new List<RadioCriteriaEntity>();
+            foreach (var dto in dtos)
+            {
+                (radioCriterias as List<RadioCriteriaEntity>).Add(dto.ToEntity());
+            }
+            return radioCriterias;
+        }
+        
         // Template
         
         public static TemplateDto ToDto(this TemplateEntity template)
         {
-            var converter = new CriteriaDtoConverter();
-    
             var templateDto = TemplateMapper.GetDto(template);
             if (templateDto == null)
             {
@@ -280,7 +325,7 @@ namespace Entities2Dto
                 {
                     Id = template.Id,
                     Name = template.Name,
-                    Criteria = template.Criteria.Select(converter.ConvertToDto).ToList(),
+                    Criteria = template.Criteria.Select(CriteriaDtoConverter.ConvertToDto).ToList(),
                     TeacherId = template.TeacherId
                 };
                 TemplateMapper.Set(template, templateDto);
@@ -299,7 +344,7 @@ namespace Entities2Dto
                 {
                     Id = template.Id,
                     Name = template.Name,
-                    //Criteria = template.Criteria.ToEntities(),
+                    Criteria = template.Criteria.Select(CriteriaDtoConverter.ConvertToEntity).ToList(),
                 };
             }
 

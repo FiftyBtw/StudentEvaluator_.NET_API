@@ -53,14 +53,14 @@ public class TemplatesController : ControllerBase
         }
     }
     
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetTemplateById(long userId, long templateId)
+    [HttpGet("{id}/user/{userId}")]
+    public async Task<IActionResult> GetTemplateById(long userId, long id)
     {
         if (_templateService == null)
         {
             return StatusCode(500);
         }
-        var data = await _templateService.GetTemplateById(userId, templateId);
+        var data = await _templateService.GetTemplateById(userId, id);
         if (data == null)
         {
             return NoContent();

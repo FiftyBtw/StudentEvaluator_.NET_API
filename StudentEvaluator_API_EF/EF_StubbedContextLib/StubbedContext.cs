@@ -45,35 +45,35 @@ namespace EF_StubbedContextLib
             
             // Configure les données initiales (stub) pour l'entité StudentEntity
             modelBuilder.Entity<StudentEntity>().HasData(
-    new StudentEntity { Id = 1, Name = "Jean", Lastname = "Dupont", UrlPhoto = "https://u-static.fotor.com/images/text-to-image/result/PRO-07b5ede889e54291946bfb76f2fc9780.jpg", GroupYear = 1, GroupNumber = 1},
-    new StudentEntity { Id = 2, Name = "Marie", Lastname = "Durand", UrlPhoto = "https://u-static.fotor.com/images/text-to-image/result/PRO-c60caadc22a7454fb452bf44157fa576.jpg", GroupYear = 1, GroupNumber = 2},
-    new StudentEntity { Id = 3, Name = "Sophie", Lastname = "Leroy", UrlPhoto = "https://u-static.fotor.com/images/text-to-image/result/PRO-939b96340eca4542a306cc87ac6d6b6e.jpg", GroupYear = 1, GroupNumber = 3},
-    new StudentEntity { Id = 4, Name = "Hugo", Lastname = "Bernard", UrlPhoto = "https://u-static.fotor.com/images/text-to-image/result/PRO-3e978dc8f56d4e9da78299875ef7f6f5.jpg", GroupYear = 1, GroupNumber = 2},
-    new StudentEntity { Id = 5, Name = "Sarah", Lastname = "Dubois", UrlPhoto = "https://u-static.fotor.com/images/text-to-image/result/PRO-474858ebc45441eca887dc208ce33721.jpg", GroupYear = 1, GroupNumber = 3},
-    new StudentEntity { Id = 6, Name = "Guillaume", Lastname = "Moreau", UrlPhoto = "gui_moreau.jpg", GroupYear = 1, GroupNumber = 3},
-    new StudentEntity { Id = 7, Name = "Clara", Lastname = "Fontaine", UrlPhoto = "clara_fontaine.jpg", GroupYear = 1, GroupNumber = 4},
-    new StudentEntity { Id = 8, Name = "David", Lastname = "Lefebvre", UrlPhoto = "david_lefebvre.jpg", GroupYear = 1, GroupNumber = 4},
-    new StudentEntity { Id = 9, Name = "Julie", Lastname = "Blanc", UrlPhoto = "julie_blanc.jpg", GroupYear = 1, GroupNumber = 5},
-    new StudentEntity { Id = 10, Name = "Richard", Lastname = "Leroux", UrlPhoto = "richard_leroux.jpg", GroupYear = 1, GroupNumber = 5},
-    new StudentEntity { Id = 11, Name = "Marie", Lastname = "Garnier", UrlPhoto = "marie_gernier.jpg", GroupYear = 1, GroupNumber = 6},
-    new StudentEntity { Id = 12, Name = "Christophe", Lastname = "Martin", UrlPhoto = "christophe_martin.jpg", GroupYear = 1, GroupNumber = 6},
-    new StudentEntity { Id = 13, Name = "Patricia", Lastname = "Clerc", UrlPhoto = "patricia_clerc.jpg", GroupYear = 1, GroupNumber = 7},
-    new StudentEntity { Id = 14, Name = "Mathieu", Lastname = "Allain", UrlPhoto = "mathieu_allain.jpg", GroupYear = 1, GroupNumber = 7},
-    new StudentEntity { Id = 15, Name = "Lucas", Lastname = "Martin", UrlPhoto = "https://u-static.fotor.com/images/text-to-image/result/PRO-ab5de70d249c440aa6031f9e33224c61.jpg", GroupYear = 2, GroupNumber = 1},
-    new StudentEntity { Id = 16, Name = "Émilie", Lastname = "Petit", UrlPhoto = "https://u-static.fotor.com/images/text-to-image/result/PRO-e5bbffbcdf5240acad364c4a6e63067f.jpg", GroupYear = 2, GroupNumber = 1},
-    new StudentEntity { Id = 17, Name = "Élisabeth", Lastname = "Hardy", UrlPhoto = "elizabeth_hardy.jpg", GroupYear = 2, GroupNumber = 2},
-    new StudentEntity { Id = 18, Name = "Thomas", Lastname = "Girard", UrlPhoto = "thomas_girard.jpg", GroupYear = 2, GroupNumber = 2},
-    new StudentEntity { Id = 19, Name = "Jessica", Lastname = "Salle", UrlPhoto = "jessica_salle.jpg", GroupYear = 2, GroupNumber = 3},
-    new StudentEntity { Id = 20, Name = "Daniel", Lastname = "Jeune", UrlPhoto = "daniel_jeune.jpg", GroupYear = 2, GroupNumber = 3},
-    new StudentEntity { Id = 21, Name = "Suzanne", Lastname = "Roy", UrlPhoto = "suzanne_roy.jpg", GroupYear = 2, GroupNumber = 4},
-    new StudentEntity { Id = 22, Name = "Paul", Lastname = "Marchand", UrlPhoto = "paul_marchand.jpg", GroupYear = 2, GroupNumber = 4},
-    new StudentEntity { Id = 23, Name = "Marie", Lastname = "Perez", UrlPhoto = "marie_perez.jpg", GroupYear = 2, GroupNumber = 5},
-    new StudentEntity { Id = 24, Name = "Kevin", Lastname = "Henry", UrlPhoto = "kevin_henry.jpg", GroupYear = 2, GroupNumber = 5},
-    new StudentEntity { Id = 25, Name = "Nancy", Lastname = "Rodriguez", UrlPhoto = "nancy_rodriguez.jpg", GroupYear = 2, GroupNumber = 6},
-    new StudentEntity { Id = 26, Name = "Marc", Lastname = "Scott", UrlPhoto = "marc_scott.jpg", GroupYear = 2, GroupNumber = 6},
-    new StudentEntity { Id = 27, Name = "Karen", Lastname = "Martinez", UrlPhoto = "karen_martinez.jpg", GroupYear = 2, GroupNumber = 7},
-    new StudentEntity { Id = 28, Name = "Édouard", Lastname = "David", UrlPhoto = "edouard_david.jpg", GroupYear = 2, GroupNumber = 7}
-);
+                new StudentEntity { Id = 1, Name = "Jean", Lastname = "Dupont", UrlPhoto = "https://u-static.fotor.com/images/text-to-image/result/PRO-07b5ede889e54291946bfb76f2fc9780.jpg", GroupYear = 1, GroupNumber = 1},
+                new StudentEntity { Id = 2, Name = "Marie", Lastname = "Durand", UrlPhoto = "https://u-static.fotor.com/images/text-to-image/result/PRO-c60caadc22a7454fb452bf44157fa576.jpg", GroupYear = 1, GroupNumber = 2},
+                new StudentEntity { Id = 3, Name = "Sophie", Lastname = "Leroy", UrlPhoto = "https://u-static.fotor.com/images/text-to-image/result/PRO-939b96340eca4542a306cc87ac6d6b6e.jpg", GroupYear = 1, GroupNumber = 3},
+                new StudentEntity { Id = 4, Name = "Hugo", Lastname = "Bernard", UrlPhoto = "https://u-static.fotor.com/images/text-to-image/result/PRO-3e978dc8f56d4e9da78299875ef7f6f5.jpg", GroupYear = 1, GroupNumber = 2},
+                new StudentEntity { Id = 5, Name = "Sarah", Lastname = "Dubois", UrlPhoto = "https://u-static.fotor.com/images/text-to-image/result/PRO-474858ebc45441eca887dc208ce33721.jpg", GroupYear = 1, GroupNumber = 3},
+                new StudentEntity { Id = 6, Name = "Guillaume", Lastname = "Moreau", UrlPhoto = "gui_moreau.jpg", GroupYear = 1, GroupNumber = 3},
+                new StudentEntity { Id = 7, Name = "Clara", Lastname = "Fontaine", UrlPhoto = "clara_fontaine.jpg", GroupYear = 1, GroupNumber = 4},
+                new StudentEntity { Id = 8, Name = "David", Lastname = "Lefebvre", UrlPhoto = "david_lefebvre.jpg", GroupYear = 1, GroupNumber = 4},
+                new StudentEntity { Id = 9, Name = "Julie", Lastname = "Blanc", UrlPhoto = "julie_blanc.jpg", GroupYear = 1, GroupNumber = 5},
+                new StudentEntity { Id = 10, Name = "Richard", Lastname = "Leroux", UrlPhoto = "richard_leroux.jpg", GroupYear = 1, GroupNumber = 5},
+                new StudentEntity { Id = 11, Name = "Marie", Lastname = "Garnier", UrlPhoto = "marie_gernier.jpg", GroupYear = 1, GroupNumber = 6},
+                new StudentEntity { Id = 12, Name = "Christophe", Lastname = "Martin", UrlPhoto = "christophe_martin.jpg", GroupYear = 1, GroupNumber = 6},
+                new StudentEntity { Id = 13, Name = "Patricia", Lastname = "Clerc", UrlPhoto = "patricia_clerc.jpg", GroupYear = 1, GroupNumber = 7},
+                new StudentEntity { Id = 14, Name = "Mathieu", Lastname = "Allain", UrlPhoto = "mathieu_allain.jpg", GroupYear = 1, GroupNumber = 7},
+                new StudentEntity { Id = 15, Name = "Lucas", Lastname = "Martin", UrlPhoto = "https://u-static.fotor.com/images/text-to-image/result/PRO-ab5de70d249c440aa6031f9e33224c61.jpg", GroupYear = 2, GroupNumber = 1},
+                new StudentEntity { Id = 16, Name = "Émilie", Lastname = "Petit", UrlPhoto = "https://u-static.fotor.com/images/text-to-image/result/PRO-e5bbffbcdf5240acad364c4a6e63067f.jpg", GroupYear = 2, GroupNumber = 1},
+                new StudentEntity { Id = 17, Name = "Élisabeth", Lastname = "Hardy", UrlPhoto = "elizabeth_hardy.jpg", GroupYear = 2, GroupNumber = 2},
+                new StudentEntity { Id = 18, Name = "Thomas", Lastname = "Girard", UrlPhoto = "thomas_girard.jpg", GroupYear = 2, GroupNumber = 2},
+                new StudentEntity { Id = 19, Name = "Jessica", Lastname = "Salle", UrlPhoto = "jessica_salle.jpg", GroupYear = 2, GroupNumber = 3},
+                new StudentEntity { Id = 20, Name = "Daniel", Lastname = "Jeune", UrlPhoto = "daniel_jeune.jpg", GroupYear = 2, GroupNumber = 3},
+                new StudentEntity { Id = 21, Name = "Suzanne", Lastname = "Roy", UrlPhoto = "suzanne_roy.jpg", GroupYear = 2, GroupNumber = 4},
+                new StudentEntity { Id = 22, Name = "Paul", Lastname = "Marchand", UrlPhoto = "paul_marchand.jpg", GroupYear = 2, GroupNumber = 4},
+                new StudentEntity { Id = 23, Name = "Marie", Lastname = "Perez", UrlPhoto = "marie_perez.jpg", GroupYear = 2, GroupNumber = 5},
+                new StudentEntity { Id = 24, Name = "Kevin", Lastname = "Henry", UrlPhoto = "kevin_henry.jpg", GroupYear = 2, GroupNumber = 5},
+                new StudentEntity { Id = 25, Name = "Nancy", Lastname = "Rodriguez", UrlPhoto = "nancy_rodriguez.jpg", GroupYear = 2, GroupNumber = 6},
+                new StudentEntity { Id = 26, Name = "Marc", Lastname = "Scott", UrlPhoto = "marc_scott.jpg", GroupYear = 2, GroupNumber = 6},
+                new StudentEntity { Id = 27, Name = "Karen", Lastname = "Martinez", UrlPhoto = "karen_martinez.jpg", GroupYear = 2, GroupNumber = 7},
+                new StudentEntity { Id = 28, Name = "Édouard", Lastname = "David", UrlPhoto = "edouard_david.jpg", GroupYear = 2, GroupNumber = 7}
+            );
 
 
             // Configure les données initiales (stub) pour l'entité TeacherEntity
@@ -94,7 +94,9 @@ namespace EF_StubbedContextLib
                 new TemplateEntity { Id = 5, Name = "Travaux Pratiques", TeacherId = 5, Criteria = [] },
                 new TemplateEntity { Id = 6, Name = "Participation en Classe", TeacherId = 2, Criteria = [] },
                 new TemplateEntity { Id = 7, Name = "Recherche et Rédaction", TeacherId = 3, Criteria = [] },
-                new TemplateEntity { Id = 8, Name = "Examen de Fin de Semestre", TeacherId = 1, Criteria = [] }
+                new TemplateEntity { Id = 8, Name = "Examen de Fin de Semestre", TeacherId = 1, Criteria = [] },
+                new TemplateEntity { Id = 9, Name = "Examen Oral", TeacherId = 1, Criteria = [] },
+                new TemplateEntity { Id = 10, Name = "Examen Écrit", TeacherId = 1, Criteria = [] }
             );
            
 
@@ -155,20 +157,21 @@ namespace EF_StubbedContextLib
             // Configure les données initiales (stub) pour l'entité EvaluationEntity
             modelBuilder.Entity<EvaluationEntity>().HasData(
                 new EvaluationEntity { Id = 1, Date = new DateOnly(2023, 11, 05), CourseName = "Introduction au SQL", Grade = 15, TeacherId = 1, TemplateId = 1, StudentId = 1 },
-                new EvaluationEntity { Id = 2, Date = new DateOnly(2023, 11, 07), CourseName = "Introduction au SQL", Grade = 14, TeacherId = 2, StudentId = 2 },
+                new EvaluationEntity { Id = 2, Date = new DateOnly(2023, 11, 07), CourseName = "Introduction au SQL", Grade = 14, TeacherId = 2, TemplateId = 4, StudentId = 2 },
                 new EvaluationEntity { Id = 3, Date = new DateOnly(2023, 11, 09), CourseName = "Bases du Développement Web", Grade = 13, TeacherId = 3, TemplateId = 2, StudentId = 3 },
-                new EvaluationEntity { Id = 4, Date = new DateOnly(2023, 11, 11), CourseName = "Bases du Développement Web", Grade = 12, TeacherId = 4, StudentId = 1 },
+                new EvaluationEntity { Id = 4, Date = new DateOnly(2023, 11, 11), CourseName = "Bases du Développement Web", Grade = 12, TeacherId = 4, TemplateId = 5, StudentId = 1 },
                 new EvaluationEntity { Id = 5, Date = new DateOnly(2023, 11, 13), CourseName = "Fondamentaux de JavaScript", Grade = 11, TeacherId = 1, TemplateId = 3, StudentId = 2 },
-                new EvaluationEntity { Id = 6, Date = new DateOnly(2023, 11, 15), CourseName = "Fondamentaux de JavaScript", Grade = 10, TeacherId = 2, StudentId = 3 },
-                new EvaluationEntity { Id = 7, Date = new DateOnly(2023, 11, 17), CourseName = "Conception de Bases de Données", Grade = 9, TeacherId = 3, StudentId = 1 },
-                new EvaluationEntity { Id = 8, Date = new DateOnly(2023, 11, 19), CourseName = "Conception de Bases de Données", Grade = 8, TeacherId = 4, StudentId = 2 },
-                new EvaluationEntity { Id = 9, Date = new DateOnly(2023, 11, 21), CourseName = "Programmation en Python", Grade = 7, TeacherId = 5, StudentId = 3 },
+                new EvaluationEntity { Id = 6, Date = new DateOnly(2023, 11, 15), CourseName = "Fondamentaux de JavaScript", Grade = 10, TeacherId = 2, TemplateId = 6, StudentId = 3 },
+                new EvaluationEntity { Id = 7, Date = new DateOnly(2023, 11, 17), CourseName = "Conception de Bases de Données", Grade = 9, TeacherId = 3, TemplateId = 7, StudentId = 1 },
+                new EvaluationEntity { Id = 8, Date = new DateOnly(2023, 11, 19), CourseName = "Conception de Bases de Données", Grade = 8, TeacherId = 4, TemplateId = 8, StudentId = 2 }
+               /* new EvaluationEntity { Id = 9, Date = new DateOnly(2023, 11, 21), CourseName = "Programmation en Python", Grade = 7, TeacherId = 5, StudentId = 3 },
                 new EvaluationEntity { Id = 10, Date = new DateOnly(2023, 11, 23), CourseName = "Programmation en Python", Grade = 6, TeacherId = 1,  StudentId = 1 },
                 new EvaluationEntity { Id = 11, Date = new DateOnly(2023, 11, 25), CourseName = "Bases du HTML", Grade = 5, TeacherId = 2, StudentId = 2 },
                 new EvaluationEntity { Id = 12, Date = new DateOnly(2023, 11, 27), CourseName = "Bases du HTML", Grade = 4, TeacherId = 3, StudentId = 3 },
                 new EvaluationEntity { Id = 13, Date = new DateOnly(2023, 11, 29), CourseName = "Stylisation CSS", Grade = 3, TeacherId = 4, StudentId = 1 },
                 new EvaluationEntity { Id = 14, Date = new DateOnly(2023, 12, 01), CourseName = "Stylisation CSS", Grade = 2, TeacherId = 5,  StudentId = 2 },
                 new EvaluationEntity { Id = 15, Date = new DateOnly(2023, 12, 03), CourseName = "Programmation en Java", Grade = 1, TeacherId = 1, StudentId = 3 }
+                */
             );
         }
     }

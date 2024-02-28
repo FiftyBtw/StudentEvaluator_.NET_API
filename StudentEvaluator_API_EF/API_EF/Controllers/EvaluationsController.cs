@@ -28,7 +28,7 @@ namespace API_EF.Controllers
         }
 
         [HttpGet]
-        [Route("id/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> GetEvaluationById(long id)
         {
             if (_evaluationService == null)
@@ -55,6 +55,7 @@ namespace API_EF.Controllers
             if (data == null) return NoContent();
             else return Ok(data);
         }
+        
         [HttpPost]
         public async Task<IActionResult> PostEvaluation([FromBody] EvaluationDto eval)
         {

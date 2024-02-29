@@ -1,0 +1,79 @@
+kind: pipeline
+type: docker
+name: default
+
+trigger:
+  event:
+    - push
+
+steps:
+  - name: build
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    commands:
+      - dotnet restore StudentEvaluator_API_EF.sln
+      - dotnet build StudentEvaluator_API_EF.sln -c Release --no-restore
+
+  - name: tests
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    commands:
+      - dotnet restore StudentEvaluator_API_EF.sln
+      - dotnet test StudentEvaluator_API_EF.sln --no-restore
+    depends_on: [build]
+
+  - name: code-analysis
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    environment:
+      sonar_host: https://codefirst.iut.uca.fr/sonar/
+      sonar_token:
+        from_secret: SECRET_SONAR_LOGIN
+      project_key: StudentEvaluator
+    commands:
+      - dotnet restore StudentEvaluator_API_EF.sln
+      - dotnet sonarscanner begin /k:$${project_key} /d:sonar.host.url=$${sonar_host} /d:sonar.login=$${sonar_token}
+      - dotnet build StudentEvaluator_API_EF.sln -c Release --no-restore
+      - dotnet sonarscanner end /d:sonar.login=$${sonar_token}
+    depends_on: [ tests ]
+
+
+  - name: generate-and-deploy-docs
+    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-docdeployer
+    failure: ignore
+    volumes:
+      - name: docs
+        path: /docs
+    commands:
+      - /entrypoint.sh
+    when:
+      branch:
+        - master
+    depends_on: [ build ]
+
+  - name: docker-build
+    image: plugins/docker
+    settings:
+      dockerfile: StudentEvaluator_API_EF/Dockerfile
+      context: .
+      registry: hub.codefirst.iut.uca.fr
+      repo: hub.codefirst.iut.uca.fr/benjamin.paczkowski/web-api
+      username:
+        from_secret: SECRET_REGISTRY_USERNAME
+      password:
+        from_secret: SECRET_REGISTRY_PASSWORD
+    when:
+      branch:
+        - master
+
+  - name: deploy-container
+    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
+    environment:
+      IMAGENAME: hub.codefirst.iut.uca.fr/benjamin.paczkowski/web-api:latest
+      CONTAINERNAME: sae_2a-api
+      COMMAND: create
+      OVERWRITE: true
+      CODEFIRST_CLIENTDRONE_ENV_BASE_PATH: /containers/benjamin-paczkowski/web-api
+    depends_on:
+      - docker-build
+
+volumes:
+  - name: docs
+    temp: { }

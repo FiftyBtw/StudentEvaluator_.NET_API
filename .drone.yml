@@ -55,9 +55,9 @@ steps:
     image: plugins/docker
     settings:
       dockerfile: StudentEvaluator_API_EF/Dockerfile
-      context: .
+      context: StudentEvaluator_API_EF
       registry: hub.codefirst.iut.uca.fr
-      repo: hub.codefirst.iut.uca.fr/benjamin.paczkowski/web-api
+      repo: hub.codefirst.iut.uca.fr/benjamin.paczkowski/sae_2a_entity_framework
       username:
         from_secret: SECRET_REGISTRY_USERNAME
       password:
@@ -69,11 +69,11 @@ steps:
   - name: deploy-container
     image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
     environment:
-      IMAGENAME: hub.codefirst.iut.uca.fr/benjamin.paczkowski/web-api:latest
-      CONTAINERNAME: sae_2a-api
+      IMAGENAME: hub.codefirst.iut.uca.fr/benjamin.paczkowski/sae_2a_entity_framework:latest
+      CONTAINERNAME: api-ef
       COMMAND: create
       OVERWRITE: true
-      CODEFIRST_CLIENTDRONE_ENV_BASE_PATH: /containers/benjamin-paczkowski/web-api
+      CODEFIRST_CLIENTDRONE_ENV_BASE_PATH: /containers/benjamin-paczkowski-studentevaluator-api-ef
     depends_on:
       - docker-build
 

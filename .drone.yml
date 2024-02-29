@@ -75,7 +75,7 @@ steps:
       COMMAND: create
       OVERWRITE: true
     depends_on:
-      - docker-build
+      - docker-build-and-push
 
 volumes:
   - name: docs

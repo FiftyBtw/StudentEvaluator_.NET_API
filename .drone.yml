@@ -74,6 +74,7 @@ steps:
       CONTAINERNAME: studentevaluator-api
       COMMAND: create
       OVERWRITE: true
+      CODEFIRST_CLIENTDRONE_ENV_ASPNETCORE_HTTP_PORTS: 80
     depends_on:
       - docker-build-and-push
 

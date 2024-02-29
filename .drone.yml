@@ -74,7 +74,7 @@ steps:
       CONTAINERNAME: api-ef
       COMMAND: create
       OVERWRITE: true
-      CODEFIRST_CLIENTDRONE_ENV_BASE_PATH: /containers/benjamin-paczkowski-studentevaluator-api-ef
+      CODEFIRST_CLIENTDRONE_ENV_BASE_PATH: /containers/benjamin-paczkowski-studentevaluator-api
     depends_on:
       - docker-build
 

@@ -1,10 +1,5 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 
-ARG APP_UID=1000
-RUN adduser --disabled-password --gecos '' --uid $APP_UID appuser
-RUN mkdir /app && chown appuser:appuser /app
-USER appuser
-
 WORKDIR /app
 
 EXPOSE 80

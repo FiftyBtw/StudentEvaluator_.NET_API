@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\API_Dto2Model\API_Dto2Model.csproj" />
+    <ProjectReference Include="..\API_Model\API_Model.csproj" />
+    <ProjectReference Include="..\Dto\API_Dto.csproj" />
   </ItemGroup>
 
 </Project>

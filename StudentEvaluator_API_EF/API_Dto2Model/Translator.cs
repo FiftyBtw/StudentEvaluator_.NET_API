@@ -10,19 +10,10 @@ namespace API_Dto2Model
 {
     public static class Translator
     {
+        //Student
         public static Student ToModel(this StudentDto student)
         {
-            return new Student
-            {
-                Id = student.Id,
-                Name = student.Name,
-                Lastname = student.Lastname,
-                UrlPhoto = student.UrlPhoto,
-                GroupNumber = student.GroupNumber,
-                GroupYear = student.GroupYear,
-
-            };
-            
+            return new Student(student.Id, student.Name, student.Lastname, student.UrlPhoto, student.GroupYear, student.GroupNumber);     
         }
 
         public static StudentDto ToDto(this Student student)
@@ -46,6 +37,31 @@ namespace API_Dto2Model
                 (students as List<Student>).Add(dto.ToModel());
             }
             return students;
+        }
+        //Group
+        public static Group ToModel(this GroupDto group)
+        {
+            return new Group(group.GroupYear,group.GroupNumber,group.Students?.ToModels());
+        }
+
+        public static GroupDto ToDto(this Group group)
+        {
+            return new GroupDto
+            {
+               GroupNumber = group.GroupNumber,
+               GroupYear= group.GroupYear,
+               Students = group.Students
+            };
+        }
+
+        public static IEnumerable<Group> ToModels(this IEnumerable<GroupDto> dtos)
+        {
+            IEnumerable<Group> groups = new List<Group>();
+            foreach (GroupDto dto in dtos)
+            {
+                (groups as List<Group>).Add(dto.ToModel());
+            }
+            return groups;
         }
 
     }

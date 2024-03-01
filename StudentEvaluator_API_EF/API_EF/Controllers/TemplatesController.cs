@@ -14,7 +14,7 @@ public class TemplatesController : ControllerBase
         _templateService = templateService;
     }
     
-    [HttpGet("/user/{id}")]
+    [HttpGet("user/{id}")]
     [ProducesResponseType(200, Type = typeof(PageReponseDto<TemplateDto>))]
     [ProducesResponseType(204)]
     [ProducesResponseType(500)]
@@ -35,7 +35,7 @@ public class TemplatesController : ControllerBase
         }
     }
     
-    [HttpGet("/user/{id}/models")]
+    [HttpGet("user/{id}/models")]
     public async Task<IActionResult> GetEmptyTemplatesByUserId(long id, int index = 0, int count = 10)
     {
         if (_templateService == null)

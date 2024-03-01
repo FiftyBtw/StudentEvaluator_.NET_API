@@ -1,45 +1,86 @@
 ﻿using EF_DbContextLib;
 using EF_Entities;
 using Microsoft.EntityFrameworkCore;
+using EF_ConsoleTests.TestUtils;
 
 class Program
 {
     static async Task Main(string[] args)
     {
         var options = new DbContextOptionsBuilder<LibraryContext>()
-            .UseSqlite("Data Source=StudentEvaluator_API_EF.db")
+            .UseSqlite("Data Source=StudentEvaluator_API_EF_Tests.db")
             .Options;
         var context = new LibraryContext(options);
         
-        // Create the database if it doesn't exist
+        await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
-
+        
         using (context)
         {
-            // Add a new student
-            var newStudent = new StudentEntity { Name = "John", Lastname = "Doe", UrlPhoto = "https://u-static.fotor.com/images/text-to-image/result/PRO-07b5ede889e54291946bfb76f2fc9780.jpg", GroupYear = 1, GroupNumber = 1 };
-            context.StudentSet.Add(newStudent);
-            await context.SaveChangesAsync();
+            Console.WriteLine("\n--------  Group  --------\n");
+            
+            // AddGroup
+            GroupTestUtils.AddGroup(context, 1, 1);
+            GroupTestUtils.AddGroup(context, 1, 2);
+            GroupTestUtils.AddGroup(context, 2, 1);
+            GroupTestUtils.AddGroup(context, 2, 2);
+
+            // DisplayAllGroups
+            GroupTestUtils.DisplayAllGroups(context);
+            
+            // DeleteGroup
+            GroupTestUtils.DeleteGroup(context, 1, 2);
+            GroupTestUtils.DeleteGroup(context, 2, 1);
+            
+            // DisplayAllGroups
+            GroupTestUtils.DisplayAllGroups(context);
+
+            
+            Console.WriteLine("--------  Student  --------\n");
+            
+            // AddStudent
+            StudentTestUtils.AddStudent(context, "John", "Doe", "url", 1, 1);
+            StudentTestUtils.AddStudent(context, "Bob", "Dylan", "url", 1, 1);
+            StudentTestUtils.AddStudent(context, "Alice", "Cooper", "url", 2, 2);
+            StudentTestUtils.AddStudent(context, "Elvis", "Presley", "url", 2, 2);
+            
+            // DisplayAllStudents
+            StudentTestUtils.DisplayAllStudents(context);
+            
+            // UpdateStudent
+            StudentTestUtils.UpdateStudent(context, 1 ,"John", "Doe", "newUrl");
+            
+            // DeleteStudent
+            StudentTestUtils.DeleteStudent(context, 2);
+            
+            // DisplayAllStudents
+            StudentTestUtils.DisplayAllStudents(context);
+            
+            // DisplayAllGroups 
+            GroupTestUtils.DisplayAllGroups(context);
             
             
-            // Display all students
-            var students = await context.StudentSet.ToListAsync();
-            foreach (var s in students)
-            {
-                Console.WriteLine($"Student: {s.Name} {s.Lastname}");
-            }
+            Console.WriteLine("\n--------  Teacher  --------\n");
             
-            // Display all groups
-            var groups = await context.GroupSet.ToListAsync();
-            foreach (var g in groups)
-            {
-                Console.WriteLine($"Group: {g.GroupYear} {g.GroupNumber}");
-            }
+            // AddTeacher
+            TeacherTestUtils.AddTeacher(context, "John", "Doe", ["Teacher"]);
+            TeacherTestUtils.AddTeacher(context, "Bob", "Dylan", ["Teacher"]);
+            TeacherTestUtils.AddTeacher(context, "Alice", "Cooper", ["Teacher"]);
             
-            // Add a new group
-            var newGroup = new GroupEntity { GroupYear = 2, GroupNumber = 1 };
-            context.GroupSet.Add(newGroup);
-            await context.SaveChangesAsync();
+            // DisplayAllTeachers
+            TeacherTestUtils.DisplayAllTeachers(context);
+            
+            // UpdateTeacher
+            TeacherTestUtils.UpdateTeacher(context, 1, "John", "Doe");
+            
+            // DisplayAllTeachers
+            TeacherTestUtils.DisplayAllTeachers(context);
+            
+            // DeleteTeacher
+            TeacherTestUtils.DeleteTeacher(context, 2);
+            
+            // DisplayAllTeachers
+            TeacherTestUtils.DisplayAllTeachers(context);
             
         }
     }

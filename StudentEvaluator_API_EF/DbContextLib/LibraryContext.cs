@@ -9,8 +9,10 @@ namespace EF_DbContextLib
         public DbSet<StudentEntity> StudentSet { get; set; }
         // Propriété DbSet pour représenter l'ensemble de groupes dans la base de données
         public DbSet<GroupEntity> GroupSet { get; set; }
-        // Propriété DbSet pour représenter l'ensemble de teachers dans la base de données
+        // Propriété DbSet pour représenter l'ensemble de users dans la base de données
         public DbSet<UserEntity> UserSet { get; set; }
+        // Propriété DbSet pour représenter l'ensemble de teachers dans la base de données
+        public DbSet<TeacherEntity> TeacherSet { get; set; }
         // Propriété DbSet pour représenter l'ensemble de templates dans la base de données
         public DbSet<TemplateEntity> TemplateSet { get; set; }
         // Propriété DbSet pour représenter l'ensemble de criteria dans la base de données

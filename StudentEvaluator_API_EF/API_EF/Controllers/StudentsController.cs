@@ -98,7 +98,5 @@ namespace API_EF.Controllers
                 { return NotFound(); }
             }
         }
-
-
     }
 }

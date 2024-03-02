@@ -26,15 +26,7 @@ foreach (var student in students.Data)
 //PostStudent :
 Console.WriteLine("Test PostStudent :");
 
-var newStudent = new Student
-{
-    Name="Mathieu",
-    Lastname="Berger",
-    UrlPhoto="photo",
-    GroupNumber=1,
-    GroupYear=1,
-};
-
+var newStudent = new Student(0,"Mathieu", "Berger", "photo", 1, 1);
 
 newStudent = await apiDataManager.PostStudent(newStudent);
 
@@ -70,3 +62,46 @@ foreach (var student in students.Data)
 }
 
 
+//Group 
+
+//GetGroups
+Console.WriteLine("Test GetGroups :\n");
+
+var groups = await apiDataManager.GetGroups();
+Console.WriteLine($"Nombre d'éléments : {groups.nbElement}");
+foreach (var group in groups.Data)
+{
+    Console.WriteLine(group);
+}
+
+//PostGroup
+
+Console.WriteLine("Test PostGroup :\n");
+
+var newGroup = new Group(3, 9, new List<Student>());
+newGroup= await apiDataManager.PostGroup(newGroup);
+
+Console.WriteLine(newGroup);
+
+//PutGroup
+
+
+//GetGroupById
+
+Console.WriteLine("Test GetGroupById (gyear =1 & gnumber=1) :\n");
+var groupById = await apiDataManager.GetGroupByIds(1, 1);
+Console.WriteLine(groupById);
+
+//DeleteGroup
+
+Console.WriteLine("Test DeleteGroup :\n");
+
+ repDelete = await apiDataManager.DeleteGroup(newGroup.GroupYear, newGroup.GroupNumber);
+Console.WriteLine(repDelete);
+
+groups = await apiDataManager.GetGroups();
+Console.WriteLine($"Nombre d'éléments : {groups.nbElement}");
+foreach (var group in groups.Data)
+{
+    Console.WriteLine(group);
+}

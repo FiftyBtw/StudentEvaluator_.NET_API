@@ -38,10 +38,22 @@ namespace API_Dto2Model
             }
             return students;
         }
+
+        public static IEnumerable<StudentDto> ToDtos(this IEnumerable<Student> dtos)
+        {
+            IEnumerable<StudentDto> students = new List<StudentDto>();
+            foreach (var dto in dtos)
+            {
+                (students as List<StudentDto>).Add(dto.ToDto());
+            }
+            return students;
+        }
+
         //Group
         public static Group ToModel(this GroupDto group)
         {
-            return new Group(group.GroupYear,group.GroupNumber,group.Students?.ToModels());
+            if (group.Students != null) return new Group(group.GroupYear, group.GroupNumber, group.Students.ToModels());
+            else return new Group(group.GroupYear, group.GroupNumber);
         }
 
         public static GroupDto ToDto(this Group group)
@@ -50,7 +62,7 @@ namespace API_Dto2Model
             {
                GroupNumber = group.GroupNumber,
                GroupYear= group.GroupYear,
-               Students = group.Students
+               Students = group.Students.ToDtos(),
             };
         }
 

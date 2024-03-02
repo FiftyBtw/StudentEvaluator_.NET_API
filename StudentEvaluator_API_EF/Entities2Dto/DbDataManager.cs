@@ -77,16 +77,18 @@ namespace Entities2Dto
 
         public Task<GroupDto?> PostGroup(GroupDto group)
         {
+            var groupTest = _libraryContext.GroupSet.FirstOrDefault(g => g.GroupYear == group.GroupYear && g.GroupNumber==group.GroupNumber );
+            if (groupTest != null) return Task.FromResult(groupTest.ToDto());
             _libraryContext.GroupSet.AddAsync(group.ToEntity());
             _libraryContext.SaveChanges();
-            return Task.FromResult(group);
+            return Task.FromResult(_libraryContext.GroupSet.FirstOrDefault(g => g.GroupYear == group.GroupYear && g.GroupNumber==group.GroupNumber)?.ToDto());
         }
 
         public Task<StudentDto?> PostStudent(StudentDto student)
         {
             _libraryContext.StudentSet.AddAsync(student.ToEntity());
             _libraryContext.SaveChanges();
-            return Task.FromResult(_libraryContext.StudentSet.FirstOrDefault(s => s.Name.Equals(student.Name) && s.Lastname.Equals(student.Lastname)).ToDto());
+            return Task.FromResult(_libraryContext.StudentSet.FirstOrDefault(s => s.Name.Equals(student.Name) && s.Lastname.Equals(student.Lastname))?.ToDto());
 
         }
 
@@ -98,7 +100,7 @@ namespace Entities2Dto
             group.GroupYear = newGroup.GroupYear;
             //group.Students = newGroup.Students;
             _libraryContext.SaveChanges();
-            return Task.FromResult(newGroup);
+            return Task.FromResult(group.ToDto());
         }
 
         public Task<StudentDto?> PutStudent(long id, StudentDto student)

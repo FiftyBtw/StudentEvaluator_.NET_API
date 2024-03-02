@@ -64,7 +64,8 @@ namespace API_Dto2Model
         public async Task<Group?> PostGroup(Group group)
         {
             var reponse = await _httpClient.PostAsJsonAsync($"{_httpClient.BaseAddress}api/Groups", group.ToDto());
-            return await Task.FromResult(await reponse.Content.ReadFromJsonAsync<Group>());
+            var groupRep = await reponse.Content.ReadFromJsonAsync<GroupDto>();
+            return await Task.FromResult(groupRep.ToModel());
         }
         public async Task<Group?> PutGroup(int gyear, int gnumber, Group group)
         {

@@ -52,7 +52,7 @@ namespace Entities2Dto
 
         public async Task<GroupDto?> GetGroupByIds(int gyear, int gnumber)
         {
-            var group = _libraryContext.GroupSet.FirstOrDefault(g => g.GroupYear == gyear && g.GroupNumber == gnumber)
+            var group = _libraryContext.GroupSet.Include(g => g.Students).FirstOrDefault(g => g.GroupYear == gyear && g.GroupNumber == gnumber)
                 ?.ToDto();
             return await Task.FromResult(group);
         }
@@ -383,8 +383,9 @@ namespace Entities2Dto
         
         public Task<TemplateDto?> PostTemplate(long userId, TemplateDto template)
         {
-            template.TeacherId = userId;
-            _libraryContext.TemplateSet.AddAsync(template.ToEntity());
+            var newTemplate = template.ToEntity();
+            newTemplate.TeacherId = userId;
+            _libraryContext.TemplateSet.AddAsync(newTemplate);
             _libraryContext.SaveChanges();
             return Task.FromResult(template);
         }

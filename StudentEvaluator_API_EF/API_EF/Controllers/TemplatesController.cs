@@ -90,7 +90,7 @@ public class TemplatesController : ControllerBase
     }
     
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutTemplate(long id, TemplateDto template)
+    public async Task<IActionResult> PutTemplate(long id, [FromBody] TemplateDto template)
     {
         if (_templateService == null)
         {

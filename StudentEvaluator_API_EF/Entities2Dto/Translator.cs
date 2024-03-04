@@ -326,7 +326,6 @@ namespace Entities2Dto
                     Id = template.Id,
                     Name = template.Name,
                     Criteria = template.Criteria.Select(CriteriaDtoConverter.ConvertToDto).ToList(),
-                    TeacherId = template.TeacherId
                 };
                 TemplateMapper.Set(template, templateDto);
             }
@@ -347,7 +346,7 @@ namespace Entities2Dto
                     Criteria = template.Criteria.Select(CriteriaDtoConverter.ConvertToEntity).ToList(),
                 };
             }
-
+            TemplateMapper.Set(templateEntity, template);
             return templateEntity;
         }
         

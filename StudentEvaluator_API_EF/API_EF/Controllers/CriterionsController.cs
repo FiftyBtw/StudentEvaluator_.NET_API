@@ -337,4 +337,4 @@ public class CriterionsController : ControllerBase
                  return BadRequest(e.Message);
              }
          }
-}
+}   

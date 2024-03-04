@@ -24,7 +24,17 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(swaggerGenOptions =>
+{
+    swaggerGenOptions.UseAllOfToExtendReferenceSchemas();
+    swaggerGenOptions.UseAllOfForInheritance();
+    swaggerGenOptions.UseOneOfForPolymorphism();
+    
+    swaggerGenOptions.SelectSubTypesUsing(baseType =>
+    {
+        return typeof(CriteriaDto).Assembly.GetTypes().Where(type => type.IsSubclassOf(baseType));
+    });
+});
 builder.Services.AddScoped<DbDataManager>(provider => new DbDataManager(new StubbedContext()));
 builder.Services.AddScoped<IStudentService>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<IGroupService>(x => x.GetRequiredService<DbDataManager>());

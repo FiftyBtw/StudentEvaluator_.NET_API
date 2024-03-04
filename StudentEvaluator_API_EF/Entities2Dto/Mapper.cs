@@ -24,6 +24,9 @@
             map.Add(entity,dto);
         }
 
-
+        public void Reset()
+        {
+            map.Clear();
+        }
     }
 }

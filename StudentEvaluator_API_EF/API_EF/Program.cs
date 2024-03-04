@@ -5,6 +5,7 @@ using EF_StubbedContextLib;
 using Entities2Dto;
 using JsonSubTypes;
 using Microsoft.EntityFrameworkCore;
+using Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,13 +37,13 @@ builder.Services.AddSwaggerGen(swaggerGenOptions =>
     });
 });
 builder.Services.AddScoped<DbDataManager>(provider => new DbDataManager(new StubbedContext()));
-builder.Services.AddScoped<IStudentService>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<IGroupService>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<ICriteriaService>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<ILessonService>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<IUserService>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<ITemplateService>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<IEvaluationService>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<IStudentService<StudentDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<IGroupService<GroupDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<ICriteriaService<CriteriaDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<ILessonService<LessonDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<IUserService<UserDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<ITemplateService<TemplateDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<IEvaluationService<EvaluationDto>>(x => x.GetRequiredService<DbDataManager>());
 
 builder.Services.AddDbContext<StubbedContext>(options =>
 {

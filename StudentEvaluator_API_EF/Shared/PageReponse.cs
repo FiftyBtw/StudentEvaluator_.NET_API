@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API_Dto
+namespace Shared
 {
-    public class PageReponseDto<T> where T : class
+    public class PageReponse<T> where T : class
     {
         public int nbElement { get; set; }
         public IEnumerable<T> Data { get; set; }
 
-        public PageReponseDto(int nbelement, IEnumerable<T> data) { 
+        public PageReponse(int nbelement, IEnumerable<T> data) { 
             nbElement= nbelement;
             Data = data;
         }

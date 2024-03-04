@@ -6,16 +6,19 @@ namespace Entities2Dto
     public static class Translator
     {
         public static Mapper<StudentEntity,StudentDto> StudentMapper { get; set; } = new Mapper<StudentEntity, StudentDto>();
-        public static Mapper<GroupEntity, GroupDto> GroupMapper { get; set; } = new Mapper<GroupEntity, GroupDto>();
-        
+        public static Mapper<GroupEntity, GroupDto> GroupMapper { get; set; } = new Mapper<GroupEntity, GroupDto>();   
         public static Mapper<CriteriaEntity, CriteriaDto> CriteriaMapper { get; set; } = new Mapper<CriteriaEntity, CriteriaDto>();
         public static Mapper<TextCriteriaEntity, TextCriteriaDto> TextCriteriaMapper { get; set; } = new Mapper<TextCriteriaEntity, TextCriteriaDto>();
         public static Mapper<SliderCriteriaEntity, SliderCriteriaDto> SliderCriteriaMapper { get; set; } = new Mapper<SliderCriteriaEntity, SliderCriteriaDto>();
         public static Mapper<TemplateEntity, TemplateDto> TemplateMapper { get; set; } = new Mapper<TemplateEntity, TemplateDto>();
-        
+ 
         public static Mapper<TeacherEntity, TeacherDto> TeacherMapper { get; set; } = new Mapper<TeacherEntity, TeacherDto>();
         public static Mapper<UserEntity, UserDto> UserMapper { get; set; } = new Mapper<UserEntity, UserDto>();
+        public static Mapper<LessonEntity,LessonDto> LessonMapper { get; set; } = new Mapper<LessonEntity, LessonDto>();
 
+        public static Mapper<EvaluationEntity, EvaluationDto> EvaluationMapper { get; set; } = new Mapper<EvaluationEntity, EvaluationDto>();
+
+        //Student
         public static StudentDto ToDto (this StudentEntity student)
         {
             var studentDto = StudentMapper.GetDto(student);
@@ -42,6 +45,48 @@ namespace Entities2Dto
 
             return studentDto;
         }
+       
+        public static StudentEntity ToEntity(this StudentDto student)
+        {
+            var studentEntity = StudentMapper.GetEntity(student);
+            if (studentEntity == null)
+            {
+                studentEntity= new StudentEntity
+                {
+                    Id = student.Id,
+                    Name = student.Name,
+                    Lastname = student.Lastname,
+                    UrlPhoto = student.UrlPhoto,
+                    GroupNumber = student.GroupNumber,
+                    GroupYear = student.GroupYear
+                };
+                StudentMapper.Set(studentEntity, student);
+                return studentEntity;
+            }
+            return studentEntity;
+        }
+
+        public static IEnumerable<StudentDto> ToDtos(this IEnumerable<StudentEntity> entities)
+        {
+            IEnumerable<StudentDto> students = new List<StudentDto>();
+            foreach (var entity in entities)
+            {
+                (students as List<StudentDto>).Add(entity.ToDto());
+            }
+            return students;
+        }
+
+        public static IEnumerable<StudentEntity> ToEntities(this IEnumerable<StudentDto> dtos)
+        {
+            IEnumerable<StudentEntity> students = new List<StudentEntity>();
+            foreach (var dto in dtos)
+            {
+                (students as List<StudentEntity>).Add(dto.ToEntity());
+            }
+            return students;
+        }
+
+        //Group
         public static GroupDto ToDto(this GroupEntity group)
         {
             var groupDto = GroupMapper.GetDto(group);
@@ -60,28 +105,6 @@ namespace Entities2Dto
             return groupDto;
 
         }
-        public static StudentEntity ToEntity(this StudentDto student)
-        {
-            var studentEntity = StudentMapper.GetEntity(student);
-            if (studentEntity == null)
-            {
-                studentEntity= new StudentEntity
-                {
-                    Id = student.Id,
-                    Name = student.Name,
-                    Lastname = student.Lastname,
-                    UrlPhoto = student.UrlPhoto,
-                    GroupNumber = student.GroupNumber,
-                    GroupYear = student.GroupYear
-                };
-                StudentMapper.Set(studentEntity, student);
-                return studentEntity;
-            }
-
-            return studentEntity;
-
-        }
-
         public static GroupEntity ToEntity(this GroupDto group)
         {
             var groupEntity = GroupMapper.GetEntity(group);
@@ -98,16 +121,6 @@ namespace Entities2Dto
             return groupEntity;
         }
 
-        public static IEnumerable<StudentDto> ToDtos(this IEnumerable<StudentEntity> entities)
-        {
-            IEnumerable<StudentDto> students = new List<StudentDto>();
-            foreach (var entity in entities)
-            {
-                (students as List<StudentDto>).Add(entity.ToDto());
-            }
-            return students;
-        }
-
         public static IEnumerable<GroupDto> ToDtos(this IEnumerable<GroupEntity> entities)
         {
             IEnumerable<GroupDto> groups = new List<GroupDto>();
@@ -117,18 +130,6 @@ namespace Entities2Dto
             }
             return groups;
         }
-
-
-        public static IEnumerable<StudentEntity> ToEntities(this IEnumerable<StudentDto> dtos)
-        {
-            IEnumerable<StudentEntity> students = new List<StudentEntity>();
-            foreach (var dto in dtos)
-            {
-                (students as List<StudentEntity>).Add(dto.ToEntity());
-            }
-            return students;
-        }
-        
         
         public static IEnumerable<GroupEntity> ToEntities(this IEnumerable<GroupDto> dtos)
         {
@@ -325,7 +326,7 @@ namespace Entities2Dto
                 {
                     Id = template.Id,
                     Name = template.Name,
-                    Criteria = template.Criteria.Select(CriteriaDtoConverter.ConvertToDto).ToList(),
+                    Criteria = template.Criteria?.Select(CriteriaDtoConverter.ConvertToDto).ToList(),
                 };
                 TemplateMapper.Set(template, templateDto);
             }
@@ -374,27 +375,39 @@ namespace Entities2Dto
         
         public static TeacherDto ToDto(this TeacherEntity teacher)
         {
-            return new TeacherDto
+            var teacherDto = TeacherMapper.GetDto(teacher);
+            if(teacherDto == null)
             {
-                Id = teacher.Id,
-                Username = teacher.Username,
-                Password = teacher.Password,
-                Templates = teacher.Templates.ToDtos(),
-                roles = teacher.roles,
-            };
+                teacherDto = new TeacherDto
+                {
+                    Id = teacher.Id,
+                    Username = teacher.Username,
+                    Password = teacher.Password,
+                    Templates = teacher.Templates?.ToDtos(),
+                    roles = teacher.roles,
+                };
+                TeacherMapper.Set(teacher, teacherDto);
+            }
+            return teacherDto;
         }
         
         public static TeacherEntity ToEntity(this TeacherDto teacher)
         {
-            return new TeacherEntity
+            var teacherEntity = TeacherMapper.GetEntity(teacher);
+            if(teacherEntity == null)
             {
-                Id = teacher.Id,
-                Username = teacher.Username,
-                Password = teacher.Password,
-                Templates = teacher.Templates.ToEntities(),
-                roles = teacher.roles,
-            };
-        }
+                teacherEntity = new TeacherEntity
+                {
+                    Id = teacher.Id,
+                    Username = teacher.Username,
+                    Password = teacher.Password,
+                    Templates = teacher.Templates?.ToEntities(),
+                    roles = teacher.roles,
+                };
+                TeacherMapper.Set(teacherEntity, teacher);
+            }
+            return teacherEntity; 
+        }   
         
         public static IEnumerable<TeacherDto> ToDtos(this IEnumerable<TeacherEntity> entities)
         {
@@ -419,32 +432,44 @@ namespace Entities2Dto
 
         public static LessonDto ToDto(this LessonEntity lesson)
         {
-            return new LessonDto
+            var lessonDto = LessonMapper.GetDto(lesson);
+            if (lessonDto == null)
             {
-               Id=lesson.Id,
-               Classroom=lesson.Classroom,
-               CourseName=lesson.CourseName,
-               Date=lesson.Date,
-               Start=lesson.Start,
-               End=lesson.End,
-               Teacher=lesson.Teacher?.ToDto(),
-               
-            };
+                lessonDto=  new LessonDto
+                {
+                    Id = lesson.Id,
+                    Classroom = lesson.Classroom,
+                    CourseName = lesson.CourseName,
+                    Start = lesson.Start,
+                    End = lesson.End,
+                    Teacher = lesson.Teacher?.ToDto(),
+
+                };
+                LessonMapper.Set(lesson, lessonDto);
+            
+            }
+            return lessonDto;
         }
 
         public static LessonEntity ToEntity(this LessonDto lessonDto)
         {
-            return new LessonEntity
+            var lessonEntity = LessonMapper.GetEntity(lessonDto);
+            if (lessonEntity == null)
             {
-                Id = lessonDto.Id,
-                Classroom = lessonDto.Classroom,
-                CourseName = lessonDto.CourseName,
-                Date = lessonDto.Date,
-                Start = lessonDto.Start,
-                End = lessonDto.End,
-                Teacher = lessonDto.Teacher?.ToEntity(),
-                Group = lessonDto.Group ?.ToEntity(),
-            };
+                lessonEntity = new LessonEntity
+                {
+                    Id = lessonDto.Id,
+                    Classroom = lessonDto.Classroom,
+                    CourseName = lessonDto.CourseName,
+                    Start = lessonDto.Start,
+                    End = lessonDto.End,
+                    Teacher = lessonDto.Teacher?.ToEntity(),
+                    Group = lessonDto.Group?.ToEntity(),
+                };
+                LessonMapper.Set(lessonEntity, lessonDto);
+            }
+            return lessonEntity;
+           
         }
 
         public static IEnumerable<LessonDto> ToDtos(this IEnumerable<LessonEntity> entities)
@@ -460,24 +485,37 @@ namespace Entities2Dto
         
         public static UserDto ToDto(this UserEntity user)
         {
-            return new UserDto
+           var userDto = UserMapper.GetDto(user);
+            if (userDto == null)
             {
-                Id = user.Id,
-                Username = user.Username,
-                Password = user.Password,
-                roles = user.roles,
-            };
+                userDto= new UserDto
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Password = user.Password,
+                    roles = user.roles,
+                };
+                UserMapper.Set(user, userDto);      
+            }
+            return userDto; 
+            
         }
         
         public static UserEntity ToEntity(this UserDto user)
         {
-            return new UserEntity
+            var userEntity = UserMapper.GetEntity(user);
+            if(userEntity == null)
             {
-                Id = user.Id,
-                Username = user.Username,
-                Password = user.Password,
-                roles = user.roles,
-            };
+                userEntity= new UserEntity
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Password = user.Password,
+                    roles = user.roles,
+                };
+                UserMapper.Set(userEntity, user);
+            }
+            return userEntity;
         }
         
         public static IEnumerable<UserDto> ToDtos(this IEnumerable<UserEntity> entities)
@@ -493,36 +531,49 @@ namespace Entities2Dto
 
         public static EvaluationDto ToDto(this EvaluationEntity eval)
         {
-            return new EvaluationDto
+            var evalDto = EvaluationMapper.GetDto(eval);
+            if(evalDto == null)
             {
-                Id = eval.Id,
-                CourseName = eval.CourseName,
-                Grade = eval.Grade,
-                PairName = eval.PairName,
-                Date = eval.Date,
+                evalDto = new EvaluationDto
+                {
+                    Id = eval.Id,
+                    CourseName = eval.CourseName,
+                    Grade = eval.Grade,
+                    PairName = eval.PairName,
+                    Date = eval.Date,
 
-                Student = eval.Student?.ToDto(),
-                Template =eval.Template?.ToDto(),
-                Teacher = eval.Teacher?.ToDto(),
+                    Student = eval.Student?.ToDto(),
+                    Template = eval.Template?.ToDto(),
+                    Teacher = eval.Teacher?.ToDto(),
 
-            };
+                };
+                EvaluationMapper.Set(eval,evalDto);
+            }
+            return evalDto;
         }
 
         public static EvaluationEntity ToEntity(this EvaluationDto evalDto)
         {
-            return new EvaluationEntity
+            var evalEntity = EvaluationMapper.GetEntity(evalDto);
+            if(evalEntity == null)
             {
-                Id = evalDto.Id,
-                CourseName = evalDto.CourseName,
-                Grade = evalDto.Grade,
-                PairName = evalDto.PairName,
-                Date = evalDto.Date,
+                evalEntity = new EvaluationEntity
+                {
+                    Id = evalDto.Id,
+                    CourseName = evalDto.CourseName,
+                    Grade = evalDto.Grade,
+                    PairName = evalDto.PairName,
+                    Date = evalDto.Date,
 
-                Student = evalDto.Student?.ToEntity(),
-                Template = evalDto.Template?.ToEntity(),
-                Teacher = evalDto.Teacher?.ToEntity(),
+                    Student = evalDto.Student?.ToEntity(),
+                    Template = evalDto.Template?.ToEntity(),
+                    Teacher = evalDto.Teacher?.ToEntity(),
 
-            };
+                };
+                EvaluationMapper.Set(evalEntity, evalDto);
+            }
+            return evalEntity;
+          
         }
 
         public static IEnumerable<EvaluationDto> ToDtos(this IEnumerable<EvaluationEntity> entities)

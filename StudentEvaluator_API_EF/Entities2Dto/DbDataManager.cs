@@ -9,10 +9,12 @@ using System.Text;
 using System.Threading.Tasks;
 using API_Dto;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using EF_Entities;
+using Shared;
 
 namespace Entities2Dto
 {
-    public class DbDataManager : IStudentService, IGroupService, ICriteriaService, IUserService, ITemplateService, ILessonService, IEvaluationService
+    public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto>, ICriteriaService<TextCriteriaDto,SliderCriteriaDto,RadioCriteriaDto>, IUserService<UserDto,LoginRequestDto, LoginResponseDto>, ITemplateService<TemplateDto>, ILessonService<LessonDto>, IEvaluationService<EvaluationDto>
     {
         private readonly LibraryContext _libraryContext;
 
@@ -57,10 +59,10 @@ namespace Entities2Dto
             return await Task.FromResult(group);
         }
 
-        public async Task<PageReponseDto<GroupDto>> GetGroups(int index, int count)
+        public async Task<PageReponse<GroupDto>> GetGroups(int index, int count)
         {
             var groups = _libraryContext.GroupSet.Include(g => g.Students).ToDtos();
-            return await Task.FromResult(new PageReponseDto<GroupDto>(groups.Count(), groups.Skip(index * count).Take(count)));
+            return await Task.FromResult(new PageReponse<GroupDto>(groups.Count(), groups.Skip(index * count).Take(count)));
         }
 
         public async Task<StudentDto?> GetStudentById(long id)
@@ -69,10 +71,10 @@ namespace Entities2Dto
             return await Task.FromResult(student);
         }
 
-        public async Task<PageReponseDto<StudentDto>> GetStudents(int index, int count )
+        public async Task<PageReponse<StudentDto>> GetStudents(int index, int count )
         {
                var students = _libraryContext.StudentSet.ToDtos();
-                return await Task.FromResult(new PageReponseDto<StudentDto>(students.Count(), students.Skip(index * count).Take(count)));
+                return await Task.FromResult(new PageReponse<StudentDto>(students.Count(), students.Skip(index * count).Take(count)));
         }
 
         public Task<GroupDto?> PostGroup(GroupDto group)
@@ -119,7 +121,7 @@ namespace Entities2Dto
         
         // Criteria
 
-        public Task<PageReponseDto<CriteriaDto>> GetCriterionsByTemplateId(long id)
+        public Task<PageReponse<CriteriaDto>> GetCriterionsByTemplateId(long id)
         {
             var criterions = _libraryContext.TemplateSet
                 .Include(t => t.Criteria)
@@ -127,7 +129,7 @@ namespace Entities2Dto
                 ?.Criteria
                 .Select(CriteriaDtoConverter.ConvertToDto)
                 .ToList();
-            return Task.FromResult(new PageReponseDto<CriteriaDto>(criterions.Count(), criterions));
+            return Task.FromResult(new PageReponse<CriteriaDto>(criterions.Count(), criterions));
         }
         
         public Task<bool> DeleteCriteria(long id)
@@ -143,11 +145,11 @@ namespace Entities2Dto
 
         // TextCriteria
 
-        public Task<PageReponseDto<TextCriteriaDto>> GetTextCriterions(int index, int count)
+        public Task<PageReponse<TextCriteriaDto>> GetTextCriterions(int index, int count)
         {
             var criterions = _libraryContext.TextCriteriaSet.ToDtos();
             
-            return Task.FromResult(new PageReponseDto<TextCriteriaDto>(criterions.Count(),
+            return Task.FromResult(new PageReponse<TextCriteriaDto>(criterions.Count(),
                 criterions.Skip(index * count).Take(count)));
         }
 
@@ -192,11 +194,11 @@ namespace Entities2Dto
         
         // SliderCriteria
         
-        public Task<PageReponseDto<SliderCriteriaDto>> GetSliderCriterions(int index, int count)
+        public Task<PageReponse<SliderCriteriaDto>> GetSliderCriterions(int index, int count)
         {
             var criterions = _libraryContext.SliderCriteriaSet.ToDtos();
 
-            return Task.FromResult(new PageReponseDto<SliderCriteriaDto>(criterions.Count(),
+            return Task.FromResult(new PageReponse<SliderCriteriaDto>(criterions.Count(),
                 criterions.Skip(index * count).Take(count)));
         }
         
@@ -241,11 +243,11 @@ namespace Entities2Dto
         
         // RadioCriteria
         
-        public Task<PageReponseDto<RadioCriteriaDto>> GetRadioCriterions(int index, int count)
+        public Task<PageReponse<RadioCriteriaDto>> GetRadioCriterions(int index, int count)
         {
             var criterions = _libraryContext.RadioCriteriaSet.ToDtos();
 
-            return Task.FromResult(new PageReponseDto<RadioCriteriaDto>(criterions.Count(),
+            return Task.FromResult(new PageReponse<RadioCriteriaDto>(criterions.Count(),
                 criterions.Skip((int)index).Take(count)));
         }
     
@@ -290,10 +292,10 @@ namespace Entities2Dto
         }
 
         // User
-        public Task<PageReponseDto<UserDto>> GetUsers(int index, int count)
+        public Task<PageReponse<UserDto>> GetUsers(int index, int count)
         {
             var users = _libraryContext.UserSet.ToDtos();
-            return Task.FromResult(new PageReponseDto<UserDto>(users.Count(), users.Skip(index * count).Take(count)));
+            return Task.FromResult(new PageReponse<UserDto>(users.Count(), users.Skip(index * count).Take(count)));
         }
 
         public Task<UserDto> GetUserById(long id)
@@ -346,28 +348,29 @@ namespace Entities2Dto
             _libraryContext.SaveChangesAsync();
             user = _libraryContext.UserSet.FirstOrDefault(u => u.Id == id);
             if (user == null) return Task.FromResult(true);
+
             return Task.FromResult(false);
         }
 
 
         // Template
 
-        public Task<PageReponseDto<TemplateDto>> GetTemplatesByUserId(long userId, int index, int count)
+        public Task<PageReponse<TemplateDto>> GetTemplatesByUserId(long userId, int index, int count)
         {
             var templates = _libraryContext.TemplateSet.Include(c => c.Criteria).Where(t => t.TeacherId == userId).ToDtos();
-            return Task.FromResult(new PageReponseDto<TemplateDto>(templates.Count(),
+            return Task.FromResult(new PageReponse<TemplateDto>(templates.Count(),
                 templates.Skip(index * count).Take(count)));
         }
         
         // Récuère les templates non utilisé dans une évaluation, ils sont considèrés comme les modèles 
-        public Task<PageReponseDto<TemplateDto>> GetEmptyTemplatesByUserId(long userId, int index, int count)
+        public Task<PageReponse<TemplateDto>> GetEmptyTemplatesByUserId(long userId, int index, int count)
         {
             var templates = _libraryContext.TemplateSet
                 .Include(c => c.Criteria)
                 .Where(t => t.TeacherId == userId)
                 .Where(t => !_libraryContext.EvaluationSet.Any(e => e.TemplateId == t.Id))
                 .ToDtos();
-            return Task.FromResult(new PageReponseDto<TemplateDto>(templates.Count(),
+            return Task.FromResult(new PageReponse<TemplateDto>(templates.Count(),
                 templates.Skip(index * count).Take(count)));
         }
         
@@ -418,10 +421,10 @@ namespace Entities2Dto
 
         //Lesson
 
-        public Task<PageReponseDto<LessonDto>> GetLessons(int index, int count)
+        public Task<PageReponse<LessonDto>> GetLessons(int index, int count)
         {
-            var lessons = _libraryContext.LessonSet.ToDtos();
-            return Task.FromResult(new PageReponseDto<LessonDto>(lessons.Count(), lessons.Skip(index * count).Take(count)));
+            var lessons = _libraryContext.LessonSet.Include(l => l.Teacher).Include(l => l.Group).ToDtos();
+            return Task.FromResult(new PageReponse<LessonDto>(lessons.Count(), lessons.Skip(index * count).Take(count)));
         }
 
         public Task<LessonDto?> GetLessonById(long id)
@@ -437,9 +440,9 @@ namespace Entities2Dto
             lesson.Id = newLesson.Id;
             lesson.CourseName = newLesson.CourseName;
             lesson.Classroom = newLesson.Classroom;
-            lesson.Date = newLesson.Date;
-            lesson.Start = newLesson.Start;
-            lesson.End = newLesson.End;
+            //lesson.Date = newLesson.Date;
+            //lesson.Start = newLesson.Start;
+            //lesson.End = newLesson.End;
             lesson.Teacher = newLesson.Teacher.ToEntity();
 
             _libraryContext.SaveChanges();
@@ -466,30 +469,30 @@ namespace Entities2Dto
             return Task.FromResult(lesson);
         }
 
-        public Task<PageReponseDto<LessonDto>> GetLessonsByTeacherId(long id, int index, int count)
+        public Task<PageReponse<LessonDto>> GetLessonsByTeacherId(long id, int index, int count)
         {
             var lessons = _libraryContext.LessonSet.Where(l => l.TeacherEntityId == id).ToDtos();
-            return Task.FromResult(new PageReponseDto<LessonDto>(lessons.Count(),lessons.Skip(count*index).Take(count)));
+            return Task.FromResult(new PageReponse<LessonDto>(lessons.Count(),lessons.Skip(count*index).Take(count)));
         }
 
 
         //Evaluations
-        public Task<PageReponseDto<EvaluationDto>> GetEvaluations(int index, int count)
+        public Task<PageReponse<EvaluationDto>> GetEvaluations(int index, int count)
         {
-            var evals = _libraryContext.EvaluationSet.ToDtos();
-            return Task.FromResult(new PageReponseDto<EvaluationDto>(evals.Count(), evals.Skip(count * index).Take(count)));
+            var evals = _libraryContext.EvaluationSet.Include(e => e.Template).Include(e => e.Student).Include(e => e.Teacher).ToDtos();
+            return Task.FromResult(new PageReponse<EvaluationDto>(evals.Count(), evals.Skip(count * index).Take(count)));
         }
 
         public Task<EvaluationDto?> GetEvaluationById(long id)
         {
-            var eval = _libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == id)?.ToDto();
+            var eval = _libraryContext.EvaluationSet.Include(e => e.Template).Include(e => e.Student).Include(e => e.Teacher).FirstOrDefault(e => e.Id == id)?.ToDto();
             return Task.FromResult(eval);
         }
 
-        public Task<PageReponseDto<EvaluationDto>> GetEvaluationsByTeacherId(long id, int index, int count)
+        public Task<PageReponse<EvaluationDto>> GetEvaluationsByTeacherId(long id, int index, int count)
         {
-            var evals = _libraryContext.EvaluationSet.Where(e => e.TeacherId == id).ToDtos();
-            return Task.FromResult(new PageReponseDto<EvaluationDto>(evals.Count(), evals.Skip(count * index).Take(count)));
+            var evals = _libraryContext.EvaluationSet.Include(e => e.Template).Include(e => e.Student).Include(e => e.Teacher).Where(e => e.TeacherId == id).ToDtos();
+            return Task.FromResult(new PageReponse<EvaluationDto>(evals.Count(), evals.Skip(count * index).Take(count)));
         }
 
         public Task<EvaluationDto?> PostEvaluation(EvaluationDto eval)

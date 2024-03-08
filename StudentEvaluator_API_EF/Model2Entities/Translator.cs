@@ -8,14 +8,26 @@ using System.Threading.Tasks;
 
 namespace Model2Entities
 {
+    /// <summary>
+    /// Provides translation methods to convert between model objects and entity objects.
+    /// </summary>
     public static class Translator
     {
         //Student
+
+
+        /// <summary>
+        /// Converts a StudentEntity object to a Student model object.
+        /// </summary>
         public static Student ToModel(this StudentEntity student)
         {
             return new Student(student.Id, student.Name, student.Lastname, student.UrlPhoto, student.GroupYear, student.GroupNumber);
         }
 
+
+        /// <summary>
+        /// Converts a Student model object to a StudentEntity object.
+        /// </summary>
         public static StudentEntity ToEntity(this Student student)
         {
             return new StudentEntity
@@ -29,6 +41,10 @@ namespace Model2Entities
             };
         }
 
+
+        /// <summary>
+        /// Converts a collection of StudentEntity objects to a collection of Student model objects.
+        /// </summary>
         public static IEnumerable<Student> ToModels(this IEnumerable<StudentEntity> entities)
         {
             IEnumerable<Student> students = new List<Student>();
@@ -39,6 +55,10 @@ namespace Model2Entities
             return students;
         }
 
+
+        /// <summary>
+        /// Converts a collection of Student model objects to a collection of StudentEntity objects.
+        /// </summary>
         public static IEnumerable<StudentEntity> ToEntities(this IEnumerable<Student> models)
         {
             IEnumerable<StudentEntity> students = new List<StudentEntity>();
@@ -50,12 +70,21 @@ namespace Model2Entities
         }
 
         //Group
+
+
+        /// <summary>
+        /// Converts a GroupEntity object to a Group model object.
+        /// </summary>
         public static Group ToModel(this GroupEntity group)
         {
             if (group.Students != null) return new Group(group.GroupYear, group.GroupNumber, group.Students.ToModels());
             else return new Group(group.GroupYear, group.GroupNumber);
         }
 
+
+        /// <summary>
+        /// Converts a Group model object to a GroupEntity object.
+        /// </summary>
         public static GroupEntity ToEntity(this Group group)
         {
             return new GroupEntity
@@ -66,6 +95,10 @@ namespace Model2Entities
             };
         }
 
+
+        /// <summary>
+        /// Converts a collection of GroupEntity objects to a collection of Group model objects.
+        /// </summary>
         public static IEnumerable<Group> ToModels(this IEnumerable<GroupEntity> entities)
         {
             IEnumerable<Group> groups = new List<Group>();

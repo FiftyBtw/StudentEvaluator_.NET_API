@@ -3,6 +3,10 @@ using EF_Entities;
 
 namespace Entities2Dto
 {
+
+    /// <summary>
+    /// Static class providing translation methods to convert between entity and DTO objects.
+    /// </summary>
     public static class Translator
     {
         public static Mapper<StudentEntity,StudentDto> StudentMapper { get; set; } = new Mapper<StudentEntity, StudentDto>();
@@ -20,6 +24,12 @@ namespace Entities2Dto
         public static Mapper<EvaluationEntity, EvaluationReponseDto> EvaluationReponseMapper { get; set; } = new Mapper<EvaluationEntity, EvaluationReponseDto>();
 
         //Student
+
+        /// <summary>
+        /// Extension method to convert StudentEntity to StudentDto.
+        /// </summary>
+        /// <param name="student">The student entity object to be converted.</param>
+        /// <returns>The corresponding student DTO object.</returns>
         public static StudentDto ToDto (this StudentEntity student)
         {
             var studentDto = StudentMapper.GetDto(student);
@@ -46,7 +56,13 @@ namespace Entities2Dto
 
             return studentDto;
         }
-       
+
+
+        /// <summary>
+        /// Extension method to convert StudentDto to StudentEntity.
+        /// </summary>
+        /// <param name="student">The student DTO object to be converted.</param>
+        /// <returns>The corresponding student entity object.</returns>
         public static StudentEntity ToEntity(this StudentDto student)
         {
             var studentEntity = StudentMapper.GetEntity(student);
@@ -67,6 +83,12 @@ namespace Entities2Dto
             return studentEntity;
         }
 
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of StudentEntity to IEnumerable of StudentDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of student entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of student DTOs.</returns>
         public static IEnumerable<StudentDto> ToDtos(this IEnumerable<StudentEntity> entities)
         {
             IEnumerable<StudentDto> students = new List<StudentDto>();
@@ -77,6 +99,12 @@ namespace Entities2Dto
             return students;
         }
 
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of StudentDto to IEnumerable of StudentEntity.
+        /// </summary>
+        /// <param name="dtos">The IEnumerable of student DTOs to be converted.</param>
+        /// <returns>The corresponding IEnumerable of student entities.</returns>
         public static IEnumerable<StudentEntity> ToEntities(this IEnumerable<StudentDto> dtos)
         {
             IEnumerable<StudentEntity> students = new List<StudentEntity>();
@@ -88,6 +116,12 @@ namespace Entities2Dto
         }
 
         //Group
+
+        /// <summary>
+        /// Extension method to convert GroupEntity to GroupDto.
+        /// </summary>
+        /// <param name="group">The group entity object to be converted.</param>
+        /// <returns>The corresponding group DTO object.</returns>
         public static GroupDto ToDto(this GroupEntity group)
         {
             var groupDto = GroupMapper.GetDto(group);
@@ -106,6 +140,12 @@ namespace Entities2Dto
             return groupDto;
 
         }
+
+        /// <summary>
+        /// Extension method to convert GroupDto to GroupEntity.
+        /// </summary>
+        /// <param name="group">The group DTO object to be converted.</param>
+        /// <returns>The corresponding group entity object.</returns>
         public static GroupEntity ToEntity(this GroupDto group)
         {
             var groupEntity = GroupMapper.GetEntity(group);
@@ -122,6 +162,12 @@ namespace Entities2Dto
             return groupEntity;
         }
 
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of GroupEntity to IEnumerable of GroupDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of group entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of group DTOs.</returns>
         public static IEnumerable<GroupDto> ToDtos(this IEnumerable<GroupEntity> entities)
         {
             IEnumerable<GroupDto> groups = new List<GroupDto>();
@@ -131,7 +177,13 @@ namespace Entities2Dto
             }
             return groups;
         }
-        
+
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of GroupDto to IEnumerable of GroupEntity.
+        /// </summary>
+        /// <param name="dtos">The IEnumerable of group DTOs to be converted.</param>
+        /// <returns>The corresponding IEnumerable of group entities.</returns>
         public static IEnumerable<GroupEntity> ToEntities(this IEnumerable<GroupDto> dtos)
         {
             IEnumerable<GroupEntity> groups = new List<GroupEntity>();
@@ -141,10 +193,16 @@ namespace Entities2Dto
             }
             return groups;
         }
-        
-        
+
+
         // TextCriteria
-        
+
+
+        /// <summary>
+        /// Extension method to convert TextCriteriaEntity to TextCriteriaDto.
+        /// </summary>
+        /// <param name="textCriteria">The text criteria entity object to be converted.</param>
+        /// <returns>The corresponding text criteria DTO object.</returns>
         public static TextCriteriaDto ToDto(this TextCriteriaEntity textCriteria)
         {
             var textCriteriaDto = TextCriteriaMapper.GetDto(textCriteria);
@@ -164,8 +222,13 @@ namespace Entities2Dto
 
             return textCriteriaDto;
         }
-        
-        
+
+
+        /// <summary>
+        /// Extension method to convert TextCriteriaDto to TextCriteriaEntity.
+        /// </summary>
+        /// <param name="textCriteria">The text criteria DTO object to be converted.</param>
+        /// <returns>The corresponding text criteria entity object.</returns>
         public static TextCriteriaEntity ToEntity(this TextCriteriaDto textCriteria)
         {
             var textCriteriaEntity = TextCriteriaMapper.GetEntity(textCriteria);
@@ -183,7 +246,13 @@ namespace Entities2Dto
 
             return textCriteriaEntity;
         }
-        
+
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of TextCriteriaEntity to IEnumerable of TextCriteriaDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of text criteria entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of text criteria DTOs.</returns>
         public static IEnumerable<TextCriteriaDto> ToDtos(this IEnumerable<TextCriteriaEntity> entities)
         {
             IEnumerable<TextCriteriaDto> textCriterias = new List<TextCriteriaDto>();
@@ -193,7 +262,13 @@ namespace Entities2Dto
             }
             return textCriterias;
         }
-        
+
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of TextCriteriaDto to IEnumerable of TextCriteriaEntity.
+        /// </summary>
+        /// <param name="dtos">The IEnumerable of text criteria DTOs to be converted.</param>
+        /// <returns>The corresponding IEnumerable of text criteria entities.</returns>
         public static IEnumerable<TextCriteriaEntity> ToEntities(this IEnumerable<TextCriteriaDto> dtos)
         {
             IEnumerable<TextCriteriaEntity> textCriterias = new List<TextCriteriaEntity>();
@@ -203,10 +278,16 @@ namespace Entities2Dto
             }
             return textCriterias;
         }
-        
-        
+
+
         // SliderCriteria
-        
+
+
+        /// <summary>
+        /// Extension method to convert SliderCriteriaEntity to SliderCriteriaDto.
+        /// </summary>
+        /// <param name="sliderCriteria">The slider criteria entity object to be converted.</param>
+        /// <returns>The corresponding slider criteria DTO object.</returns>
         public static SliderCriteriaDto ToDto(this SliderCriteriaEntity sliderCriteria)
         {
            var sliderCriteriaDto = SliderCriteriaMapper.GetDto(sliderCriteria);
@@ -226,8 +307,13 @@ namespace Entities2Dto
 
             return sliderCriteriaDto;
         }
-        
-        
+
+
+        /// <summary>
+        /// Extension method to convert SliderCriteriaDto to SliderCriteriaEntity.
+        /// </summary>
+        /// <param name="sliderCriteria">The slider criteria DTO object to be converted.</param>
+        /// <returns>The corresponding slider criteria entity object.</returns>
         public static SliderCriteriaEntity ToEntity(this SliderCriteriaDto sliderCriteria)
         {
             var sliderCriteriaEntity = SliderCriteriaMapper.GetEntity(sliderCriteria);
@@ -245,8 +331,13 @@ namespace Entities2Dto
 
             return sliderCriteriaEntity;
         }
-        
-        
+
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of SliderCriteriaEntity to IEnumerable of SliderCriteriaDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of slider criteria entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of slider criteria DTOs.</returns>
         public static IEnumerable<SliderCriteriaDto> ToDtos(this IEnumerable<SliderCriteriaEntity> entities)
         {
             IEnumerable<SliderCriteriaDto> sliderCriterias = new List<SliderCriteriaDto>();
@@ -256,8 +347,13 @@ namespace Entities2Dto
             }
             return sliderCriterias;
         }
-        
-        
+
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of SliderCriteriaDto to IEnumerable of SliderCriteriaEntity.
+        /// </summary>
+        /// <param name="dtos">The IEnumerable of slider criteria DTOs to be converted.</param>
+        /// <returns>The corresponding IEnumerable of slider criteria entities.</returns>
         public static IEnumerable<SliderCriteriaEntity> ToEntities(this IEnumerable<SliderCriteriaDto> dtos)
         {
             IEnumerable<SliderCriteriaEntity> sliderCriterias = new List<SliderCriteriaEntity>();
@@ -267,9 +363,15 @@ namespace Entities2Dto
             }
             return sliderCriterias;
         }
-        
+
         // RadioCriteria
-        
+
+
+        /// <summary>
+        /// Extension method to convert RadioCriteriaEntity to RadioCriteriaDto.
+        /// </summary>
+        /// <param name="radioCriteria">The radio criteria entity object to be converted.</param>
+        /// <returns>The corresponding radio criteria DTO object.</returns>
         public static RadioCriteriaDto ToDto(this RadioCriteriaEntity radioCriteria)
         {
             return new RadioCriteriaDto
@@ -282,7 +384,13 @@ namespace Entities2Dto
                 SelectedOption = radioCriteria.SelectedOption
             };
         }
-        
+
+
+        /// <summary>
+        /// Extension method to convert RadioCriteriaDto to RadioCriteriaEntity.
+        /// </summary>
+        /// <param name="radioCriteria">The radio criteria DTO object to be converted.</param>
+        /// <returns>The corresponding radio criteria entity object.</returns>
         public static RadioCriteriaEntity ToEntity(this RadioCriteriaDto radioCriteria)
         {
             return new RadioCriteriaEntity
@@ -295,7 +403,13 @@ namespace Entities2Dto
                 SelectedOption = radioCriteria.SelectedOption
             };
         }
-        
+
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of RadioCriteriaEntity to IEnumerable of RadioCriteriaDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of radio criteria entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of radio criteria DTOs.</returns>
         public static IEnumerable<RadioCriteriaDto> ToDtos(this IEnumerable<RadioCriteriaEntity> entities)
         {
             IEnumerable<RadioCriteriaDto> radioCriterias = new List<RadioCriteriaDto>();
@@ -305,7 +419,13 @@ namespace Entities2Dto
             }
             return radioCriterias;
         }
-        
+
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of RadioCriteriaDto to IEnumerable of RadioCriteriaEntity.
+        /// </summary>
+        /// <param name="dtos">The IEnumerable of radio criteria DTOs to be converted.</param>
+        /// <returns>The corresponding IEnumerable of radio criteria entities.</returns
         public static IEnumerable<RadioCriteriaEntity> ToEntities(this IEnumerable<RadioCriteriaDto> dtos)
         {
             IEnumerable<RadioCriteriaEntity> radioCriterias = new List<RadioCriteriaEntity>();
@@ -315,9 +435,15 @@ namespace Entities2Dto
             }
             return radioCriterias;
         }
-        
+
         // Template
-        
+
+
+        /// <summary>
+        /// Extension method to convert TemplateEntity to TemplateDto.
+        /// </summary>
+        /// <param name="template">The template entity object to be converted.</param>
+        /// <returns>The corresponding template DTO object.</returns>
         public static TemplateDto ToDto(this TemplateEntity template)
         {
             var templateDto = TemplateMapper.GetDto(template);
@@ -334,8 +460,13 @@ namespace Entities2Dto
 
             return templateDto;
         }
-        
-        
+
+
+        /// <summary>
+        /// Extension method to convert TemplateDto to TemplateEntity.
+        /// </summary>
+        /// <param name="template">The template DTO object to be converted.</param>
+        /// <returns>The corresponding template entity object.</returns>
         public static TemplateEntity ToEntity(this TemplateDto template)
         {
             var templateEntity = TemplateMapper.GetEntity(template);
@@ -351,7 +482,13 @@ namespace Entities2Dto
             TemplateMapper.Set(templateEntity, template);
             return templateEntity;
         }
-        
+
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of TemplateEntity to IEnumerable of TemplateDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of template entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of template DTOs.</returns>
         public static IEnumerable<TemplateDto> ToDtos(this IEnumerable<TemplateEntity> entities)
         {
             IEnumerable<TemplateDto> templates = new List<TemplateDto>();
@@ -361,7 +498,13 @@ namespace Entities2Dto
             }
             return templates;
         }
-        
+
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of TemplateDto to IEnumerable of TemplateEntity.
+        /// </summary>
+        /// <param name="dtos">The IEnumerable of template DTOs to be converted.</param>
+        /// <returns>The corresponding IEnumerable of template entities.</returns>
         public static IEnumerable<TemplateEntity> ToEntities(this IEnumerable<TemplateDto> dtos)
         {
             IEnumerable<TemplateEntity> templates = new List<TemplateEntity>();
@@ -371,9 +514,14 @@ namespace Entities2Dto
             }
             return templates;
         }
-        
+
         //Teacher
-        
+
+        /// <summary>
+        /// Extension method to convert TeacherEntity to TeacherDto.
+        /// </summary>
+        /// <param name="teacher">The teacher entity object to be converted.</param>
+        /// <returns>The corresponding teacher DTO object.</returns>
         public static TeacherDto ToDto(this TeacherEntity teacher)
         {
             var teacherDto = TeacherMapper.GetDto(teacher);
@@ -391,7 +539,13 @@ namespace Entities2Dto
             }
             return teacherDto;
         }
-        
+
+
+        /// <summary>
+        /// Extension method to convert TeacherDto to TeacherEntity.
+        /// </summary>
+        /// <param name="teacher">The teacher DTO object to be converted.</param>
+        /// <returns>The corresponding teacher entity object.</returns>
         public static TeacherEntity ToEntity(this TeacherDto teacher)
         {
             var teacherEntity = TeacherMapper.GetEntity(teacher);
@@ -408,8 +562,14 @@ namespace Entities2Dto
                 TeacherMapper.Set(teacherEntity, teacher);
             }
             return teacherEntity; 
-        }   
-        
+        }
+
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of TeacherEntity to IEnumerable of TeacherDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of teacher entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of teacher DTOs.</returns>
         public static IEnumerable<TeacherDto> ToDtos(this IEnumerable<TeacherEntity> entities)
         {
             IEnumerable<TeacherDto> teachers = new List<TeacherDto>();
@@ -419,8 +579,13 @@ namespace Entities2Dto
             }
             return teachers;
         }
-        
-        
+
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of TeacherDto to IEnumerable of TeacherEntity.
+        /// </summary>
+        /// <param name="dtos">The IEnumerable of teacher DTOs to be converted.</param>
+        /// <returns>The corresponding IEnumerable of teacher entities.</returns>
         public static IEnumerable<TeacherEntity> ToEntities(this IEnumerable<TeacherDto> dtos)
         {
             IEnumerable<TeacherEntity> teachers = new List<TeacherEntity>();
@@ -431,6 +596,12 @@ namespace Entities2Dto
             return teachers;
         }
 
+
+        /// <summary>
+        /// Extension method to convert LessonEntity to LessonDto.
+        /// </summary>
+        /// <param name="lesson">The lesson entity object to be converted.</param>
+        /// <returns>The corresponding lesson DTO object.</returns>
         public static LessonDto ToDto(this LessonEntity lesson)
         {
             var lessonDto = LessonMapper.GetDto(lesson);
@@ -451,6 +622,12 @@ namespace Entities2Dto
             }
             return lessonDto;
         }
+
+        /// <summary>
+        /// Extension method to convert LessonEntity to LessonReponseDto.
+        /// </summary>
+        /// <param name="lesson">The lesson entity object to be converted.</param>
+        /// <returns>The corresponding lesson response DTO object.</returns>
         public static LessonReponseDto ToReponseDto(this LessonEntity lesson)
         {
             var lessonDto = LessonReponseMapper.GetDto(lesson);
@@ -472,6 +649,12 @@ namespace Entities2Dto
             return lessonDto;
         }
 
+
+        /// <summary>
+        /// Extension method to convert LessonDto to LessonEntity.
+        /// </summary>
+        /// <param name="lessonDto">The lesson DTO object to be converted.</param>
+        /// <returns>The corresponding lesson entity object.</returns>
         public static LessonEntity ToEntity(this LessonDto lessonDto)
         {
             var lessonEntity = LessonMapper.GetEntity(lessonDto);
@@ -494,6 +677,11 @@ namespace Entities2Dto
            
         }
 
+        /// <summary>
+        /// Extension method to convert IEnumerable of LessonEntity to IEnumerable of LessonDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of lesson entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of lesson DTOs.</returns>
         public static IEnumerable<LessonDto> ToDtos(this IEnumerable<LessonEntity> entities)
         {
             IEnumerable<LessonDto> lessons = new List<LessonDto>();
@@ -504,6 +692,12 @@ namespace Entities2Dto
             return lessons;
         }
 
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of LessonEntity to IEnumerable of LessonReponseDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of lesson entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of lesson response DTOs.</returns>
         public static IEnumerable<LessonReponseDto> ToReponseDtos(this IEnumerable<LessonEntity> entities)
         {
             IEnumerable<LessonReponseDto> lessons = new List<LessonReponseDto>();
@@ -514,7 +708,11 @@ namespace Entities2Dto
             return lessons;
         }
 
-
+        /// <summary>
+        /// Extension method to convert UserEntity to UserDto.
+        /// </summary>
+        /// <param name="user">The user entity object to be converted.</param>
+        /// <returns>The corresponding user DTO object.</returns>
         public static UserDto ToDto(this UserEntity user)
         {
            var userDto = UserMapper.GetDto(user);
@@ -532,7 +730,13 @@ namespace Entities2Dto
             return userDto; 
             
         }
-        
+
+
+        /// <summary>
+        /// Extension method to convert UserDto to UserEntity.
+        /// </summary>
+        /// <param name="user">The user DTO object to be converted.</param>
+        /// <returns>The corresponding user entity object.</returns>
         public static UserEntity ToEntity(this UserDto user)
         {
             var userEntity = UserMapper.GetEntity(user);
@@ -549,7 +753,13 @@ namespace Entities2Dto
             }
             return userEntity;
         }
-        
+
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of UserEntity to IEnumerable of UserDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of user entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of user DTOs.</returns>
         public static IEnumerable<UserDto> ToDtos(this IEnumerable<UserEntity> entities)
         {
             IEnumerable<UserDto> users = new List<UserDto>();
@@ -561,6 +771,11 @@ namespace Entities2Dto
         }
 
 
+        /// <summary>
+        /// Extension method to convert EvaluationEntity to EvaluationDto.
+        /// </summary>
+        /// <param name="eval">The evaluation entity object to be converted.</param>
+        /// <returns>The corresponding evaluation DTO object.</returns>
         public static EvaluationDto ToDto(this EvaluationEntity eval)
         {
             var evalDto = EvaluationMapper.GetDto(eval);
@@ -584,6 +799,11 @@ namespace Entities2Dto
             return evalDto;
         }
 
+        /// <summary>
+        /// Extension method to convert EvaluationEntity to EvaluationReponseDto.
+        /// </summary>
+        /// <param name="eval">The evaluation entity object to be converted.</param>
+        /// <returns>The corresponding evaluation response DTO object.</returns>
         public static EvaluationReponseDto ToReponseDto(this EvaluationEntity eval)
         {
             var evalDto = EvaluationReponseMapper.GetDto(eval);
@@ -607,6 +827,12 @@ namespace Entities2Dto
             return evalDto;
         }
 
+
+        /// <summary>
+        /// Extension method to convert EvaluationDto to EvaluationEntity.
+        /// </summary>
+        /// <param name="evalDto">The evaluation DTO object to be converted.</param>
+        /// <returns>The corresponding evaluation entity object.</returns>
         public static EvaluationEntity ToEntity(this EvaluationDto evalDto)
         {
             var evalEntity = EvaluationMapper.GetEntity(evalDto);
@@ -630,6 +856,13 @@ namespace Entities2Dto
             return evalEntity;
           
         }
+
+
+        /// <summary>
+        /// Extension method to convert EvaluationReponseDto to EvaluationEntity.
+        /// </summary>
+        /// <param name="evalDto">The evaluation response DTO object to be converted.</param>
+        /// <returns>The corresponding evaluation entity object.</returns>
         public static EvaluationEntity ToEntity(this EvaluationReponseDto evalDto)
         {
             var evalEntity = EvaluationReponseMapper.GetEntity(evalDto);
@@ -654,6 +887,12 @@ namespace Entities2Dto
 
         }
 
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of EvaluationEntity to IEnumerable of EvaluationDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of evaluation entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of evaluation DTOs.</returns>
         public static IEnumerable<EvaluationDto> ToDtos(this IEnumerable<EvaluationEntity> entities)
         {
             IEnumerable<EvaluationDto> evals = new List<EvaluationDto>();
@@ -664,6 +903,12 @@ namespace Entities2Dto
             return evals;
         }
 
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of EvaluationEntity to IEnumerable of EvaluationReponseDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of evaluation entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of evaluation response DTOs.</returns>
         public static IEnumerable<EvaluationReponseDto> ToReponseDtos(this IEnumerable<EvaluationEntity> entities)
         {
             IEnumerable<EvaluationReponseDto> evals = new List<EvaluationReponseDto>();

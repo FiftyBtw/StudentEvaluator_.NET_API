@@ -1,5 +1,13 @@
 namespace Shared;
 
+
+/// <summary>
+/// Represents a service interface for criteria-related operations.
+/// </summary>
+/// <typeparam name="TCriteria">The type representing a criterion.</typeparam>
+/// <typeparam name="TText">The type representing a text-based criterion.</typeparam>
+/// <typeparam name="TSlider">The type representing a slider-based criterion.</typeparam>
+/// <typeparam name="TRadio">The type representing a radio-based criterion.</typeparam>
 public interface ICriteriaService<TCriteria,TText,TSlider,TRadio> where TRadio : class where TText : class where TSlider : class where TCriteria : class
 {
     public Task<PageReponse<TText>> GetTextCriterions(int index, int count);

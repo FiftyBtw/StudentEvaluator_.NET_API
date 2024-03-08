@@ -1,5 +1,9 @@
 namespace Shared;
 
+/// <summary>
+/// Represents a service interface for template-related operations.
+/// </summary>
+/// <typeparam name="TTemplate">The type representing a template.</typeparam>
 public interface ITemplateService<TTemplate> where TTemplate : class
 {
     public Task<PageReponse<TTemplate>> GetTemplatesByUserId(long userId, int index, int count);

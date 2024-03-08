@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace Shared;
 
+
+    /// <summary>
+    /// Represents a service interface for evaluation-related operations.
+    /// </summary>
+    /// <typeparam name="T">The type representing an evaluation.</typeparam>
+    /// <typeparam name="TResponse">The type representing a response related to the evaluation.</typeparam>
     public interface IEvaluationService<T,TReponse> where T : class where TReponse : class
     {
         public Task<PageReponse<TReponse>> GetEvaluations(int index, int count);

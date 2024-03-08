@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\API_Dto2Model\API_Dto2Model.csproj" />
+    <ProjectReference Include="..\API_Dto2Model\Dto2Model.csproj" />
   </ItemGroup>
 
 </Project>

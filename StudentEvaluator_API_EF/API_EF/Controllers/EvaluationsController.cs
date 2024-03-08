@@ -1,6 +1,6 @@
 using API_Dto;
 using Microsoft.AspNetCore.Mvc;
-
+using Shared;
 namespace API_EF.Controllers
 {
     [ApiController]
@@ -8,9 +8,9 @@ namespace API_EF.Controllers
     public class EvaluationsController : ControllerBase
     {
 
-        private readonly IEvaluationService  _evaluationService;
+        private readonly IEvaluationService<EvaluationDto,EvaluationReponseDto>  _evaluationService;
 
-        public EvaluationsController(IEvaluationService evaluationService)
+        public EvaluationsController(IEvaluationService<EvaluationDto, EvaluationReponseDto> evaluationService)
         {
             _evaluationService = evaluationService;
         }

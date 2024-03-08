@@ -5,6 +5,7 @@ using EF_StubbedContextLib;
 using Entities2Dto;
 using JsonSubTypes;
 using Microsoft.EntityFrameworkCore;
+using Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,15 +25,25 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(swaggerGenOptions =>
+{
+    swaggerGenOptions.UseAllOfToExtendReferenceSchemas();
+    swaggerGenOptions.UseAllOfForInheritance();
+    swaggerGenOptions.UseOneOfForPolymorphism();
+    
+    swaggerGenOptions.SelectSubTypesUsing(baseType =>
+    {
+        return typeof(CriteriaDto).Assembly.GetTypes().Where(type => type.IsSubclassOf(baseType));
+    });
+});
 builder.Services.AddScoped<DbDataManager>(provider => new DbDataManager(new StubbedContext()));
-builder.Services.AddScoped<IStudentService>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<IGroupService>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<ICriteriaService>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<ILessonService>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<IUserService>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<ITemplateService>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<IEvaluationService>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<IStudentService<StudentDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<IGroupService<GroupDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<ICriteriaService<CriteriaDto,TextCriteriaDto,SliderCriteriaDto,RadioCriteriaDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<ILessonService<LessonDto, LessonReponseDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<IUserService<UserDto,LoginRequestDto,LoginResponseDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<ITemplateService<TemplateDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<IEvaluationService<EvaluationDto,EvaluationReponseDto>>(x => x.GetRequiredService<DbDataManager>());
 
 builder.Services.AddDbContext<StubbedContext>(options =>
 {

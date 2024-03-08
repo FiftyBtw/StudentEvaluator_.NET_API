@@ -10,17 +10,17 @@ namespace API_Dto
     {
         public long Id { get; set; }
 
-        public DateOnly Date { get; set; }
+        public DateTime Date { get; set; }
 
         public string CourseName { get; set; }
 
         public long Grade { get; set; }
         public string? PairName { get; set; }
-        public TeacherDto Teacher { get; set; }
+        public long TeacherId { get; set; }
 
-        public TemplateDto? Template { get; set; }
+        public long TemplateId { get; set; }
 
-        public StudentDto Student { get; set; }
+        public long StudentId { get; set; }
 
     }
 }

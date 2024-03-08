@@ -6,15 +6,14 @@ using System.Threading.Tasks;
 
 namespace API_Dto
 {
-    public class LessonDto
-   {
+    public class LessonReponseDto
+    {
         public long Id { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public string CourseName { get; set; }
         public string Classroom { get; set; }
-        public long TeacherId { get; set; } 
-        public int GroupNumber { get; set; }
-        public int GroupYear { get; set; }
-   }
+        public TeacherDto Teacher { get; set; }
+        public GroupDto Group { get; set; }
+    }
 }

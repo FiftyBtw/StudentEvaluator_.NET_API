@@ -1,6 +1,6 @@
 using API_Dto;
 using Microsoft.AspNetCore.Mvc;
-
+using Shared;
 namespace API_EF.Controllers
 {
     [ApiController]
@@ -8,15 +8,15 @@ namespace API_EF.Controllers
     public class GroupsController : ControllerBase
     {
 
-        private readonly IGroupService  _groupService;
+        private readonly IGroupService<GroupDto>  _groupService;
 
-        public GroupsController(IGroupService groupService)
+        public GroupsController(IGroupService<GroupDto> groupService)
         {
             _groupService = groupService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetGroups(int index, int count)
+        public async Task<IActionResult> GetGroups(int index=0, int count=10)
         {
             if (_groupService == null)
             {

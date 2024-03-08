@@ -1,11 +1,12 @@
 ﻿using API_Dto;
 using API_Model;
+using Shared;
 using System.Net.Http.Json;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace API_Dto2Model
 {
-    public class ApiDataManager : IDataManager
+    public class ApiDataManager : IStudentService<Student>,IGroupService<Group>
     {
         private readonly HttpClient _httpClient;
 
@@ -31,10 +32,10 @@ namespace API_Dto2Model
             return await Task.FromResult(studentById?.ToModel());
         }
 
-        public async Task<PageReponseModel<Student>> GetStudents(int index=0, int count=10)
+        public async Task<PageReponse<Student>> GetStudents(int index=0, int count=10)
         {
-            var students = await _httpClient.GetFromJsonAsync<PageReponseDto<StudentDto>>($"{_httpClient.BaseAddress}api/Students?index={index}&count={count}");
-            return await Task.FromResult(new PageReponseModel<Student>(students.nbElement,students.Data.ToModels()));
+            var students = await _httpClient.GetFromJsonAsync<PageReponse<StudentDto>>($"{_httpClient.BaseAddress}api/Students?index={index}&count={count}");
+            return await Task.FromResult(new PageReponse<Student>(students.nbElement,students.Data.ToModels()));
         }
 
         public async Task<Student?> PostStudent(Student student)
@@ -50,11 +51,11 @@ namespace API_Dto2Model
         }
 
         //Group
-        public async Task<PageReponseModel<Group>> GetGroups(int index=0, int count=10)
+        public async Task<PageReponse<Group>> GetGroups(int index=0, int count=10)
         {
 
-            var groups = await _httpClient.GetFromJsonAsync<PageReponseDto<GroupDto>>($"{_httpClient.BaseAddress}api/Groups?index={index}&count={count}");
-            return await Task.FromResult(new PageReponseModel<Group>(groups.nbElement, groups.Data.ToModels()));
+            var groups = await _httpClient.GetFromJsonAsync<PageReponse<GroupDto>>($"{_httpClient.BaseAddress}api/Groups?index={index}&count={count}");
+            return await Task.FromResult(new PageReponse<Group>(groups.nbElement, groups.Data.ToModels()));
         }
         public async Task<Group?> GetGroupByIds(int gyear, int gnumber)
         {

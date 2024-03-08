@@ -1,5 +1,6 @@
 using API_Dto;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 
 namespace API_EF.Controllers;
 
@@ -7,9 +8,9 @@ namespace API_EF.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
-    private readonly IUserService _userService;
+    private readonly IUserService<UserDto,LoginRequestDto,LoginResponseDto> _userService;
 
-    public UsersController(IUserService userService)
+    public UsersController(IUserService<UserDto, LoginRequestDto, LoginResponseDto> userService)
     {
         _userService = userService;
     }

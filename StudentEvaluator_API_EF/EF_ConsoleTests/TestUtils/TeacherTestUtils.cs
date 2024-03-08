@@ -34,7 +34,7 @@ public class TeacherTestUtils
                 Console.WriteLine("Lessons:");
                 foreach (var lesson in teacher.Lessons)
                 {
-                    Console.WriteLine($"  - {lesson.Id}: {lesson.CourseName} {lesson.Date}");
+                    Console.WriteLine($"  - {lesson.Id}: {lesson.CourseName} {lesson.Start}");
                 }
             }
 

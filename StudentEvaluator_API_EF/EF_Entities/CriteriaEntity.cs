@@ -1,6 +1,6 @@
 namespace EF_Entities;
 
-public class CriteriaEntity
+public abstract class  CriteriaEntity
 {
     public long Id { get; set; }
     

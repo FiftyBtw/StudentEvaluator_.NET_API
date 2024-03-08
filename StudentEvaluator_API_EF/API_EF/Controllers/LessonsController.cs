@@ -1,5 +1,6 @@
 using API_Dto;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 
 namespace API_EF.Controllers
 {
@@ -8,9 +9,9 @@ namespace API_EF.Controllers
     public class LessonsController : ControllerBase
     {
 
-        private readonly ILessonService  _lessonService;
+        private readonly ILessonService<LessonDto,LessonReponseDto>  _lessonService;
 
-        public LessonsController(ILessonService lessonService)
+        public LessonsController(ILessonService<LessonDto, LessonReponseDto> lessonService)
         {
             _lessonService = lessonService;
         }

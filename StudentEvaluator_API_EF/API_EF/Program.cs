@@ -39,11 +39,11 @@ builder.Services.AddSwaggerGen(swaggerGenOptions =>
 builder.Services.AddScoped<DbDataManager>(provider => new DbDataManager(new StubbedContext()));
 builder.Services.AddScoped<IStudentService<StudentDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<IGroupService<GroupDto>>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<ICriteriaService<CriteriaDto>>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<ILessonService<LessonDto>>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<IUserService<UserDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<ICriteriaService<CriteriaDto,TextCriteriaDto,SliderCriteriaDto,RadioCriteriaDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<ILessonService<LessonDto, LessonReponseDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<IUserService<UserDto,LoginRequestDto,LoginResponseDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<ITemplateService<TemplateDto>>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<IEvaluationService<EvaluationDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<IEvaluationService<EvaluationDto,EvaluationReponseDto>>(x => x.GetRequiredService<DbDataManager>());
 
 builder.Services.AddDbContext<StubbedContext>(options =>
 {

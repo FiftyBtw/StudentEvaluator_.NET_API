@@ -156,14 +156,14 @@ namespace EF_StubbedContextLib
            
             // Configure les données initiales (stub) pour l'entité EvaluationEntity
             modelBuilder.Entity<EvaluationEntity>().HasData(
-                new EvaluationEntity { Id = 1, Date = new DateOnly(2023, 11, 05), CourseName = "Introduction au SQL", Grade = 15, TeacherId = 1, TemplateId = 1, StudentId = 1 },
-                new EvaluationEntity { Id = 2, Date = new DateOnly(2023, 11, 07), CourseName = "Introduction au SQL", Grade = 14, TeacherId = 2, TemplateId = 4, StudentId = 2 },
-                new EvaluationEntity { Id = 3, Date = new DateOnly(2023, 11, 09), CourseName = "Bases du Développement Web", Grade = 13, TeacherId = 3, TemplateId = 2, StudentId = 3 },
-                new EvaluationEntity { Id = 4, Date = new DateOnly(2023, 11, 11), CourseName = "Bases du Développement Web", Grade = 12, TeacherId = 4, TemplateId = 5, StudentId = 1 },
-                new EvaluationEntity { Id = 5, Date = new DateOnly(2023, 11, 13), CourseName = "Fondamentaux de JavaScript", Grade = 11, TeacherId = 1, TemplateId = 3, StudentId = 2 },
-                new EvaluationEntity { Id = 6, Date = new DateOnly(2023, 11, 15), CourseName = "Fondamentaux de JavaScript", Grade = 10, TeacherId = 2, TemplateId = 6, StudentId = 3 },
-                new EvaluationEntity { Id = 7, Date = new DateOnly(2023, 11, 17), CourseName = "Conception de Bases de Données", Grade = 9, TeacherId = 3, TemplateId = 7, StudentId = 1 },
-                new EvaluationEntity { Id = 8, Date = new DateOnly(2023, 11, 19), CourseName = "Conception de Bases de Données", Grade = 8, TeacherId = 4, TemplateId = 8, StudentId = 2 }
+                new EvaluationEntity { Id = 1, Date = new DateOnly(2023, 11, 05).ToDateTime(new TimeOnly(0,0)), CourseName = "Introduction au SQL", Grade = 15, TeacherId = 1, TemplateId = 1, StudentId = 1 },
+                new EvaluationEntity { Id = 2, Date = new DateOnly(2023, 11, 07).ToDateTime(new TimeOnly(0, 0)), CourseName = "Introduction au SQL", Grade = 14, TeacherId = 2, TemplateId = 4, StudentId = 2 },
+                new EvaluationEntity { Id = 3, Date = new DateOnly(2023, 11, 09).ToDateTime(new TimeOnly(0, 0)), CourseName = "Bases du Développement Web", Grade = 13, TeacherId = 3, TemplateId = 2, StudentId = 3 },
+                new EvaluationEntity { Id = 4, Date = new DateOnly(2023, 11, 11).ToDateTime(new TimeOnly(0, 0)), CourseName = "Bases du Développement Web", Grade = 12, TeacherId = 4, TemplateId = 5, StudentId = 1 },
+                new EvaluationEntity { Id = 5, Date = new DateOnly(2023, 11, 13).ToDateTime(new TimeOnly(0, 0)), CourseName = "Fondamentaux de JavaScript", Grade = 11, TeacherId = 1, TemplateId = 3, StudentId = 2 },
+                new EvaluationEntity { Id = 6, Date = new DateOnly(2023, 11, 15).ToDateTime(new TimeOnly(0, 0)), CourseName = "Fondamentaux de JavaScript", Grade = 10, TeacherId = 2, TemplateId = 6, StudentId = 3 },
+                new EvaluationEntity { Id = 7, Date = new DateOnly(2023, 11, 17).ToDateTime(new TimeOnly(0, 0)), CourseName = "Conception de Bases de Données", Grade = 9, TeacherId = 3, TemplateId = 7, StudentId = 1 },
+                new EvaluationEntity { Id = 8, Date = new DateOnly(2023, 11, 19).ToDateTime(new TimeOnly(0, 0)), CourseName = "Conception de Bases de Données", Grade = 8, TeacherId = 4, TemplateId = 8, StudentId = 2 }
                /* new EvaluationEntity { Id = 9, Date = new DateOnly(2023, 11, 21), CourseName = "Programmation en Python", Grade = 7, TeacherId = 5, StudentId = 3 },
                 new EvaluationEntity { Id = 10, Date = new DateOnly(2023, 11, 23), CourseName = "Programmation en Python", Grade = 6, TeacherId = 1,  StudentId = 1 },
                 new EvaluationEntity { Id = 11, Date = new DateOnly(2023, 11, 25), CourseName = "Bases du HTML", Grade = 5, TeacherId = 2, StudentId = 2 },

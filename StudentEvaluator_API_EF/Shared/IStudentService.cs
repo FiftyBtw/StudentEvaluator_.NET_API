@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Shared;
-{
     public interface IStudentService<TStudent> where TStudent : class
     {
         public Task<PageReponse<TStudent>> GetStudents(int index, int count);
@@ -17,4 +16,3 @@ namespace Shared;
         public Task<bool> DeleteStudent(long id);
     }
 
-}

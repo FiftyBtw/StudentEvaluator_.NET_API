@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Shared;
-{
+
     public interface IGroupService<T> where T : class
     {
         public Task<PageReponse<T>> GetGroups(int index,int count);
@@ -17,4 +17,4 @@ namespace Shared;
 
         public Task<bool> DeleteGroup(int gyear, int gnumber);
     }
-}
+

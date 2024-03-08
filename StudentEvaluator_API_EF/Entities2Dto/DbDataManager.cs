@@ -14,7 +14,8 @@ using Shared;
 
 namespace Entities2Dto
 {
-    public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto>, ICriteriaService<TextCriteriaDto,SliderCriteriaDto,RadioCriteriaDto>, IUserService<UserDto,LoginRequestDto, LoginResponseDto>, ITemplateService<TemplateDto>, ILessonService<LessonDto>, IEvaluationService<EvaluationDto>
+    public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto>, ICriteriaService<CriteriaDto,TextCriteriaDto,SliderCriteriaDto,RadioCriteriaDto>,
+        IUserService<UserDto,LoginRequestDto, LoginResponseDto>, ITemplateService<TemplateDto>, ILessonService<LessonDto,LessonReponseDto>, IEvaluationService<EvaluationDto,EvaluationReponseDto>
     {
         private readonly LibraryContext _libraryContext;
 
@@ -23,6 +24,63 @@ namespace Entities2Dto
             _libraryContext = context;
         }
 
+        //Student
+        public Task<bool> DeleteStudent(long id)
+        {
+            var student = _libraryContext.StudentSet.FirstOrDefault(b => b.Id == id);
+            if (student == null) return Task.FromResult(false);
+
+            _libraryContext.StudentSet.Where(b => b.Id == id).ExecuteDelete();
+            _libraryContext.SaveChangesAsync();
+            student = _libraryContext.StudentSet.FirstOrDefault(b => b.Id == id);
+      
+            if (student == null) return Task.FromResult(true);
+            return Task.FromResult(false);
+        }
+
+        public async Task<StudentDto?> GetStudentById(long id)
+        {
+            var student = _libraryContext.StudentSet.FirstOrDefault(s => s.Id == id)?.ToDto();
+            Translator.StudentMapper.Reset();
+            return await Task.FromResult(student);
+        }
+
+        public async Task<PageReponse<StudentDto>> GetStudents(int index, int count )
+        {
+            var students = _libraryContext.StudentSet.ToDtos();
+            Translator.StudentMapper.Reset();
+            return await Task.FromResult(new PageReponse<StudentDto>(students.Count(), students.Skip(index * count).Take(count)));
+        }
+
+        public Task<StudentDto?> PostStudent(StudentDto student)
+        {
+            _libraryContext.StudentSet.AddAsync(student.ToEntity());
+            _libraryContext.SaveChanges();
+            Translator.StudentMapper.Reset();
+            return Task.FromResult(_libraryContext.StudentSet.FirstOrDefault(s => s.Name.Equals(student.Name) && s.Lastname.Equals(student.Lastname))?.ToDto());
+
+        }
+
+     
+        public Task<StudentDto?> PutStudent(long id, StudentDto student)
+        {
+            var oldStudent = _libraryContext.StudentSet.FirstOrDefault(b => b.Id == id);
+            if (oldStudent == null) {
+                Translator.StudentMapper.Reset();
+                return Task.FromResult<StudentDto?>(null);
+            }
+            oldStudent.Name = student.Name;
+            oldStudent.Lastname = student.Lastname;
+            oldStudent.UrlPhoto = student.UrlPhoto;
+            oldStudent.GroupNumber = student.GroupNumber;
+            oldStudent.GroupYear = student.GroupYear;
+            _libraryContext.SaveChanges();
+            Translator.StudentMapper.Reset();
+            return Task.FromResult(oldStudent.ToDto());
+
+        }
+
+        //Group
         public Task<bool> DeleteGroup(int gyear, int gnumber)
         {
             var group = _libraryContext.GroupSet.FirstOrDefault(g => g.GroupYear == gyear && g.GroupNumber == gnumber);
@@ -38,60 +96,28 @@ namespace Entities2Dto
             return Task.FromResult(false);
         }
 
-        public Task<bool> DeleteStudent(long id)
-        {
-            var student = _libraryContext.StudentSet.FirstOrDefault(b => b.Id == id);
-            if (student == null) return Task.FromResult(false);
-
-            _libraryContext.StudentSet.Where(b => b.Id == id).ExecuteDelete();
-            _libraryContext.SaveChangesAsync();
-
-            student = _libraryContext.StudentSet.FirstOrDefault(b => b.Id == id);
-
-            if (student == null) return Task.FromResult(true);
-            return Task.FromResult(false);
-        }
-
         public async Task<GroupDto?> GetGroupByIds(int gyear, int gnumber)
         {
             var group = _libraryContext.GroupSet.Include(g => g.Students).FirstOrDefault(g => g.GroupYear == gyear && g.GroupNumber == gnumber)
                 ?.ToDto();
+            Translator.GroupMapper.Reset();
             return await Task.FromResult(group);
         }
 
         public async Task<PageReponse<GroupDto>> GetGroups(int index, int count)
         {
             var groups = _libraryContext.GroupSet.Include(g => g.Students).ToDtos();
+            Translator.GroupMapper.Reset();
             return await Task.FromResult(new PageReponse<GroupDto>(groups.Count(), groups.Skip(index * count).Take(count)));
         }
-
-        public async Task<StudentDto?> GetStudentById(long id)
-        {
-            var student = _libraryContext.StudentSet.FirstOrDefault(s => s.Id == id)?.ToDto();
-            return await Task.FromResult(student);
-        }
-
-        public async Task<PageReponse<StudentDto>> GetStudents(int index, int count )
-        {
-               var students = _libraryContext.StudentSet.ToDtos();
-                return await Task.FromResult(new PageReponse<StudentDto>(students.Count(), students.Skip(index * count).Take(count)));
-        }
-
         public Task<GroupDto?> PostGroup(GroupDto group)
         {
-            var groupTest = _libraryContext.GroupSet.FirstOrDefault(g => g.GroupYear == group.GroupYear && g.GroupNumber==group.GroupNumber );
+            var groupTest = _libraryContext.GroupSet.FirstOrDefault(g => g.GroupYear == group.GroupYear && g.GroupNumber == group.GroupNumber);
             if (groupTest != null) return Task.FromResult(groupTest.ToDto());
             _libraryContext.GroupSet.AddAsync(group.ToEntity());
             _libraryContext.SaveChanges();
-            return Task.FromResult(_libraryContext.GroupSet.FirstOrDefault(g => g.GroupYear == group.GroupYear && g.GroupNumber==group.GroupNumber)?.ToDto());
-        }
-
-        public Task<StudentDto?> PostStudent(StudentDto student)
-        {
-            _libraryContext.StudentSet.AddAsync(student.ToEntity());
-            _libraryContext.SaveChanges();
-            return Task.FromResult(_libraryContext.StudentSet.FirstOrDefault(s => s.Name.Equals(student.Name) && s.Lastname.Equals(student.Lastname))?.ToDto());
-
+            Translator.GroupMapper.Reset();
+            return Task.FromResult(_libraryContext.GroupSet.FirstOrDefault(g => g.GroupYear == group.GroupYear && g.GroupNumber == group.GroupNumber)?.ToDto());
         }
 
         public Task<GroupDto?> PutGroup(int gyear, int gnumber, GroupDto newGroup)
@@ -102,23 +128,11 @@ namespace Entities2Dto
             group.GroupYear = newGroup.GroupYear;
             //group.Students = newGroup.Students;
             _libraryContext.SaveChanges();
-            return Task.FromResult(group.ToDto());
+            var groupDto = group.ToDto();
+            Translator.GroupMapper.Reset();
+            return Task.FromResult(groupDto);
         }
 
-        public Task<StudentDto?> PutStudent(long id, StudentDto student)
-        {
-            var oldStudent = _libraryContext.StudentSet.FirstOrDefault(b => b.Id == id);
-            if (oldStudent == null) return Task.FromResult<StudentDto?>(null);
-            oldStudent.Name = student.Name;
-            oldStudent.Lastname = student.Lastname;
-            oldStudent.UrlPhoto = student.UrlPhoto;
-            oldStudent.GroupNumber = student.GroupNumber;
-            oldStudent.GroupYear = student.GroupYear;
-            _libraryContext.SaveChanges();
-            return Task.FromResult(oldStudent.ToDto());
-
-        }
-        
         // Criteria
 
         public Task<PageReponse<CriteriaDto>> GetCriterionsByTemplateId(long id)
@@ -129,6 +143,7 @@ namespace Entities2Dto
                 ?.Criteria
                 .Select(CriteriaDtoConverter.ConvertToDto)
                 .ToList();
+
             return Task.FromResult(new PageReponse<CriteriaDto>(criterions.Count(), criterions));
         }
         
@@ -148,7 +163,7 @@ namespace Entities2Dto
         public Task<PageReponse<TextCriteriaDto>> GetTextCriterions(int index, int count)
         {
             var criterions = _libraryContext.TextCriteriaSet.ToDtos();
-            
+            Translator.TextCriteriaMapper.Reset();
             return Task.FromResult(new PageReponse<TextCriteriaDto>(criterions.Count(),
                 criterions.Skip(index * count).Take(count)));
         }
@@ -156,6 +171,7 @@ namespace Entities2Dto
         public Task<TextCriteriaDto?> GetTextCriterionByIds(long id)
         {
             var criterion = _libraryContext.TextCriteriaSet.FirstOrDefault(s => s.Id == id)?.ToDto();
+            Translator.TextCriteriaMapper.Reset();
             return Task.FromResult(criterion);
         }
         
@@ -166,6 +182,7 @@ namespace Entities2Dto
             text.TemplateId = templateId;
             _libraryContext.TextCriteriaSet.AddAsync(text.ToEntity());
             _libraryContext.SaveChanges();
+            Translator.TextCriteriaMapper.Reset();
             return Task.FromResult(text);
         }
         
@@ -197,14 +214,15 @@ namespace Entities2Dto
         public Task<PageReponse<SliderCriteriaDto>> GetSliderCriterions(int index, int count)
         {
             var criterions = _libraryContext.SliderCriteriaSet.ToDtos();
-
+            Translator.SliderCriteriaMapper.Reset();
             return Task.FromResult(new PageReponse<SliderCriteriaDto>(criterions.Count(),
                 criterions.Skip(index * count).Take(count)));
         }
         
         public Task<SliderCriteriaDto?> GetSliderCriterionByIds(long id)
-        {
+        {   
             var criterion = _libraryContext.SliderCriteriaSet.FirstOrDefault(s => s.Id == id)?.ToDto();
+            Translator.SliderCriteriaMapper.Reset();
             return Task.FromResult(criterion);
         }
         
@@ -215,6 +233,7 @@ namespace Entities2Dto
             slider.TemplateId = templateId;
             _libraryContext.SliderCriteriaSet.AddAsync(slider.ToEntity());
             _libraryContext.SaveChanges();
+            Translator.SliderCriteriaMapper.Reset();
             return Task.FromResult(slider);
         }
         
@@ -246,7 +265,7 @@ namespace Entities2Dto
         public Task<PageReponse<RadioCriteriaDto>> GetRadioCriterions(int index, int count)
         {
             var criterions = _libraryContext.RadioCriteriaSet.ToDtos();
-
+            
             return Task.FromResult(new PageReponse<RadioCriteriaDto>(criterions.Count(),
                 criterions.Skip((int)index).Take(count)));
         }
@@ -295,12 +314,14 @@ namespace Entities2Dto
         public Task<PageReponse<UserDto>> GetUsers(int index, int count)
         {
             var users = _libraryContext.UserSet.ToDtos();
+            Translator.UserMapper.Reset();
             return Task.FromResult(new PageReponse<UserDto>(users.Count(), users.Skip(index * count).Take(count)));
         }
 
         public Task<UserDto> GetUserById(long id)
         {
             var user = _libraryContext.UserSet.FirstOrDefault(u => u.Id == id)?.ToDto();
+            Translator.UserMapper.Reset();
             return Task.FromResult(user);
         }
 
@@ -309,6 +330,7 @@ namespace Entities2Dto
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             _libraryContext.UserSet.AddAsync(user.ToEntity());
             _libraryContext.SaveChanges();
+            Translator.UserMapper.Reset();
             return Task.FromResult(user);
         }
 
@@ -358,6 +380,7 @@ namespace Entities2Dto
         public Task<PageReponse<TemplateDto>> GetTemplatesByUserId(long userId, int index, int count)
         {
             var templates = _libraryContext.TemplateSet.Include(c => c.Criteria).Where(t => t.TeacherId == userId).ToDtos();
+            Translator.TemplateMapper.Reset();
             return Task.FromResult(new PageReponse<TemplateDto>(templates.Count(),
                 templates.Skip(index * count).Take(count)));
         }
@@ -370,6 +393,7 @@ namespace Entities2Dto
                 .Where(t => t.TeacherId == userId)
                 .Where(t => !_libraryContext.EvaluationSet.Any(e => e.TemplateId == t.Id))
                 .ToDtos();
+            Translator.TemplateMapper.Reset();
             return Task.FromResult(new PageReponse<TemplateDto>(templates.Count(),
                 templates.Skip(index * count).Take(count)));
         }
@@ -381,6 +405,7 @@ namespace Entities2Dto
                 .Where(t => t.TeacherId == userId && t.Id == templateId)
                 .ToDtos()
                 .FirstOrDefault();
+            Translator.TemplateMapper.Reset();
             return Task.FromResult(template);
         }
         
@@ -390,6 +415,7 @@ namespace Entities2Dto
             newTemplate.TeacherId = userId;
             _libraryContext.TemplateSet.AddAsync(newTemplate);
             _libraryContext.SaveChanges();
+            Translator.TemplateMapper.Reset();
             return Task.FromResult(template);
         }
         
@@ -421,32 +447,36 @@ namespace Entities2Dto
 
         //Lesson
 
-        public Task<PageReponse<LessonDto>> GetLessons(int index, int count)
+        public Task<PageReponse<LessonReponseDto>> GetLessons(int index, int count)
         {
-            var lessons = _libraryContext.LessonSet.Include(l => l.Teacher).Include(l => l.Group).ToDtos();
-            return Task.FromResult(new PageReponse<LessonDto>(lessons.Count(), lessons.Skip(index * count).Take(count)));
+            var lessons = _libraryContext.LessonSet.Include(l => l.Teacher).Include(l => l.Group).ToReponseDtos();
+            Translator.LessonMapper.Reset();
+            return Task.FromResult(new PageReponse<LessonReponseDto>(lessons.Count(), lessons.Skip(index * count).Take(count)));
         }
 
-        public Task<LessonDto?> GetLessonById(long id)
+        public Task<LessonReponseDto?> GetLessonById(long id)
         {
-            var lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id == id)?.ToDto();
+            var lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id == id)?.ToReponseDto();
+            Translator.LessonMapper.Reset();
             return Task.FromResult(lesson);
         }
 
-        public Task<LessonDto?> PutLesson(long id, LessonDto newLesson)
+        public Task<LessonReponseDto?> PutLesson(long id, LessonDto newLesson)
         {
             var lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id == id);
-            if (lesson == null) return Task.FromResult<LessonDto?>(null);
+            if (lesson == null) return Task.FromResult<LessonReponseDto?>(null);
             lesson.Id = newLesson.Id;
             lesson.CourseName = newLesson.CourseName;
             lesson.Classroom = newLesson.Classroom;
             //lesson.Date = newLesson.Date;
             //lesson.Start = newLesson.Start;
             //lesson.End = newLesson.End;
-            lesson.Teacher = newLesson.Teacher.ToEntity();
+            lesson.TeacherEntityId = newLesson.TeacherId;
 
             _libraryContext.SaveChanges();
-            return Task.FromResult(newLesson);
+            
+            Translator.LessonMapper.Reset();
+            return Task.FromResult(_libraryContext.LessonSet.FirstOrDefault(l => l.Id == id)?.ToReponseDto());
         }
 
         public Task<bool> DeleteLesson(long id)
@@ -462,60 +492,69 @@ namespace Entities2Dto
             if (lesson == null) return Task.FromResult(true);
             else return Task.FromResult(false);
         }
-        public Task<LessonDto?> PostLesson(LessonDto lesson)
+        public Task<LessonReponseDto?> PostLesson(LessonDto lesson)
         {
-            _libraryContext.LessonSet.AddAsync(lesson.ToEntity());
+            var lessonEntity = lesson.ToEntity();
+            _libraryContext.LessonSet.AddAsync(lessonEntity);
             _libraryContext.SaveChanges();
-            return Task.FromResult(lesson);
+            Translator.LessonMapper.Reset();
+            return Task.FromResult(lessonEntity?.ToReponseDto());
         }
 
-        public Task<PageReponse<LessonDto>> GetLessonsByTeacherId(long id, int index, int count)
+        public Task<PageReponse<LessonReponseDto>> GetLessonsByTeacherId(long id, int index, int count)
         {
-            var lessons = _libraryContext.LessonSet.Where(l => l.TeacherEntityId == id).ToDtos();
-            return Task.FromResult(new PageReponse<LessonDto>(lessons.Count(),lessons.Skip(count*index).Take(count)));
+            var lessons = _libraryContext.LessonSet.Where(l => l.TeacherEntityId == id).ToReponseDtos();
+            Translator.LessonMapper.Reset();
+            return Task.FromResult(new PageReponse<LessonReponseDto>(lessons.Count(),lessons.Skip(count*index).Take(count)));
         }
 
 
         //Evaluations
-        public Task<PageReponse<EvaluationDto>> GetEvaluations(int index, int count)
+        public Task<PageReponse<EvaluationReponseDto>> GetEvaluations(int index, int count)
         {
-            var evals = _libraryContext.EvaluationSet.Include(e => e.Template).Include(e => e.Student).Include(e => e.Teacher).ToDtos();
-            return Task.FromResult(new PageReponse<EvaluationDto>(evals.Count(), evals.Skip(count * index).Take(count)));
+            var evals = _libraryContext.EvaluationSet.Include(e => e.Template).Include(e => e.Student).Include(e => e.Teacher).ToReponseDtos();
+            Translator.EvaluationReponseMapper.Reset();
+            return Task.FromResult(new PageReponse<EvaluationReponseDto>(evals.Count(), evals.Skip(count * index).Take(count)));
         }
 
-        public Task<EvaluationDto?> GetEvaluationById(long id)
+        public Task<EvaluationReponseDto?> GetEvaluationById(long id)
         {
-            var eval = _libraryContext.EvaluationSet.Include(e => e.Template).Include(e => e.Student).Include(e => e.Teacher).FirstOrDefault(e => e.Id == id)?.ToDto();
+            var eval = _libraryContext.EvaluationSet.Include(e => e.Template).Include(e => e.Student).Include(e => e.Teacher).FirstOrDefault(e => e.Id == id)?.ToReponseDto();
+            Translator.EvaluationReponseMapper.Reset();
             return Task.FromResult(eval);
         }
 
-        public Task<PageReponse<EvaluationDto>> GetEvaluationsByTeacherId(long id, int index, int count)
+        public Task<PageReponse<EvaluationReponseDto>> GetEvaluationsByTeacherId(long id, int index, int count)
         {
-            var evals = _libraryContext.EvaluationSet.Include(e => e.Template).Include(e => e.Student).Include(e => e.Teacher).Where(e => e.TeacherId == id).ToDtos();
-            return Task.FromResult(new PageReponse<EvaluationDto>(evals.Count(), evals.Skip(count * index).Take(count)));
+            var evals = _libraryContext.EvaluationSet.Include(e => e.Template).Include(e => e.Student).Include(e => e.Teacher).Where(e => e.TeacherId == id).ToReponseDtos();
+            Translator.EvaluationMapper.Reset();
+            return Task.FromResult(new PageReponse<EvaluationReponseDto>(evals.Count(), evals.Skip(count * index).Take(count)));
         }
 
-        public Task<EvaluationDto?> PostEvaluation(EvaluationDto eval)
+        public Task<EvaluationReponseDto?> PostEvaluation(EvaluationDto eval)
         {
-            _libraryContext.EvaluationSet.AddAsync(eval.ToEntity());
+            var evalEntity = eval.ToEntity();
+            _libraryContext.EvaluationSet.AddAsync(evalEntity);
             _libraryContext.SaveChanges();
-            return Task.FromResult(eval);
+            Translator.EvaluationMapper.Reset();
+            return Task.FromResult(evalEntity?.ToReponseDto());
         }
 
-        public Task<EvaluationDto?> PutEvaluation(long id, EvaluationDto newEval)
+        public Task<EvaluationReponseDto?> PutEvaluation(long id, EvaluationDto newEval)
         {
             var eval = _libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == id);
-            if (eval == null) return Task.FromResult<EvaluationDto?>(null);
+            if (eval == null) return Task.FromResult<EvaluationReponseDto?>(null);
             eval.Id = newEval.Id;
             eval.CourseName = newEval.CourseName;
             eval.PairName = newEval.PairName;
             eval.Grade = newEval.Grade;
             eval.Date = newEval.Date;
 
-            eval.Teacher = newEval.Teacher.ToEntity();
+            eval.TeacherId = newEval.TeacherId;
 
             _libraryContext.SaveChanges();
-            return Task.FromResult(newEval);
+            Translator.EvaluationMapper.Reset();
+            return Task.FromResult(_libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == id)?.ToReponseDto());
         }
 
         public Task<bool> DeleteEvaluation(long id)

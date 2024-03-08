@@ -15,8 +15,9 @@ namespace Entities2Dto
         public static Mapper<TeacherEntity, TeacherDto> TeacherMapper { get; set; } = new Mapper<TeacherEntity, TeacherDto>();
         public static Mapper<UserEntity, UserDto> UserMapper { get; set; } = new Mapper<UserEntity, UserDto>();
         public static Mapper<LessonEntity,LessonDto> LessonMapper { get; set; } = new Mapper<LessonEntity, LessonDto>();
-
+        public static Mapper<LessonEntity, LessonReponseDto> LessonReponseMapper { get; set; } = new Mapper<LessonEntity, LessonReponseDto>();
         public static Mapper<EvaluationEntity, EvaluationDto> EvaluationMapper { get; set; } = new Mapper<EvaluationEntity, EvaluationDto>();
+        public static Mapper<EvaluationEntity, EvaluationReponseDto> EvaluationReponseMapper { get; set; } = new Mapper<EvaluationEntity, EvaluationReponseDto>();
 
         //Student
         public static StudentDto ToDto (this StudentEntity student)
@@ -442,11 +443,31 @@ namespace Entities2Dto
                     CourseName = lesson.CourseName,
                     Start = lesson.Start,
                     End = lesson.End,
-                    Teacher = lesson.Teacher?.ToDto(),
+                    TeacherId = lesson.TeacherEntityId,
 
                 };
                 LessonMapper.Set(lesson, lessonDto);
             
+            }
+            return lessonDto;
+        }
+        public static LessonReponseDto ToReponseDto(this LessonEntity lesson)
+        {
+            var lessonDto = LessonReponseMapper.GetDto(lesson);
+            if (lessonDto == null)
+            {
+                lessonDto = new LessonReponseDto
+                {
+                    Id = lesson.Id,
+                    Classroom = lesson.Classroom,
+                    CourseName = lesson.CourseName,
+                    Start = lesson.Start,
+                    End = lesson.End,
+                    Teacher = lesson.Teacher.ToDto(),
+
+                };
+                LessonReponseMapper.Set(lesson, lessonDto);
+
             }
             return lessonDto;
         }
@@ -463,8 +484,9 @@ namespace Entities2Dto
                     CourseName = lessonDto.CourseName,
                     Start = lessonDto.Start,
                     End = lessonDto.End,
-                    Teacher = lessonDto.Teacher?.ToEntity(),
-                    Group = lessonDto.Group?.ToEntity(),
+                    TeacherEntityId = lessonDto.TeacherId,
+                    GroupNumber = lessonDto.GroupNumber,
+                    GroupYear= lessonDto.GroupYear,
                 };
                 LessonMapper.Set(lessonEntity, lessonDto);
             }
@@ -482,7 +504,17 @@ namespace Entities2Dto
             return lessons;
         }
 
-        
+        public static IEnumerable<LessonReponseDto> ToReponseDtos(this IEnumerable<LessonEntity> entities)
+        {
+            IEnumerable<LessonReponseDto> lessons = new List<LessonReponseDto>();
+            foreach (var entity in entities)
+            {
+                (lessons as List<LessonReponseDto>).Add(entity.ToReponseDto());
+            }
+            return lessons;
+        }
+
+
         public static UserDto ToDto(this UserEntity user)
         {
            var userDto = UserMapper.GetDto(user);
@@ -542,12 +574,35 @@ namespace Entities2Dto
                     PairName = eval.PairName,
                     Date = eval.Date,
 
+                    StudentId = eval.StudentId,
+                    TeacherId = eval.TeacherId,
+                    TemplateId = eval.TemplateId,
+
+                };
+                EvaluationMapper.Set(eval,evalDto);
+            }
+            return evalDto;
+        }
+
+        public static EvaluationReponseDto ToReponseDto(this EvaluationEntity eval)
+        {
+            var evalDto = EvaluationReponseMapper.GetDto(eval);
+            if (evalDto == null)
+            {
+                evalDto = new EvaluationReponseDto
+                {
+                    Id = eval.Id,
+                    CourseName = eval.CourseName,
+                    Grade = eval.Grade,
+                    PairName = eval.PairName,
+                    Date = eval.Date,
+
                     Student = eval.Student?.ToDto(),
                     Template = eval.Template?.ToDto(),
                     Teacher = eval.Teacher?.ToDto(),
 
                 };
-                EvaluationMapper.Set(eval,evalDto);
+                EvaluationReponseMapper.Set(eval, evalDto);
             }
             return evalDto;
         }
@@ -565,15 +620,38 @@ namespace Entities2Dto
                     PairName = evalDto.PairName,
                     Date = evalDto.Date,
 
-                    Student = evalDto.Student?.ToEntity(),
-                    Template = evalDto.Template?.ToEntity(),
-                    Teacher = evalDto.Teacher?.ToEntity(),
+                    StudentId = evalDto.StudentId,
+                    TemplateId = evalDto.TemplateId,
+                    TeacherId = evalDto.TeacherId,
 
                 };
                 EvaluationMapper.Set(evalEntity, evalDto);
             }
             return evalEntity;
           
+        }
+        public static EvaluationEntity ToEntity(this EvaluationReponseDto evalDto)
+        {
+            var evalEntity = EvaluationReponseMapper.GetEntity(evalDto);
+            if (evalEntity == null)
+            {
+                evalEntity = new EvaluationEntity
+                {
+                    Id = evalDto.Id,
+                    CourseName = evalDto.CourseName,
+                    Grade = evalDto.Grade,
+                    PairName = evalDto.PairName,
+                    Date = evalDto.Date,
+
+                    Student = evalDto.Student?.ToEntity(),
+                    Template = evalDto.Template?.ToEntity(),
+                    Teacher = evalDto.Teacher?.ToEntity(),
+
+                };
+                EvaluationReponseMapper.Set(evalEntity, evalDto);
+            }
+            return evalEntity;
+
         }
 
         public static IEnumerable<EvaluationDto> ToDtos(this IEnumerable<EvaluationEntity> entities)
@@ -582,6 +660,16 @@ namespace Entities2Dto
             foreach (var entity in entities)
             {
                 (evals as List<EvaluationDto>).Add(entity.ToDto());
+            }
+            return evals;
+        }
+
+        public static IEnumerable<EvaluationReponseDto> ToReponseDtos(this IEnumerable<EvaluationEntity> entities)
+        {
+            IEnumerable<EvaluationReponseDto> evals = new List<EvaluationReponseDto>();
+            foreach (var entity in entities)
+            {
+                (evals as List<EvaluationReponseDto>).Add(entity.ToReponseDto());
             }
             return evals;
         }

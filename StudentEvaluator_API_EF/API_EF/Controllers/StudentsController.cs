@@ -1,7 +1,7 @@
 using API_Dto;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-
+using Shared;
 namespace API_EF.Controllers
 {
     [ApiController]
@@ -9,9 +9,9 @@ namespace API_EF.Controllers
     public class StudentsController : ControllerBase
     {
 
-        private readonly IStudentService _studentService;
+        private readonly IStudentService<StudentDto> _studentService;
 
-        public StudentsController(IStudentService studentService)
+        public StudentsController(IStudentService<StudentDto> studentService)
         {
             _studentService = studentService;
         }

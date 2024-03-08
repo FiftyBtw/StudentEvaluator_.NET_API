@@ -1,21 +1,21 @@
 using API_Dto;
 using Microsoft.AspNetCore.Mvc;
-
+using Shared;
 namespace API_EF.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class TemplatesController : ControllerBase
 {
-    private readonly ITemplateService _templateService;
+    private readonly ITemplateService<TemplateDto> _templateService;
     
-    public TemplatesController(ITemplateService templateService)
+    public TemplatesController(ITemplateService<TemplateDto> templateService)
     {
         _templateService = templateService;
     }
     
     [HttpGet("user/{id}")]
-    [ProducesResponseType(200, Type = typeof(PageReponseDto<TemplateDto>))]
+    [ProducesResponseType(200, Type = typeof(PageReponse<TemplateDto>))]
     [ProducesResponseType(204)]
     [ProducesResponseType(500)]
     public async Task<IActionResult> GetTemplatesByUserId(long id, int index = 0, int count = 10)

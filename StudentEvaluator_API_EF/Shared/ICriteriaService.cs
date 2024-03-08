@@ -1,6 +1,6 @@
 namespace Shared;
 
-public interface ICriteriaService<TText,TSlider,TRadio> where TRadio : class where TText : class where TSlider : class
+public interface ICriteriaService<TCriteria,TText,TSlider,TRadio> where TRadio : class where TText : class where TSlider : class where TCriteria : class
 {
     public Task<PageReponse<TText>> GetTextCriterions(int index, int count);
     public Task<TText> GetTextCriterionByIds(long id);
@@ -10,7 +10,7 @@ public interface ICriteriaService<TText,TSlider,TRadio> where TRadio : class whe
     
     public Task<PageReponse<TRadio>> GetRadioCriterions(int index, int count);
     public Task<TRadio> GetRadioCriterionByIds(long id);
-    public Task<PageReponse<TSlider>> GetCriterionsByTemplateId(long id);
+    public Task<PageReponse<TCriteria>> GetCriterionsByTemplateId(long id);
     
     // Post
     public Task<TText> PostTextCriterion(long templateId, TText text);

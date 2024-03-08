@@ -1,5 +1,6 @@
 using API_Dto;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 
 namespace API_EF.Controllers;
 
@@ -7,9 +8,9 @@ namespace API_EF.Controllers;
 [Route("api/[controller]")]
 public class CriterionsController : ControllerBase
 {
-    private readonly ICriteriaService _criteriaService;
+    private readonly ICriteriaService<CriteriaDto,TextCriteriaDto,SliderCriteriaDto,RadioCriteriaDto> _criteriaService;
     
-    public CriterionsController(ICriteriaService criteriaService)
+    public CriterionsController(ICriteriaService<CriteriaDto, TextCriteriaDto, SliderCriteriaDto, RadioCriteriaDto> criteriaService)
     {
         _criteriaService = criteriaService;
     }
@@ -160,7 +161,7 @@ public class CriterionsController : ControllerBase
     
     
      [HttpGet("template/{id}")]
-     [ProducesResponseType(200, Type= typeof(PageReponseDto<CriteriaDto>[]))]
+     [ProducesResponseType(200, Type= typeof(PageReponse<CriteriaDto>[]))]
      [ProducesResponseType(400)]
      [ProducesResponseType(404)]
      [ProducesResponseType(500)]

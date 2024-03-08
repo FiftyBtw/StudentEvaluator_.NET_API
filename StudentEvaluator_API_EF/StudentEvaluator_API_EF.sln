@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client_Model", "API_Model\C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dto2Model", "API_Dto2Model\Dto2Model.csproj", "{30BC4ED0-35E5-4564-9C10-51A51B0A77DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{3B164F4B-B578-439C-874E-54FDFDCC0816}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{3B164F4B-B578-439C-874E-54FDFDCC0816}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model2Entities", "Model2Entities\Model2Entities.csproj", "{4735BABE-9EA2-4989-9455-C28CA394BE67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{3B164F4B-B578-439C-874E-54FDFDCC0816}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B164F4B-B578-439C-874E-54FDFDCC0816}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B164F4B-B578-439C-874E-54FDFDCC0816}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4735BABE-9EA2-4989-9455-C28CA394BE67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4735BABE-9EA2-4989-9455-C28CA394BE67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4735BABE-9EA2-4989-9455-C28CA394BE67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4735BABE-9EA2-4989-9455-C28CA394BE67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

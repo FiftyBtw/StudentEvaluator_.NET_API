@@ -81,5 +81,37 @@ namespace API_Dto2Model
             }
             else return await Task.FromResult(false);
         }
+
+        //Lesson
+        public Task<PageReponseModel<Lesson>> GetLessons(int index=0, int count=10)
+        {
+            var lessons = await _httpClient.GetFromJsonAsync<PageReponseDto<Lesson>>($"{_httpClient.BaseAddress}api/Lessons?index={index}&count={count}");
+            return await Task.FromResult(new PageReponseModel<Lesson>(lessons.nbElement, lessons.Data.ToModels()));
+        }
+
+        public Task<Lesson?> GetLessonById(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PageReponseModel<Lesson>> GetLessonsByTeacherId(long id, int index, int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Lesson?> PostLesson(Lesson lesson)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Lesson?> PutLesson(long id, Lesson lesson)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteLesson(long id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

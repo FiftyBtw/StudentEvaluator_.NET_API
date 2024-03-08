@@ -75,6 +75,53 @@ namespace API_Dto2Model
             }
             return groups;
         }
+        //Teacher
+        public static Teacher ToModel(this TeacherDto dto)
+        {
+            return new Teacher();
+        }
+
+        public static TeacherDto ToDto(this Teacher teacher)
+        {
+            return new TeacherDto
+            {
+                Id = teacher.Id,
+                Username = teacher.Username,
+                Password = teacher.Password,
+                roles = teacher.roles
+
+            };
+        }
+        //Lesson
+        public static Lesson ToModel(this LessonDto lesson)
+        {
+            return new Lesson(lesson.Id,lesson.Date,lesson.Start,lesson.End,lesson.CourseName,lesson.Classroom,lesson.Teacher.ToModel(),lesson.Group.ToModel());
+        }
+
+        public static LessonDto ToDto(this Lesson lesson)
+        {
+            return new LessonDto
+            {
+                Id = lesson.Id,
+                Date = lesson.Date,
+                Start = lesson.Start,
+                End = lesson.End,
+                CourseName = lesson.CourseName,
+                Classroom = lesson.Classroom,
+                Teacher = lesson.Teacher.ToDto(),
+                Group = lesson.Group.ToDto(),
+            };
+        }
+
+        public static IEnumerable<Lesson> ToModels(this IEnumerable<LessonDto> dtos)
+        {
+            IEnumerable<Lesson> lessons = new List<Lesson>();
+            foreach (LessonDto dto in dtos)
+            {
+                (lessons as List<Lesson>).Add(dto.ToModel());
+            }
+            return lessons;
+        }
 
     }
 }

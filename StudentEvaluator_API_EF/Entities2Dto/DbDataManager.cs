@@ -19,7 +19,7 @@ namespace Entities2Dto
     /// Implements various service interfaces for managing students, groups, criteria, users, templates, lessons, and evaluations.
     /// </summary>
     public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto>, ICriteriaService<CriteriaDto,TextCriteriaDto,SliderCriteriaDto,RadioCriteriaDto>,
-        IUserService<UserDto,LoginRequestDto, LoginResponseDto>, ITemplateService<TemplateDto>, ILessonService<LessonDto,LessonReponseDto>, IEvaluationService<EvaluationDto,EvaluationReponseDto>
+        IUserService<UserDto,LoginRequestDto, LoginResponseDto>, ITemplateService<TemplateDto, TemplateResponseDto>, ILessonService<LessonDto,LessonReponseDto>, IEvaluationService<EvaluationDto,EvaluationReponseDto>
     {
         private readonly LibraryContext _libraryContext;
 
@@ -612,11 +612,11 @@ namespace Entities2Dto
         /// <param name="index">The index of the page.</param>
         /// <param name="count">The number of templates per page.</param>
         /// <returns>A task representing the asynchronous operation, returning a page response containing the templates.</returns>
-        public Task<PageReponse<TemplateDto>> GetTemplatesByUserId(long userId, int index, int count)
+        public Task<PageReponse<TemplateResponseDto>> GetTemplatesByUserId(long userId, int index, int count)
         {
-            var templates = _libraryContext.TemplateSet.Include(c => c.Criteria).Where(t => t.TeacherId == userId).ToDtos();
+            var templates = _libraryContext.TemplateSet.Include(c => c.Criteria).Where(t => t.TeacherId == userId).ToResponseDtos();
             Translator.TemplateMapper.Reset();
-            return Task.FromResult(new PageReponse<TemplateDto>(templates.Count(),
+            return Task.FromResult(new PageReponse<TemplateResponseDto>(templates.Count(),
                 templates.Skip(index * count).Take(count)));
         }
 
@@ -627,15 +627,15 @@ namespace Entities2Dto
         /// <param name="index">The index of the page.</param>
         /// <param name="count">The number of empty templates per page.</param>
         /// <returns>A task representing the asynchronous operation, returning a page response containing the empty templates.</returns>
-        public Task<PageReponse<TemplateDto>> GetEmptyTemplatesByUserId(long userId, int index, int count)
+        public Task<PageReponse<TemplateResponseDto>> GetEmptyTemplatesByUserId(long userId, int index, int count)
         {
             var templates = _libraryContext.TemplateSet
                 .Include(c => c.Criteria)
                 .Where(t => t.TeacherId == userId)
                 .Where(t => !_libraryContext.EvaluationSet.Any(e => e.TemplateId == t.Id))
-                .ToDtos();
+                .ToResponseDtos();
             Translator.TemplateMapper.Reset();
-            return Task.FromResult(new PageReponse<TemplateDto>(templates.Count(),
+            return Task.FromResult(new PageReponse<TemplateResponseDto>(templates.Count(),
                 templates.Skip(index * count).Take(count)));
         }
 
@@ -646,15 +646,12 @@ namespace Entities2Dto
         /// <param name="userId">The ID of the user who owns the template.</param>
         /// <param name="templateId">The ID of the template to retrieve.</param>
         /// <returns>A task representing the asynchronous operation, returning the template DTO if found, otherwise null.</returns>
-        public Task<TemplateDto?> GetTemplateById(long userId, long templateId)
+        public Task<TemplateResponseDto?> GetTemplateById(long userId, long templateId)
         {
-            var template = _libraryContext.TemplateSet
-                .Include(t => t.Criteria)
-                .Where(t => t.TeacherId == userId && t.Id == templateId)
-                .ToDtos()
-                .FirstOrDefault();
+            var template = _libraryContext.TemplateSet.Include(t => t.Criteria).FirstOrDefault(t => t.Id == templateId);
+            if (template == null) return Task.FromResult<TemplateResponseDto?>(null);
             Translator.TemplateMapper.Reset();
-            return Task.FromResult(template);
+            return Task.FromResult(template.ToResponseDto());
         }
 
 
@@ -664,14 +661,14 @@ namespace Entities2Dto
         /// <param name="userId">The ID of the user who owns the template.</param>
         /// <param name="template">The template DTO to add.</param>
         /// <returns>A task representing the asynchronous operation, returning the added template DTO.</returns>
-        public Task<TemplateDto?> PostTemplate(long userId, TemplateDto template)
+        public Task<TemplateResponseDto?> PostTemplate(long userId, TemplateDto template)
         {
-            var newTemplate = template.ToEntity();
-            newTemplate.TeacherId = userId;
-            _libraryContext.TemplateSet.AddAsync(newTemplate);
+            var templateEntity = template.ToEntity();
+            templateEntity.TeacherId = userId;
+            _libraryContext.TemplateSet.AddAsync(templateEntity);
             _libraryContext.SaveChanges();
             Translator.TemplateMapper.Reset();
-            return Task.FromResult(template);
+            return Task.FromResult(templateEntity.ToResponseDto());
         }
 
 
@@ -681,14 +678,14 @@ namespace Entities2Dto
         /// <param name="templateId">The ID of the template to update.</param>
         /// <param name="template">The updated template DTO.</param>
         /// <returns>A task representing the asynchronous operation, returning the updated template DTO if found, otherwise null.</returns>
-        public Task<TemplateDto?> PutTemplate(long templateId, TemplateDto template)
+        public Task<TemplateResponseDto?> PutTemplate(long templateId, TemplateDto template)
         {
-            var oldTemplate = _libraryContext.TemplateSet.FirstOrDefault(t => t.Id == templateId);
-            if (oldTemplate == null) return Task.FromResult<TemplateDto?>(null);
+            var oldTemplate = _libraryContext.TemplateSet.Include(t => t.Criteria).FirstOrDefault(t => t.Id == templateId);
+            if (oldTemplate == null) return Task.FromResult<TemplateResponseDto?>(null);
             oldTemplate.Name = template.Name;
-            oldTemplate.Criteria = template.Criteria.Select(CriteriaDtoConverter.ConvertToEntity).ToList();
             _libraryContext.SaveChanges();
-            return Task.FromResult(template);
+            Translator.TemplateMapper.Reset();
+            return Task.FromResult(oldTemplate.ToResponseDto());
         }
 
 
@@ -753,7 +750,6 @@ namespace Entities2Dto
         {
             var lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id == id);
             if (lesson == null) return Task.FromResult<LessonReponseDto?>(null);
-            lesson.Id = newLesson.Id;
             lesson.CourseName = newLesson.CourseName;
             lesson.Classroom = newLesson.Classroom;
             //lesson.Date = newLesson.Date;

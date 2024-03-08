@@ -8,7 +8,6 @@ namespace API_Dto
 {
     public class LessonDto
    {
-        public long Id { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public string CourseName { get; set; }

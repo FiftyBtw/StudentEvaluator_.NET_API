@@ -1,11 +1,13 @@
 using API_Dto;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
 namespace API_EF.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class UsersController : ControllerBase
 {
     private readonly IUserService<UserDto,LoginRequestDto,LoginResponseDto> _userService;

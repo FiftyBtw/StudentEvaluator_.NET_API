@@ -451,9 +451,7 @@ namespace Entities2Dto
             {
                 templateDto = new TemplateDto
                 {
-                    Id = template.Id,
                     Name = template.Name,
-                    Criteria = template.Criteria?.Select(CriteriaDtoConverter.ConvertToDto).ToList(),
                 };
                 TemplateMapper.Set(template, templateDto);
             }
@@ -474,9 +472,8 @@ namespace Entities2Dto
             {
                 return new TemplateEntity
                 {
-                    Id = template.Id,
                     Name = template.Name,
-                    Criteria = template.Criteria.Select(CriteriaDtoConverter.ConvertToEntity).ToList(),
+                    Criteria = new List<CriteriaEntity>(),
                 };
             }
             TemplateMapper.Set(templateEntity, template);
@@ -514,7 +511,28 @@ namespace Entities2Dto
             }
             return templates;
         }
-
+        
+        public static TemplateResponseDto ToResponseDto(this TemplateEntity template)
+        {
+            var templateDto = new TemplateResponseDto
+            {
+                Id = template.Id,
+                Name = template.Name,
+                Criterias = template.Criteria?.Select(CriteriaDtoConverter.ConvertToDto).ToList()
+            };
+            return templateDto;
+        }
+        
+        public static  IEnumerable<TemplateResponseDto> ToResponseDtos(this IEnumerable<TemplateEntity> entities)
+        {
+            IEnumerable<TemplateResponseDto> templates = new List<TemplateResponseDto>();
+            foreach (var entity in entities)
+            {
+                (templates as List<TemplateResponseDto>).Add(entity.ToResponseDto());
+            }
+            return templates;
+        }
+        
         //Teacher
 
         /// <summary>
@@ -609,7 +627,6 @@ namespace Entities2Dto
             {
                 lessonDto=  new LessonDto
                 {
-                    Id = lesson.Id,
                     Classroom = lesson.Classroom,
                     CourseName = lesson.CourseName,
                     Start = lesson.Start,
@@ -662,7 +679,6 @@ namespace Entities2Dto
             {
                 lessonEntity = new LessonEntity
                 {
-                    Id = lessonDto.Id,
                     Classroom = lessonDto.Classroom,
                     CourseName = lessonDto.CourseName,
                     Start = lessonDto.Start,

@@ -1,11 +1,13 @@
 using API_Dto;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
-namespace API_EF.Controllers
+namespace API_EF.Controllers.V1
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class LessonsController : ControllerBase
     {
 

@@ -1,15 +1,19 @@
 using API_Dto;
+using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
+
 namespace API_EF.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class TemplatesController : ControllerBase
 {
-    private readonly ITemplateService<TemplateDto> _templateService;
+    private readonly ITemplateService<TemplateDto, TemplateResponseDto> _templateService;
     
-    public TemplatesController(ITemplateService<TemplateDto> templateService)
+    public TemplatesController(ITemplateService<TemplateDto, TemplateResponseDto> templateService)
     {
         _templateService = templateService;
     }

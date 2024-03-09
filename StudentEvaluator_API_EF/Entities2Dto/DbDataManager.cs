@@ -456,7 +456,7 @@ namespace Entities2Dto
 
         public Task<LessonReponseDto?> GetLessonById(long id)
         {
-            var lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id == id)?.ToReponseDto();
+            var lesson = _libraryContext.LessonSet.Include(l => l.Teacher).Include(l => l.Group).FirstOrDefault(l => l.Id == id)?.ToReponseDto();
             Translator.LessonMapper.Reset();
             return Task.FromResult(lesson);
         }
@@ -465,18 +465,16 @@ namespace Entities2Dto
         {
             var lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id == id);
             if (lesson == null) return Task.FromResult<LessonReponseDto?>(null);
-            lesson.Id = newLesson.Id;
             lesson.CourseName = newLesson.CourseName;
             lesson.Classroom = newLesson.Classroom;
-            //lesson.Date = newLesson.Date;
-            //lesson.Start = newLesson.Start;
-            //lesson.End = newLesson.End;
+            lesson.Start = newLesson.Start;
+            lesson.End = newLesson.End;
             lesson.TeacherEntityId = newLesson.TeacherId;
-
-            _libraryContext.SaveChanges();
-            
+            lesson.GroupNumber = newLesson.GroupNumber;
+            lesson.GroupYear= newLesson.GroupYear;
+            _libraryContext.SaveChanges();         
             Translator.LessonMapper.Reset();
-            return Task.FromResult(_libraryContext.LessonSet.FirstOrDefault(l => l.Id == id)?.ToReponseDto());
+            return Task.FromResult(_libraryContext.LessonSet.Include(l => l.Teacher).Include(l => l.Group).FirstOrDefault(l => l.Id == id)?.ToReponseDto());
         }
 
         public Task<bool> DeleteLesson(long id)
@@ -498,12 +496,12 @@ namespace Entities2Dto
             _libraryContext.LessonSet.AddAsync(lessonEntity);
             _libraryContext.SaveChanges();
             Translator.LessonMapper.Reset();
-            return Task.FromResult(lessonEntity?.ToReponseDto());
+            return Task.FromResult(_libraryContext.LessonSet.Include(l => l.Teacher).Include(l=>l.Group).FirstOrDefault(l => l.Id==lessonEntity.Id)?.ToReponseDto());
         }
 
         public Task<PageReponse<LessonReponseDto>> GetLessonsByTeacherId(long id, int index, int count)
         {
-            var lessons = _libraryContext.LessonSet.Where(l => l.TeacherEntityId == id).ToReponseDtos();
+            var lessons = _libraryContext.LessonSet.Include(l => l.Teacher).Include(l => l.Group).Where(l => l.TeacherEntityId == id).ToReponseDtos();
             Translator.LessonMapper.Reset();
             return Task.FromResult(new PageReponse<LessonReponseDto>(lessons.Count(),lessons.Skip(count*index).Take(count)));
         }

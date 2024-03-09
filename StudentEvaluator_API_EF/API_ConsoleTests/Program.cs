@@ -5,6 +5,8 @@ using System.Text.Json;
 using System.Text;
 using API_Dto2Model;
 using API_Model;
+using Client_Model;
+using EF_Entities;
 
 HttpClient httpClient = new HttpClient();
 httpClient.BaseAddress = new Uri("https://localhost:7140");
@@ -104,4 +106,63 @@ Console.WriteLine($"Nombre d'éléments : {groups.nbElement}");
 foreach (var group in groups.Data)
 {
     Console.WriteLine(group);
+}
+
+//Lesson
+
+
+//GetLessons
+Console.WriteLine("Test GetLessons :\n");
+
+var lessons = await apiDataManager.GetLessons();
+Console.WriteLine($"Nombre d'éléments : {lessons.nbElement}");
+foreach (var lesson in lessons.Data)
+{
+    Console.WriteLine(lesson);
+}
+
+//PostLesson
+
+Console.WriteLine("Test PostGroup :\n");
+
+var newLesson = new LessonCreation( 0,new DateOnly(2023, 11, 26).ToDateTime(new TimeOnly(15, 0)), new DateOnly(2023, 11, 26).ToDateTime(new TimeOnly(17, 0)), "Apprentissage Automatique", "Amphi A", 1, 1, 5);
+var lessonReponse = await apiDataManager.PostLesson(newLesson);
+
+Console.WriteLine(lessonReponse);
+
+//PutLesson
+Console.WriteLine("Test PutLesson :\n");
+newLesson.Classroom = "Amphi B";
+lessonReponse = await apiDataManager.PutLesson(lessonReponse.Id, newLesson);
+
+Console.WriteLine(lessonReponse);
+//GetLessonById
+
+Console.WriteLine("Test GetLessonById (id=1) :\n");
+var lessbyId = await apiDataManager.GetLessonById(1);
+
+Console.WriteLine(lessbyId);
+
+//GetLessonByTeacherId
+
+Console.WriteLine("Test GetLessonByTeacherId (id=1) :\n");
+
+var lessonsByTeacherId=await apiDataManager.GetLessonsByTeacherId(1);
+Console.WriteLine($"Nombre d'éléments : {lessonsByTeacherId.nbElement}");
+foreach (var lesson in lessonsByTeacherId.Data)
+{
+    Console.WriteLine(lesson);
+}
+//DeleteLesson
+
+Console.WriteLine("Test DeleteLesson :\n");
+
+repDelete = await apiDataManager.DeleteLesson(lessonReponse.Id);
+Console.WriteLine(repDelete);
+
+lessons = await apiDataManager.GetLessons();
+Console.WriteLine($"Nombre d'éléments : {lessons.nbElement}");
+foreach (var lesson in lessons.Data)
+{
+    Console.WriteLine(lesson);
 }

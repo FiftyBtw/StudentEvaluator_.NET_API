@@ -444,6 +444,8 @@ namespace Entities2Dto
                     Start = lesson.Start,
                     End = lesson.End,
                     TeacherId = lesson.TeacherEntityId,
+                    GroupNumber = lesson.GroupNumber,
+                    GroupYear = lesson.GroupYear,
 
                 };
                 LessonMapper.Set(lesson, lessonDto);
@@ -464,6 +466,7 @@ namespace Entities2Dto
                     Start = lesson.Start,
                     End = lesson.End,
                     Teacher = lesson.Teacher.ToDto(),
+                    Group = lesson.Group.ToDto(),
 
                 };
                 LessonReponseMapper.Set(lesson, lessonDto);

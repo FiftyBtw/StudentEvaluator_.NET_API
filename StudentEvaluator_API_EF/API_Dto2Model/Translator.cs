@@ -1,5 +1,6 @@
 ﻿using API_Dto;
 using API_Model;
+using Client_Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,7 +79,7 @@ namespace API_Dto2Model
         //Teacher
         public static Teacher ToModel(this TeacherDto dto)
         {
-            return new Teacher();
+            return new Teacher(dto.Id, dto.Username, dto.Password,dto.roles) ;
         }
 
         public static TeacherDto ToDto(this Teacher teacher)
@@ -93,30 +94,46 @@ namespace API_Dto2Model
             };
         }
         //Lesson
-        public static Lesson ToModel(this LessonDto lesson)
+        public static Lesson ToModel(this LessonReponseDto lesson)
         {
-            return new Lesson(lesson.Id,lesson.Date,lesson.Start,lesson.End,lesson.CourseName,lesson.Classroom,lesson.Teacher.ToModel(),lesson.Group.ToModel());
+            return new Lesson(lesson.Id,lesson.Start,lesson.End,lesson.CourseName,lesson.Classroom,lesson.Teacher.ToModel(),lesson.Group.ToModel());
         }
 
-        public static LessonDto ToDto(this Lesson lesson)
+
+        public static LessonDto ToDto(this LessonCreation lesson)
         {
             return new LessonDto
             {
                 Id = lesson.Id,
-                Date = lesson.Date,
+                Start = lesson.Start,
+                End = lesson.End,
+                CourseName = lesson.CourseName,
+                Classroom = lesson.Classroom,
+                TeacherId = lesson.TeacherId,
+                GroupNumber = lesson.GroupNumber,
+                GroupYear = lesson.GroupYear,
+            };
+        }
+
+        public static LessonReponseDto ToReponseDto(this Lesson lesson)
+        {
+            return new LessonReponseDto
+            {
+                Id = lesson.Id,
                 Start = lesson.Start,
                 End = lesson.End,
                 CourseName = lesson.CourseName,
                 Classroom = lesson.Classroom,
                 Teacher = lesson.Teacher.ToDto(),
                 Group = lesson.Group.ToDto(),
+           
             };
         }
 
-        public static IEnumerable<Lesson> ToModels(this IEnumerable<LessonDto> dtos)
+        public static IEnumerable<Lesson> ToModels(this IEnumerable<LessonReponseDto> dtos)
         {
             IEnumerable<Lesson> lessons = new List<Lesson>();
-            foreach (LessonDto dto in dtos)
+            foreach (LessonReponseDto dto in dtos)
             {
                 (lessons as List<Lesson>).Add(dto.ToModel());
             }

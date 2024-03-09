@@ -10,9 +10,8 @@ namespace API_Model
     {
         private readonly long _id;
         public long Id { get { return _id; } }
-        public DateOnly Date { get; set; }
-        public TimeOnly Start { get; set; }
-        public TimeOnly End { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
         public string CourseName { get; set; }
         public string Classroom { get; set; }
         public Teacher Teacher { get; set; }
@@ -22,10 +21,9 @@ namespace API_Model
 
         public Lesson() { }
 
-        public Lesson(long id,DateOnly date ,TimeOnly start, TimeOnly end, string coursename,string classroom,Teacher teacher,Group group)
+        public Lesson(long id,DateTime start, DateTime end, string coursename,string classroom,Teacher teacher,Group group)
         {
             _id = id;
-            Date= date;
             Start= start;
             End= end;
             CourseName= coursename;
@@ -34,5 +32,12 @@ namespace API_Model
             Group= group;
         }
 
+        public override string ToString()
+        {
+            string lesson = "Lesson : " + Id + ", " + CourseName + ","+ Classroom + ", "+Start.ToString()+"-"+End.ToString()+"\n";
+            lesson += "\tTeacher : " + Teacher.Username + "\n";
+            lesson += "\tGroup  :" + Group.GroupYear + "A G" + Group.GroupNumber + "\n";
+            return lesson;
+        }
     }
 }

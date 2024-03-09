@@ -1,12 +1,14 @@
 ﻿using API_Dto;
 using API_Model;
+using Client_Model;
 using Shared;
+using System.Net.Http;
 using System.Net.Http.Json;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace API_Dto2Model
 {
-    public class ApiDataManager : IStudentService<Student>,IGroupService<Group>
+    public class ApiDataManager : IStudentService<Student>,IGroupService<Group>,ILessonService<LessonCreation,Lesson>
     {
         private readonly HttpClient _httpClient;
 
@@ -84,35 +86,56 @@ namespace API_Dto2Model
         }
 
         //Lesson
-        public Task<PageReponseModel<Lesson>> GetLessons(int index=0, int count=10)
+        public async Task<PageReponse<Lesson>> GetLessons(int index=0, int count=10)
         {
-            var lessons = await _httpClient.GetFromJsonAsync<PageReponseDto<Lesson>>($"{_httpClient.BaseAddress}api/Lessons?index={index}&count={count}");
-            return await Task.FromResult(new PageReponseModel<Lesson>(lessons.nbElement, lessons.Data.ToModels()));
+            var lessons = await _httpClient.GetFromJsonAsync<PageReponse<LessonReponseDto>>($"{_httpClient.BaseAddress}api/Lessons?index={index}&count={count}");
+            return await Task.FromResult(new PageReponse<Lesson>(lessons.nbElement, lessons.Data.ToModels()));
         }
 
-        public Task<Lesson?> GetLessonById(long id)
+        public async Task<Lesson?> GetLessonById(long id)
         {
-            throw new NotImplementedException();
+            var lessonById = await _httpClient.GetFromJsonAsync<LessonReponseDto>($"{_httpClient.BaseAddress}api/Lessons/id/{id}");
+            return await Task.FromResult(lessonById?.ToModel());
         }
 
-        public Task<PageReponseModel<Lesson>> GetLessonsByTeacherId(long id, int index, int count)
+        public async Task<PageReponse<Lesson>> GetLessonsByTeacherId(long id, int index=0, int count = 10)
         {
-            throw new NotImplementedException();
+            var lessonsByTeacherId = await _httpClient.GetFromJsonAsync<PageReponse<LessonReponseDto>>($"{_httpClient.BaseAddress}api/Lessons/teacher/{id}?index={index}&count={count}");
+            return await Task.FromResult(new PageReponse<Lesson>(lessonsByTeacherId.nbElement, lessonsByTeacherId.Data.ToModels()));
         }
 
-        public Task<Lesson?> PostLesson(Lesson lesson)
+        public async Task<Lesson?> PostLesson(LessonCreation lesson)
         {
-            throw new NotImplementedException();
+            var lessonDto = lesson.ToDto();
+            var reponse = await _httpClient.PostAsJsonAsync($"{_httpClient.BaseAddress}api/Lessons", lessonDto);
+            if(reponse.IsSuccessStatusCode)
+            {
+                var lessonRep = await reponse.Content.ReadFromJsonAsync<LessonReponseDto>();
+                return await Task.FromResult(lessonRep.ToModel());
+            }
+            return await Task.FromResult<Lesson?>(null);
         }
-
-        public Task<Lesson?> PutLesson(long id, Lesson lesson)
+        
+        public async Task<Lesson?> PutLesson(long id, LessonCreation lesson)
         {
-            throw new NotImplementedException();
+
+            var reponse = await _httpClient.PutAsJsonAsync($"{_httpClient.BaseAddress}api/Lessons?id={id}", lesson.ToDto());
+            if(reponse.IsSuccessStatusCode)
+            {
+                var lessonRep = await reponse.Content.ReadFromJsonAsync<LessonReponseDto>();
+                return await Task.FromResult(lessonRep.ToModel());
+            }   
+            return await Task.FromResult<Lesson?>(null);
         }
-
-        public Task<bool> DeleteLesson(long id)
+        public async Task<bool> DeleteLesson(long id)
         {
-            throw new NotImplementedException();
+            var b = await _httpClient.DeleteAsync($"{_httpClient.BaseAddress}api/Lessons?id={id}");
+            if (b.IsSuccessStatusCode)
+            {
+                return await Task.FromResult(true);
+            }
+            else return await Task.FromResult(false);
+
         }
     }
 }

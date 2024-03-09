@@ -1,3 +1,4 @@
+using System.Reflection;
 using API_Dto;
 using Asp.Versioning;
 using EF_StubbedContextLib;
@@ -9,6 +10,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Shared;
 using TP_ConsoDev.Data;
+using API_EF.Swagger;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +40,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 builder.Services.AddSwaggerGen(swaggerGenOptions =>
 {
     swaggerGenOptions.UseAllOfToExtendReferenceSchemas();
@@ -46,6 +52,12 @@ builder.Services.AddSwaggerGen(swaggerGenOptions =>
     {
         return typeof(CriteriaDto).Assembly.GetTypes().Where(type => type.IsSubclassOf(baseType));
     });
+    
+    swaggerGenOptions.OperationFilter<SwaggerDefaultValues>();
+            
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    swaggerGenOptions.IncludeXmlComments(xmlPath);
             
     swaggerGenOptions.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -100,13 +112,26 @@ builder.Services
         options.SubstituteApiVersionInUrl = true;
     });
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        var descriptions = app.DescribeApiVersions();
+
+        foreach (var description in descriptions)
+        {
+            var url = $"/swagger/{description.GroupName}/swagger.json";
+            var name = description.GroupName.ToUpperInvariant();
+            options.SwaggerEndpoint(url, name);
+        }
+    });
 }
 
 app.UseHttpsRedirection();

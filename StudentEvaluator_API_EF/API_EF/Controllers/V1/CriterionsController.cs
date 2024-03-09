@@ -5,6 +5,9 @@ using Shared;
 
 namespace API_EF.Controllers.V1;
 
+/// <summary>
+///  This class is the controller for the criterions
+/// </summary>
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
@@ -42,6 +45,11 @@ public class CriterionsController : ControllerBase
     }
     */
     
+    /// <summary>
+    ///  Get a text criteria by its id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet("texts/{id}")]
     [ProducesResponseType(200, Type= typeof(TextCriteriaDto))] 
     [ProducesResponseType(400)]
@@ -90,6 +98,11 @@ public class CriterionsController : ControllerBase
     }
     */
     
+    /// <summary>
+    ///  Get a slider criteria by its id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet("sliders/{id}")]
     [ProducesResponseType(200, Type= typeof(SliderCriteriaDto))]
     [ProducesResponseType(400)]
@@ -138,6 +151,11 @@ public class CriterionsController : ControllerBase
     }
     */
     
+    /// <summary>
+    ///  Get a radio criteria by its id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet("radios/{id}")]
     [ProducesResponseType(200, Type= typeof(RadioCriteriaDto))]
     [ProducesResponseType(400)]
@@ -161,7 +179,11 @@ public class CriterionsController : ControllerBase
         }
     }
     
-    
+    /// <summary>
+    ///  Get all criterions by template id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
      [HttpGet("template/{id}")]
      [ProducesResponseType(200, Type= typeof(PageReponse<CriteriaDto>[]))]
      [ProducesResponseType(400)]
@@ -185,6 +207,12 @@ public class CriterionsController : ControllerBase
          }
      }
      
+    /// <summary>
+    ///  Add a text criterion to a template
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="text"></param>
+    /// <returns></returns>
      [HttpPost("text/template/{id}")]
      [ProducesResponseType(204)]
      [ProducesResponseType(400)]
@@ -207,137 +235,170 @@ public class CriterionsController : ControllerBase
          }
      }
      
+     /// <summary>
+     ///  Add a slider criterion to a template
+     /// </summary>
+     /// <param name="id"></param>
+     /// <param name="slider"></param>
+     /// <returns></returns>
+     [HttpPost("slider/template/{id}")]
+     [ProducesResponseType(204)]
+     [ProducesResponseType(400)]
+     [ProducesResponseType(500)]
+     public async Task<IActionResult> PostSliderCriterion(long id, [FromBody] SliderCriteriaDto slider)
+     {
+         if (_criteriaService == null) {
+             return StatusCode(500);
+         }
+         try {
+             var data = await _criteriaService.PostSliderCriterion(id, slider);
+             if (data == null)
+             {
+                 return BadRequest();
+             }
+             return Created();
+         }
+         catch (Exception e) {
+             return BadRequest(e.Message);
+         }
+     }
+ 
+     /// <summary>
+     ///  Add a radio criterion to a template
+     /// </summary>
+     /// <param name="id"></param>
+     /// <param name="radio"></param>
+     /// <returns></returns>
+     [HttpPost("radio/template/{id}")]
+     [ProducesResponseType(204)]
+     [ProducesResponseType(400)]
+     [ProducesResponseType(500)]
+     public async Task<IActionResult> PostRadioCriterion(long id, [FromBody] RadioCriteriaDto radio)
+     {
+         if (_criteriaService == null) {
+             return StatusCode(500);
+         }
+         try {
+             var data = await _criteriaService.PostRadioCriterion(id, radio);
+             if (data == null)
+             {
+                 return BadRequest();
+             }
+             return Created();
+         }
+         catch (Exception e) {
+             return BadRequest(e.Message);
+         }
+     }
      
-         [HttpPost("slider/template/{id}")]
-         [ProducesResponseType(204)]
-         [ProducesResponseType(400)]
-         [ProducesResponseType(500)]
-         public async Task<IActionResult> PostSliderCriterion(long id, [FromBody] SliderCriteriaDto slider)
-         {
-             if (_criteriaService == null) {
-                 return StatusCode(500);
-             }
-             try {
-                 var data = await _criteriaService.PostSliderCriterion(id, slider);
-                 if (data == null)
-                 {
-                     return BadRequest();
-                 }
-                 return Created();
-             }
-             catch (Exception e) {
-                 return BadRequest(e.Message);
-             }
+     /// <summary>
+     ///  Update a text criteria
+     /// </summary>
+     /// <param name="id"></param>
+     /// <param name="text"></param>
+     /// <returns></returns>
+     [HttpPut("text/{id}")]
+     [ProducesResponseType(204)]
+     [ProducesResponseType(400)]
+     [ProducesResponseType(500)]
+     public async Task<IActionResult> PutTextCriterion(long id, [FromBody] TextCriteriaDto text)
+     {
+         if (_criteriaService == null) {
+             return StatusCode(500);
          }
+         try {
+             var data = await _criteriaService.PutTextCriterion(id, text);
+             if (data == null)
+             {
+                 return BadRequest();
+             }
+             return Created();
+         }
+         catch (Exception e) {
+             return BadRequest(e.Message);
+         }
+     }
      
-         [HttpPost("radio/template/{id}")]
-         [ProducesResponseType(204)]
-         [ProducesResponseType(400)]
-         [ProducesResponseType(500)]
-         public async Task<IActionResult> PostRadioCriterion(long id, [FromBody] RadioCriteriaDto radio)
-         {
-             if (_criteriaService == null) {
-                 return StatusCode(500);
-             }
-             try {
-                 var data = await _criteriaService.PostRadioCriterion(id, radio);
-                 if (data == null)
-                 {
-                     return BadRequest();
-                 }
-                 return Created();
-             }
-             catch (Exception e) {
-                 return BadRequest(e.Message);
-             }
+     /// <summary>
+     ///  Update a slider criteria
+     /// </summary>
+     /// <param name="id"></param>
+     /// <param name="slider"></param>
+     /// <returns></returns>
+     [HttpPut("slider/{id}")]
+     [ProducesResponseType(204)]
+     [ProducesResponseType(400)]
+     [ProducesResponseType(500)]
+     public async Task<IActionResult> PutSliderCriterion(long id, [FromBody] SliderCriteriaDto slider)
+     {
+         if (_criteriaService == null) {
+             return StatusCode(500);
          }
-         
-         [HttpPut("text/{id}")]
-         [ProducesResponseType(204)]
-         [ProducesResponseType(400)]
-         [ProducesResponseType(500)]
-         public async Task<IActionResult> PutTextCriterion(long id, [FromBody] TextCriteriaDto text)
-         {
-             if (_criteriaService == null) {
-                 return StatusCode(500);
+         try {
+             var data = await _criteriaService.PutSliderCriterion(id, slider);
+             if (data == null)
+             {
+                 return BadRequest();
              }
-             try {
-                 var data = await _criteriaService.PutTextCriterion(id, text);
-                 if (data == null)
-                 {
-                     return BadRequest();
-                 }
-                 return Created();
-             }
-             catch (Exception e) {
-                 return BadRequest(e.Message);
-             }
+             return Created();
          }
-         
-         
-         [HttpPut("slider/{id}")]
-         [ProducesResponseType(204)]
-         [ProducesResponseType(400)]
-         [ProducesResponseType(500)]
-         public async Task<IActionResult> PutSliderCriterion(long id, [FromBody] SliderCriteriaDto slider)
-         {
-             if (_criteriaService == null) {
-                 return StatusCode(500);
-             }
-             try {
-                 var data = await _criteriaService.PutSliderCriterion(id, slider);
-                 if (data == null)
-                 {
-                     return BadRequest();
-                 }
-                 return Created();
-             }
-             catch (Exception e) {
-                 return BadRequest(e.Message);
-             }
+         catch (Exception e) {
+             return BadRequest(e.Message);
          }
-     
-         [HttpPut("radio/{id}")]
-         [ProducesResponseType(204)]
-         [ProducesResponseType(400)]
-         [ProducesResponseType(500)]
-         public async Task<IActionResult> PutRadioCriterion(long id, [FromBody] RadioCriteriaDto radio)
-         {
-             if (_criteriaService == null) {
-                 return StatusCode(500);
-             }
-             try {
-                 var data = await _criteriaService.PutRadioCriterion(id, radio);
-                 if (data == null)
-                 {
-                     return BadRequest();
-                 }
-                 return Created();
-             }
-             catch (Exception e) {
-                 return BadRequest(e.Message);
-             }
+     }
+ 
+     /// <summary>
+     ///  Update a radio criteria
+     /// </summary>
+     /// <param name="id"></param>
+     /// <param name="radio"></param>
+     /// <returns></returns>
+     [HttpPut("radio/{id}")]
+     [ProducesResponseType(204)]
+     [ProducesResponseType(400)]
+     [ProducesResponseType(500)]
+     public async Task<IActionResult> PutRadioCriterion(long id, [FromBody] RadioCriteriaDto radio)
+     {
+         if (_criteriaService == null) {
+             return StatusCode(500);
          }
+         try {
+             var data = await _criteriaService.PutRadioCriterion(id, radio);
+             if (data == null)
+             {
+                 return BadRequest();
+             }
+             return Created();
+         }
+         catch (Exception e) {
+             return BadRequest(e.Message);
+         }
+     }
 
-         [HttpDelete("{id}")]
-         [ProducesResponseType(204)]
-         [ProducesResponseType(400)]
-         [ProducesResponseType(500)]
-         public async Task<IActionResult> DeleteCriterion(long id)
-         {
-             if (_criteriaService == null) {
-                 return StatusCode(500);
-             }
-             try {
-                 var data = await _criteriaService.DeleteCriteria(id);
-                 if (data == null)
-                 {
-                     return BadRequest();
-                 }
-                 return Created();
-             }
-             catch (Exception e) {
-                 return BadRequest(e.Message);
-             }
+     /// <summary>
+     ///  Delete a criteria
+     /// </summary>
+     /// <param name="id"></param>
+     /// <returns></returns>
+     [HttpDelete("{id}")]
+     [ProducesResponseType(204)]
+     [ProducesResponseType(400)]
+     [ProducesResponseType(500)]
+     public async Task<IActionResult> DeleteCriterion(long id)
+     {
+         if (_criteriaService == null) {
+             return StatusCode(500);
          }
+         try {
+             var data = await _criteriaService.DeleteCriteria(id);
+             if (data == null)
+             {
+                 return BadRequest();
+             }
+             return Created();
+         }
+         catch (Exception e) {
+             return BadRequest(e.Message);
+         }
+     }
 }   

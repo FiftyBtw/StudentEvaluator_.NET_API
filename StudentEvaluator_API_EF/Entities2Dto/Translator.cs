@@ -425,7 +425,7 @@ namespace Entities2Dto
         /// Extension method to convert IEnumerable of RadioCriteriaDto to IEnumerable of RadioCriteriaEntity.
         /// </summary>
         /// <param name="dtos">The IEnumerable of radio criteria DTOs to be converted.</param>
-        /// <returns>The corresponding IEnumerable of radio criteria entities.</returns
+        /// <returns>The corresponding IEnumerable of radio criteria entities.</returns>
         public static IEnumerable<RadioCriteriaEntity> ToEntities(this IEnumerable<RadioCriteriaDto> dtos)
         {
             IEnumerable<RadioCriteriaEntity> radioCriterias = new List<RadioCriteriaEntity>();

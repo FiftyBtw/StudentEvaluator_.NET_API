@@ -9,7 +9,7 @@ namespace API_Dto
     /// <summary>
     /// Data transfer object for user information.
     /// </summary>
-    public class UserDto
+    public class UserDto 
     {
         public long Id { get; set; }
 

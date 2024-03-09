@@ -5,6 +5,9 @@ using Shared;
 
 namespace API_EF.Controllers.V1
 {
+    /// <summary>
+    ///  Controller for lessons
+    /// </summary>
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -18,6 +21,12 @@ namespace API_EF.Controllers.V1
             _lessonService = lessonService;
         }
 
+        /// <summary>
+        ///  Get all lessons
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetLessons(int index=0, int count=10)
         {
@@ -30,6 +39,11 @@ namespace API_EF.Controllers.V1
             else return Ok(data);
         }
 
+        /// <summary>
+        ///  Get a lesson by its id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("id/{id}")]
         public async Task<IActionResult> GetLessonById(long id)
@@ -46,6 +60,13 @@ namespace API_EF.Controllers.V1
             else return Ok(lesson);
         }
 
+        /// <summary>
+        ///  Get all lessons of a teacher
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="index"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("teacher/{id}")]
         public async Task<IActionResult> GetLessonsByTeacherId(long id,int index = 0, int count = 10)
@@ -59,6 +80,11 @@ namespace API_EF.Controllers.V1
             else return Ok(data);
         }
 
+        /// <summary>
+        ///  Add a lesson
+        /// </summary>
+        /// <param name="lesson"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostLesson([FromBody] LessonDto lesson)
         {
@@ -77,6 +103,12 @@ namespace API_EF.Controllers.V1
             }
         }
 
+        /// <summary>
+        ///  Update a lesson
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="lesson"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<IActionResult> PutLesson(long id, [FromBody] LessonDto lesson)
         {
@@ -95,6 +127,11 @@ namespace API_EF.Controllers.V1
             }
         }
 
+        /// <summary>
+        ///  Delete a lesson
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task<IActionResult> DeleteLesson(long id)
         {

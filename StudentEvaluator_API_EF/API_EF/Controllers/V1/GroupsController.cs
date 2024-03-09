@@ -5,6 +5,9 @@ using Shared;
 
 namespace API_EF.Controllers.V1
 {
+    /// <summary>
+    ///  Controller for groups
+    /// </summary>
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -18,6 +21,12 @@ namespace API_EF.Controllers.V1
             _groupService = groupService;
         }
 
+        /// <summary>
+        ///  Get all groups
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetGroups(int index=0, int count=10)
         {
@@ -29,7 +38,13 @@ namespace API_EF.Controllers.V1
             if (data == null) return NoContent();
             else return Ok(data);
         }
-
+    
+        /// <summary>
+        ///  Get a group by the year and the number 
+        /// </summary>
+        /// <param name="gyear"></param>
+        /// <param name="gnumber"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{gyear}/{gnumber}")]
         public async Task<IActionResult> GetGroupById(int gyear,int gnumber)
@@ -46,6 +61,11 @@ namespace API_EF.Controllers.V1
             else return Ok(book);
         }
 
+        /// <summary>
+        ///  Add a group
+        /// </summary>
+        /// <param name="group"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostGroup([FromBody] GroupDto group)
         {
@@ -64,24 +84,12 @@ namespace API_EF.Controllers.V1
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> PutGroup(int gyear, int gnumber, [FromBody] GroupDto group)
-        {
-            if (_groupService == null)
-            {
-                return StatusCode(500);
-            }
-            var studentDto = await _groupService.PutGroup(gyear,gnumber, group);
-            if (studentDto == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return Ok(studentDto);
-            }
-        }
-
+        /// <summary>
+        ///  Delete a group
+        /// </summary>
+        /// <param name="gyear"></param>
+        /// <param name="gnumber"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task<IActionResult> DeleteStudent(int gyear, int gnumber)
         {

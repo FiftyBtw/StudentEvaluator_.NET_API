@@ -5,6 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Shared;
+
+    /// <summary>
+    /// Represents a service interface for student-related operations.
+    /// </summary>
+    /// <typeparam name="TStudent">The type representing a student.</typeparam>
     public interface IStudentService<TStudent> where TStudent : class
     {
         public Task<PageReponse<TStudent>> GetStudents(int index, int count);

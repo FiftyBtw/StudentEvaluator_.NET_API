@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace API_Dto
 {
-    public class CriteriaDto
+    /// <summary>
+    /// Abstract base class for criteria data transfer objects.
+    /// </summary>
+    public abstract class CriteriaDto
     {
         public long Id { get; set; }
 

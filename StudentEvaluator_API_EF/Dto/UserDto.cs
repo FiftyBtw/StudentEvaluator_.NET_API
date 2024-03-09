@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace API_Dto
 {
-    public class UserDto
+    /// <summary>
+    /// Data transfer object for user information.
+    /// </summary>
+    public class UserDto 
     {
         public long Id { get; set; }
 

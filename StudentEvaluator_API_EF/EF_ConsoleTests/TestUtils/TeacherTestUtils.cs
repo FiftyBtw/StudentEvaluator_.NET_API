@@ -4,9 +4,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EF_ConsoleTests.TestUtils;
 
-// Classe regroupant les méthodes utilitaires pour les tests des Teacher
+/// <summary>
+/// Class containing utility methods for Teacher tests.
+/// </summary>
 public class TeacherTestUtils
 {
+
+    /// <summary>
+    /// Adds a new teacher to the database.
+    /// </summary>
+    /// <param name="context">The database context.</param>
+    /// <param name="username">The username of the teacher.</param>
+    /// <param name="password">The password of the teacher.</param>
+    /// <param name="roles">The roles of the teacher.</param>
     public static void AddTeacher(LibraryContext context, string username, string password, string[] roles)
     {
         context.TeacherSet.Add(new TeacherEntity { Username = username, Password = password, roles = roles });
@@ -14,6 +24,10 @@ public class TeacherTestUtils
         Console.WriteLine($"Teacher '{username}' added to the database");
     }
 
+    /// <summary>
+    /// Displays all teachers in the database.
+    /// </summary>
+    /// <param name="context">The database context.</param>
     public static void DisplayAllTeachers(LibraryContext context)
     {
         Console.WriteLine("\nAll teachers in the database:");
@@ -59,6 +73,13 @@ public class TeacherTestUtils
         }
     }
 
+    /// <summary>
+    /// Updates a teacher in the database.
+    /// </summary>
+    /// <param name="context">The database context.</param>
+    /// <param name="id">The ID of the teacher to update.</param>
+    /// <param name="newUsername">The new username.</param>
+    /// <param name="newPassword">The new password.</param>
     public static void UpdateTeacher(LibraryContext context, long id, string newUsername, string newPassword)
     {
         var teacher = context.TeacherSet.FirstOrDefault(t => t.Id == id);
@@ -75,6 +96,11 @@ public class TeacherTestUtils
         }
     }
 
+    /// <summary>
+    /// Deletes a teacher from the database.
+    /// </summary>
+    /// <param name="context">The database context.</param>
+    /// <param name="id">The ID of the teacher to delete.</param>
     public static void DeleteTeacher(LibraryContext context, long id)
     {
         var teacher = context.TeacherSet.FirstOrDefault(t => t.Id == id);

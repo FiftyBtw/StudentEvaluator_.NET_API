@@ -1,11 +1,16 @@
 using API_Dto;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
 namespace API_EF.Controllers;
 
+/// <summary>
+///  Controller for users
+/// </summary>
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class UsersController : ControllerBase
 {
     private readonly IUserService<UserDto,LoginRequestDto,LoginResponseDto> _userService;
@@ -15,6 +20,12 @@ public class UsersController : ControllerBase
         _userService = userService;
     }
 
+    /// <summary>
+    ///  Get all users
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="count"></param>
+    /// <returns></returns>
     [HttpGet]
     public async Task<IActionResult> GetUsers(int index = 0, int count = 10)
     {
@@ -34,6 +45,11 @@ public class UsersController : ControllerBase
 
     }
 
+    /// <summary>
+    ///  Get a user by its id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetUserById(long id)
     {
@@ -49,6 +65,11 @@ public class UsersController : ControllerBase
         else return Ok(user);
     }
 
+    /// <summary>
+    ///  Create a new user
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> PostUser([FromBody] UserDto user)
     {
@@ -67,6 +88,12 @@ public class UsersController : ControllerBase
         }
     }
 
+    /// <summary>
+    ///  Update a user
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="user"></param>
+    /// <returns></returns>
     [HttpPut("{id}")]
     public async Task<IActionResult> PutUser(long id, [FromBody] UserDto user)
     {
@@ -85,6 +112,11 @@ public class UsersController : ControllerBase
         }
     }
 
+    /// <summary>
+    ///  Delete a user
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(long id)
     {
@@ -103,6 +135,11 @@ public class UsersController : ControllerBase
         }
     }
     
+    /// <summary>
+    ///  Login (authenticate a user and send his data if successful, this login is deprecated because it is not secure, use the login with token instead)
+    /// </summary>
+    /// <param name="loginRequest"></param>
+    /// <returns></returns>
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest)
     {

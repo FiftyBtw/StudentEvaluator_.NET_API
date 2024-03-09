@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Shared;
 
+    /// <summary>
+    /// Represents a service interface for lesson-related operations.
+    /// </summary>
+    /// <typeparam name="T">The type representing a lesson.</typeparam>
+    /// <typeparam name="TResponse">The type representing a response related to the lesson.</typeparam>
     public interface ILessonService<T,TReponse> where T : class where TReponse : class
     {
         public Task<PageReponse<TReponse>> GetLessons(int index, int count);

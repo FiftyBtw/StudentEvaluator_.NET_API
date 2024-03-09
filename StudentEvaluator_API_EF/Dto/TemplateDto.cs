@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace API_Dto
 {
+    /// <summary>
+    /// Data transfer object for templates.
+    /// </summary>
     public class TemplateDto
-    {
-        public long Id { get; set; }
+    { 
         public string Name { get; set; }
-        public IEnumerable<CriteriaDto>? Criteria { get; set; }
     }
 }

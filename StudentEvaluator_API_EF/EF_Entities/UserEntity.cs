@@ -1,6 +1,8 @@
 namespace EF_Entities;
 
-
+/// <summary>
+/// Represents a user entity in the database.
+/// </summary>
 public class UserEntity
 {
     public long Id { get; set; }

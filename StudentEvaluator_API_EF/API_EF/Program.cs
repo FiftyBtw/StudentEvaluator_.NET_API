@@ -1,13 +1,28 @@
+using System.Reflection;
 using API_Dto;
-using EF_DbContextLib;
-using EF_Entities;
+using Asp.Versioning;
 using EF_StubbedContextLib;
 using Entities2Dto;
 using JsonSubTypes;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Shared;
+using TP_ConsoDev.Data;
+using API_EF.Swagger;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddDbContext<ApplicationDbContext>(
+    options => options.UseInMemoryDatabase("AppDb"));
+
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Add services to the container.
 
@@ -25,6 +40,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 builder.Services.AddSwaggerGen(swaggerGenOptions =>
 {
     swaggerGenOptions.UseAllOfToExtendReferenceSchemas();
@@ -35,14 +52,46 @@ builder.Services.AddSwaggerGen(swaggerGenOptions =>
     {
         return typeof(CriteriaDto).Assembly.GetTypes().Where(type => type.IsSubclassOf(baseType));
     });
+    
+    swaggerGenOptions.OperationFilter<SwaggerDefaultValues>();
+            
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    swaggerGenOptions.IncludeXmlComments(xmlPath);
+            
+    swaggerGenOptions.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey
+    });
+    swaggerGenOptions.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header,
+            },
+            new List<string>()
+        }
+    });
 });
+
 builder.Services.AddScoped<DbDataManager>(provider => new DbDataManager(new StubbedContext()));
 builder.Services.AddScoped<IStudentService<StudentDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<IGroupService<GroupDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<ICriteriaService<CriteriaDto,TextCriteriaDto,SliderCriteriaDto,RadioCriteriaDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<ILessonService<LessonDto, LessonReponseDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<IUserService<UserDto,LoginRequestDto,LoginResponseDto>>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<ITemplateService<TemplateDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<ITemplateService<TemplateDto, TemplateResponseDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<IEvaluationService<EvaluationDto,EvaluationReponseDto>>(x => x.GetRequiredService<DbDataManager>());
 
 builder.Services.AddDbContext<StubbedContext>(options =>
@@ -50,13 +99,39 @@ builder.Services.AddDbContext<StubbedContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services
+    .AddApiVersioning(options =>
+    {
+        options.AssumeDefaultVersionWhenUnspecified = true;
+        options.ReportApiVersions = true;
+        options.DefaultApiVersion = new ApiVersion( 1.0 );
+    })
+    .AddApiExplorer(options =>
+    {
+        options.GroupNameFormat = "'v'VVV";
+        options.SubstituteApiVersionInUrl = true;
+    });
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        var descriptions = app.DescribeApiVersions();
+
+        foreach (var description in descriptions)
+        {
+            var url = $"/swagger/{description.GroupName}/swagger.json";
+            var name = description.GroupName.ToUpperInvariant();
+            options.SwaggerEndpoint(url, name);
+        }
+    });
 }
 
 app.UseHttpsRedirection();
@@ -64,6 +139,25 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseAuthorization();
+        
+app.MapIdentityApi<IdentityUser>();
+app.MapSwagger().RequireAuthorization();
+
+app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager,
+        [FromBody]object empty) =>
+    {
+        if (empty != null)
+        {
+            await signInManager.SignOutAsync();
+            return Results.Ok();
+        }
+        return Results.Unauthorized();
+    })
+    .WithOpenApi()
+    .RequireAuthorization();
+
 
 var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<StubbedContext>();

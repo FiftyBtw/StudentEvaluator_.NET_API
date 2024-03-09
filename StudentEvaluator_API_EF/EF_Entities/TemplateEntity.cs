@@ -1,5 +1,9 @@
 namespace EF_Entities;
 
+
+/// <summary>
+/// Represents a template entity in the database.
+/// </summary>
 public class TemplateEntity
 {
     public long Id { get; set; }

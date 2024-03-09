@@ -1,10 +1,16 @@
 using API_Dto;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
-namespace API_EF.Controllers
+
+namespace API_EF.Controllers.V1
 {
+    /// <summary>
+    ///  Controller for evaluations
+    /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class EvaluationsController : ControllerBase
     {
 
@@ -14,7 +20,13 @@ namespace API_EF.Controllers
         {
             _evaluationService = evaluationService;
         }
-
+        
+        /// <summary>
+        ///  Get all evaluations
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetEvaluations(int index=0, int count=10)
         {
@@ -27,6 +39,11 @@ namespace API_EF.Controllers
             else return Ok(data);
         }
 
+        /// <summary>
+        ///  Get an evaluation by its id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetEvaluationById(long id)
@@ -43,6 +60,13 @@ namespace API_EF.Controllers
             else return Ok(eval);
         }
 
+        /// <summary>
+        ///  Get all evaluations of a teacher
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="index"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("teacher/{id}")]
         public async Task<IActionResult> GetEvaluationsByTeacherId(long id,int index = 0, int count = 10)
@@ -56,6 +80,11 @@ namespace API_EF.Controllers
             else return Ok(data);
         }
         
+        /// <summary>
+        ///  Add an evaluation
+        /// </summary>
+        /// <param name="eval"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostEvaluation([FromBody] EvaluationDto eval)
         {
@@ -74,6 +103,12 @@ namespace API_EF.Controllers
             }
         }
 
+        /// <summary>
+        ///  Update an evaluation
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="eval"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<IActionResult> PutEvaluation(long id, [FromBody] EvaluationDto eval)
         {
@@ -92,6 +127,11 @@ namespace API_EF.Controllers
             }
         }
 
+        /// <summary>
+        ///  Delete an evaluation
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task<IActionResult> DeleteEvaluation(long id)
         {
@@ -106,7 +146,5 @@ namespace API_EF.Controllers
                 else return NotFound(); 
             }
         }
-
-
     }
 }

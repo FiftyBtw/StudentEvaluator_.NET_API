@@ -3,11 +3,18 @@ using EF_Entities;
 
 namespace Entities2Dto;
 
+/// <summary>
+/// Static class for converting between entity objects and DTOs for criteria.
+/// </summary>
 public static class CriteriaDtoConverter
 {
     private static readonly Dictionary<Type, Func<CriteriaEntity, CriteriaDto>> _entityToDtoConverters;
     private static readonly Dictionary<Type, Func<CriteriaDto, CriteriaEntity>> _dtoToEntityConverters;
 
+
+    /// <summary>
+    /// Static constructor to initialize converters dictionaries.
+    /// </summary>
     static CriteriaDtoConverter()
     {
         _entityToDtoConverters = new Dictionary<Type, Func<CriteriaEntity, CriteriaDto>>
@@ -24,7 +31,13 @@ public static class CriteriaDtoConverter
             { typeof(TextCriteriaDto), dto => ConvertTextToEntity(dto as TextCriteriaDto) },
         };
     }
-    
+
+
+    /// <summary>
+    /// Converts a criteria entity object to its corresponding DTO.
+    /// </summary>
+    /// <param name="entity">Criteria entity object.</param>
+    /// <returns>Corresponding DTO object.</returns>
     public static CriteriaDto ConvertToDto(CriteriaEntity entity)
     {
         if (entity == null) return null;
@@ -38,6 +51,12 @@ public static class CriteriaDtoConverter
         throw new ArgumentException($"No converter available for {entityType.Name}");
     }
 
+
+    /// <summary>
+    /// Converts a criteria DTO object to its corresponding entity.
+    /// </summary>
+    /// <param name="dto">Criteria DTO object.</param>
+    /// <returns>Corresponding entity object.</returns>
     public static CriteriaEntity ConvertToEntity(CriteriaDto dto)
     {
         if (dto == null) return null;
@@ -51,6 +70,12 @@ public static class CriteriaDtoConverter
         throw new ArgumentException($"No converter available for {dtoType.Name}");
     }
 
+
+    /// <summary>
+    /// Converts a SliderCriteriaEntity object to its corresponding SliderCriteriaDto.
+    /// </summary>
+    /// <param name="entity">The SliderCriteriaEntity object to convert.</param>
+    /// <returns>The corresponding SliderCriteriaDto.</returns>
     private static SliderCriteriaDto ConvertSliderToDto(SliderCriteriaEntity entity)
     {
         return new SliderCriteriaDto
@@ -63,6 +88,12 @@ public static class CriteriaDtoConverter
         };
     }
 
+
+    /// <summary>
+    /// Converts a RadioCriteriaEntity object to its corresponding RadioCriteriaDto.
+    /// </summary>
+    /// <param name="entity">The RadioCriteriaEntity object to convert.</param>
+    /// <returns>The corresponding RadioCriteriaDto.</returns>
     private static RadioCriteriaDto ConvertRadioToDto(RadioCriteriaEntity entity)
     {
         return new RadioCriteriaDto
@@ -76,6 +107,12 @@ public static class CriteriaDtoConverter
         };
     }
 
+
+    /// <summary>
+    /// Converts a TextCriteriaEntity object to its corresponding TextCriteriaDto.
+    /// </summary>
+    /// <param name="entity">The TextCriteriaEntity object to convert.</param>
+    /// <returns>The corresponding TextCriteriaDto.</returns>
     private static TextCriteriaDto ConvertTextToDto(TextCriteriaEntity entity)
     {
         return new TextCriteriaDto
@@ -87,7 +124,13 @@ public static class CriteriaDtoConverter
             Text = entity.Text,
         };
     }
-    
+
+
+    /// <summary>
+    /// Converts a SliderCriteriaDto object to its corresponding SliderCriteriaEntity.
+    /// </summary>
+    /// <param name="dto">The SliderCriteriaDto object to convert.</param>
+    /// <returns>The corresponding SliderCriteriaEntity.</returns>
     private static SliderCriteriaEntity ConvertSliderToEntity(SliderCriteriaDto dto)
     {
         return new SliderCriteriaEntity
@@ -99,7 +142,13 @@ public static class CriteriaDtoConverter
             Value = dto.Value
         };
     }
-    
+
+
+    /// <summary>
+    /// Converts a RadioCriteriaDto object to its corresponding RadioCriteriaEntity.
+    /// </summary>
+    /// <param name="dto">The RadioCriteriaDto object to convert.</param>
+    /// <returns>The corresponding RadioCriteriaEntity.</returns>
     private static RadioCriteriaEntity ConvertRadioToEntity(RadioCriteriaDto dto)
     {
         return new RadioCriteriaEntity
@@ -112,7 +161,13 @@ public static class CriteriaDtoConverter
             SelectedOption = dto.SelectedOption
         };
     }
-    
+
+
+    /// <summary>
+    /// Converts a TextCriteriaDto object to its corresponding TextCriteriaEntity.
+    /// </summary>
+    /// <param name="dto">The TextCriteriaDto object to convert.</param>
+    /// <returns>The corresponding TextCriteriaEntity.</returns>
     private static TextCriteriaEntity ConvertTextToEntity(TextCriteriaDto dto)
     {
         return new TextCriteriaEntity

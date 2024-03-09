@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace API_Dto
 {
+    /// <summary>
+    /// Data transfer object for lesson response.
+    /// </summary>
     public class LessonReponseDto
     {
         public long Id { get; set; }

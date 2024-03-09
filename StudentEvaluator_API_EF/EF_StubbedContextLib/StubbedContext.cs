@@ -4,18 +4,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EF_StubbedContextLib
 {
+    /// <summary>
+    /// Represents a stubbed version of the database context.
+    /// </summary>
     public class StubbedContext : LibraryContext
     {
-        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StubbedContext"/> class.
+        /// </summary>
+        /// <param name="options">The options for this context.</param>
         public StubbedContext(DbContextOptions<LibraryContext> options) : base(options)
         {
         }
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StubbedContext"/> class.
+        /// </summary>
         public StubbedContext() : base()
         {
         }
 
-        // Méthode appelée lors de la création du modèle de la base de données
+        /// <summary>
+        /// Method called when the database model is being created.
+        /// </summary>
+        /// <param name="modelBuilder">The model builder to configure the database model.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Appelle la méthode de la classe de base pour effectuer la configuration initiale du modèle

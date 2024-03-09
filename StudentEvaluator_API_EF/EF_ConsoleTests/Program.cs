@@ -3,8 +3,17 @@ using EF_Entities;
 using Microsoft.EntityFrameworkCore;
 using EF_ConsoleTests.TestUtils;
 
+
+/// <summary>
+/// Represents the main program class.
+/// </summary>
 class Program
 {
+
+    /// <summary>
+    /// The entry point of the program.
+    /// </summary>
+    /// <param name="args">The command-line arguments.</param>
     static async Task Main(string[] args)
     {
         var options = new DbContextOptionsBuilder<LibraryContext>()

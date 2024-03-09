@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace EF_Entities
 {
+    /// <summary>
+    /// Represents a group entity in the database.
+    /// </summary>
     public class GroupEntity
     {
         public int GroupYear { get; set; }

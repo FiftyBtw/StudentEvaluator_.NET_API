@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Shared;
 
+    /// <summary>
+    /// Represents a service interface for group-related operations.
+    /// </summary>
+    /// <typeparam name="T">The type representing a group.</typeparam>
     public interface IGroupService<T> where T : class
     {
         public Task<PageReponse<T>> GetGroups(int index,int count);

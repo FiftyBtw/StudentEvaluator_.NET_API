@@ -1,5 +1,8 @@
 namespace EF_Entities;
 
+/// <summary>
+/// Represents an evaluation entity in the database.
+/// </summary>
 public class EvaluationEntity
 {
     public long Id { get; set; }

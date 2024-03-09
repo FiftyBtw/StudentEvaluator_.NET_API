@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EF_DbContextLib
 {
+    /// <summary>
+    /// Represents the database context for the library.
+    /// </summary>
     public class LibraryContext : DbContext
     {
         // Propriété DbSet pour représenter l'ensemble de students dans la base de données
@@ -33,7 +36,10 @@ namespace EF_DbContextLib
         public LibraryContext(DbContextOptions options) : base(options) { }
 
 
-        // Méthode appelée lors de la configuration du contexte de la base de données
+        /// <summary>
+        /// Method called when configuring the database context.
+        /// </summary>
+        /// <param name="optionsBuilder">The options builder used to configure the database context.</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Méthode appelée lors de la configuration du contexte de la base de données
@@ -46,8 +52,11 @@ namespace EF_DbContextLib
             }
 
         }
-        
-        // Méthode appelée lors de la création du modèle de la base de données
+
+        /// <summary>
+        /// Method called when building the database model.
+        /// </summary>
+        /// <param name="modelBuilder">The model builder used to configure the database model.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Appelle la méthode de la classe de base pour effectuer la configuration initiale du modèle

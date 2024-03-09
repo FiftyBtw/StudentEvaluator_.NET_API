@@ -1,5 +1,9 @@
 namespace EF_Entities;
 
+
+/// <summary>
+/// Represents a lesson entity in the database.
+/// </summary>
 public class LessonEntity
 {
     public long Id { get; set; }

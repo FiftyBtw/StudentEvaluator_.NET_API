@@ -2,6 +2,9 @@
 
 namespace API_Dto
 {
+    /// <summary>
+    /// Data transfer object for students.
+    /// </summary>
     public class StudentDto
     {
         public long Id { get; set; }

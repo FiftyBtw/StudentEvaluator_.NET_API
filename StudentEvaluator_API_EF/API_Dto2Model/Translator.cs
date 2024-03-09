@@ -129,8 +129,7 @@ namespace API_Dto2Model
         public static LessonDto ToDto(this LessonCreation lesson)
         {
             return new LessonDto
-            {
-                Id = lesson.Id,
+            { 
                 Start = lesson.Start,
                 End = lesson.End,
                 CourseName = lesson.CourseName,

@@ -9,8 +9,6 @@ namespace Client_Model
 {
     public class LessonCreation
     {
-        private readonly long _id;
-        public long Id { get { return _id; } }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public string CourseName { get; set; }
@@ -23,9 +21,8 @@ namespace Client_Model
 
         public LessonCreation() { }
 
-        public LessonCreation(long id, DateTime start, DateTime end, string coursename, string classroom, long teacherid, int gyear, int gnumber)
+        public LessonCreation( DateTime start, DateTime end, string coursename, string classroom, long teacherid, int gyear, int gnumber)
         {
-            _id = id;
             Start = start;
             End = end;
             CourseName = coursename;

@@ -125,7 +125,7 @@ foreach (var lesson in lessons.Data)
 
 Console.WriteLine("Test PostGroup :\n");
 
-var newLesson = new LessonCreation( 0,new DateOnly(2023, 11, 26).ToDateTime(new TimeOnly(15, 0)), new DateOnly(2023, 11, 26).ToDateTime(new TimeOnly(17, 0)), "Apprentissage Automatique", "Amphi A", 1, 1, 5);
+var newLesson = new LessonCreation(new DateOnly(2023, 11, 26).ToDateTime(new TimeOnly(15, 0)), new DateOnly(2023, 11, 26).ToDateTime(new TimeOnly(17, 0)), "Apprentissage Automatique", "Amphi A", 1, 1, 5);
 var lessonReponse = await apiDataManager.PostLesson(newLesson);
 
 Console.WriteLine(lessonReponse);

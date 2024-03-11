@@ -1,5 +1,6 @@
 ﻿using EF_Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace EF_DbContextLib
 {
@@ -34,6 +35,8 @@ namespace EF_DbContextLib
         public LibraryContext() { }
 
         public LibraryContext(DbContextOptions options) : base(options) { }
+        
+        private StreamWriter _logStream = new("ef_log.txt", append: true);
 
 
         /// <summary>
@@ -50,6 +53,10 @@ namespace EF_DbContextLib
                 // Utilise SQLite comme fournisseur de base de données avec le chemin spécifié
                 optionsBuilder.UseSqlite($"Data Source=StudentEvaluator_API_EF.db");
             }
+
+            optionsBuilder.LogTo( log => _logStream.WriteLine(log), LogLevel.Information)
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors();
 
         }
 

@@ -11,7 +11,7 @@ namespace API_Dto2Model
     /// <summary>
     /// Class for managing API data related to students and groups.
     /// </summary>
-    public class ApiDataManager : IStudentService<Student>,IGroupService<Group>,ILessonService<LessonCreation,Lesson>
+    public class ApiDataManager : IStudentService<Student>,IGroupService<Group>,ILessonService<LessonCreation,Lesson>,IEvaluationService<EvaluationCreation,Evaluation>
     {
         private readonly HttpClient _httpClient;
 
@@ -167,7 +167,6 @@ namespace API_Dto2Model
         
         public async Task<Lesson?> PutLesson(long id, LessonCreation lesson)
         {
-
             var reponse = await _httpClient.PutAsJsonAsync($"{_httpClient.BaseAddress}api/v{Version}/Lessons?id={id}", lesson.ToDto());
             if(reponse.IsSuccessStatusCode)
             {
@@ -185,6 +184,58 @@ namespace API_Dto2Model
             }
             else return await Task.FromResult(false);
 
+        }
+
+        //Evaluation
+
+        public async Task<PageReponse<Evaluation>> GetEvaluations(int index=0, int count=10)
+        {
+            var evals = await _httpClient.GetFromJsonAsync<PageReponse<EvaluationReponseDto>>($"{_httpClient.BaseAddress}api/v{Version}/Evaluations?index={index}&count={count}");
+            return await Task.FromResult(new PageReponse<Evaluation>(evals.nbElement, evals.Data.ToModels()));
+        }
+
+        public async Task<Evaluation?> GetEvaluationById(long id)
+        {
+            var evalById = await _httpClient.GetFromJsonAsync<EvaluationReponseDto>($"{_httpClient.BaseAddress}api/v{Version}/Evaluations/id/{id}");
+            return await Task.FromResult(evalById?.ToModel());
+        }
+
+        public async Task<PageReponse<Evaluation>> GetEvaluationsByTeacherId(long id, int index=0, int count=10)
+        {
+            var evalsByTeacherId = await _httpClient.GetFromJsonAsync<PageReponse<EvaluationReponseDto>>($"{_httpClient.BaseAddress}api/v{Version}/Evaluations/teacher/{id}?index={index}&count={count}");
+            return await Task.FromResult(new PageReponse<Evaluation>(evalsByTeacherId.nbElement, evalsByTeacherId.Data.ToModels()));
+        }
+
+        public async Task<Evaluation?> PostEvaluation(EvaluationCreation eval)
+        {
+            var reponse = await _httpClient.PostAsJsonAsync($"{_httpClient.BaseAddress}api/v{Version}/Evaluations", eval.ToDto());
+            if (reponse.IsSuccessStatusCode)
+            {
+                var evalRep = await reponse.Content.ReadFromJsonAsync<EvaluationReponseDto>();
+                return await Task.FromResult(evalRep.ToModel());
+            }
+            return await Task.FromResult<Evaluation?>(null);
+        }
+
+        public async Task<Evaluation?> PutEvaluation(long id, EvaluationCreation eval)
+        {
+            var reponse = await _httpClient.PutAsJsonAsync($"{_httpClient.BaseAddress}api/v{Version}/Evaluations?id={id}", eval.ToDto());
+            if (reponse.IsSuccessStatusCode)
+            {
+                var evalRep = await reponse.Content.ReadFromJsonAsync<EvaluationReponseDto>();
+                return await Task.FromResult(evalRep.ToModel());
+            }
+            return await Task.FromResult<Evaluation?>(null);
+        }
+
+        public async Task<bool> DeleteEvaluation(long id)
+        {
+            var b = await _httpClient.DeleteAsync($"{_httpClient.BaseAddress}api/v{Version}/Evluations?id={id}");
+            if (b.IsSuccessStatusCode)
+            {
+                return await Task.FromResult(true);
+            }
+            else return await Task.FromResult(false);
         }
     }
 }

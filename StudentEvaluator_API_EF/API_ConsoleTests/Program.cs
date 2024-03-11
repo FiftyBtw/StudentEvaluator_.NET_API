@@ -123,7 +123,7 @@ foreach (var lesson in lessons.Data)
 
 //PostLesson
 
-Console.WriteLine("Test PostGroup :\n");
+Console.WriteLine("Test PostLesson :\n");
 
 var newLesson = new LessonCreation(new DateOnly(2023, 11, 26).ToDateTime(new TimeOnly(15, 0)), new DateOnly(2023, 11, 26).ToDateTime(new TimeOnly(17, 0)), "Apprentissage Automatique", "Amphi A", 1, 1, 5);
 var lessonReponse = await apiDataManager.PostLesson(newLesson);
@@ -165,4 +165,62 @@ Console.WriteLine($"Nombre d'éléments : {lessons.nbElement}");
 foreach (var lesson in lessons.Data)
 {
     Console.WriteLine(lesson);
+}
+
+//Evaluation
+
+//GetEvaluations
+Console.WriteLine("Test GetEvaluations :\n");
+
+var evals = await apiDataManager.GetEvaluations();
+Console.WriteLine($"Nombre d'éléments : {evals.nbElement}");
+foreach (var eval in evals.Data)
+{
+    Console.WriteLine(eval);
+}
+
+//PostEvaluation
+
+Console.WriteLine("Test PostEvaluation :\n");
+
+var newEval = new EvaluationCreation(new DateOnly(2023, 11, 26).ToDateTime(new TimeOnly(15, 0)), "JavaScript", 13, null, 1, 10, 1);
+var evalReponse = await apiDataManager.PostEvaluation(newEval);
+
+Console.WriteLine(evalReponse);
+
+//PutEvaluation
+Console.WriteLine("Test PutEvaluation :\n");
+newEval.CourseName= "PHP";
+evalReponse = await apiDataManager.PutEvaluation(evalReponse.Id, newEval);
+
+Console.WriteLine(evalReponse);
+//GetEvaluationById
+
+Console.WriteLine("Test GetEvaluationById (id=1) :\n");
+var evalById = await apiDataManager.GetEvaluationById(1);
+
+Console.WriteLine(evalById);
+
+//GetLessonByTeacherId
+
+Console.WriteLine("Test GetEvaluationsByTeacherId (id=1) :\n");
+
+var evalsByTeacherId = await apiDataManager.GetEvaluationsByTeacherId(1);
+Console.WriteLine($"Nombre d'éléments : {evalsByTeacherId.nbElement}");
+foreach (var eval in evalsByTeacherId.Data)
+{
+    Console.WriteLine(eval);
+}
+//DeleteEvalation
+
+Console.WriteLine("Test DeleteEvaluation :\n");
+
+repDelete = await apiDataManager.DeleteEvaluation(lessonReponse.Id);
+Console.WriteLine(repDelete);
+
+evals = await apiDataManager.GetEvaluations();
+Console.WriteLine($"Nombre d'éléments : {evals.nbElement}");
+foreach (var eval in evals.Data)
+{
+    Console.WriteLine(eval);
 }

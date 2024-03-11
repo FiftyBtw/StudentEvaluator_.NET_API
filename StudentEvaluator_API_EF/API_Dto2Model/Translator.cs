@@ -1,11 +1,7 @@
 ﻿using API_Dto;
 using API_Model;
 using Client_Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Dto2Model;
 
 namespace API_Dto2Model
 {
@@ -164,6 +160,112 @@ namespace API_Dto2Model
             }
             return lessons;
         }
+
+        //Criteria 
+
+        //public static Criteria ToModel(this CriteriaDto criteriaDto)
+        //{
+        //    return new Criteria(criteriaDto.Id, criteriaDto.Name, criteriaDto.ValueEvaluation, criteriaDto.TemplateId);
+        //}
+
+
+        //public static CriteriaDto ToDto(this Criteria criteria)
+        //{
+        //    return new CriteriaDto
+        //    {
+        //        Id= criteria.Id,
+        //        Name= criteria.Name,
+        //        ValueEvaluation= criteria.ValueEvaluation,
+        //        TemplateId= criteria.TemplateId
+
+        //    };
+        //}
+
+ 
+        //Template 
+        public static Template ToModel(this TemplateDto template)
+        {
+            return new Template(0, template.Name, new List<Criteria>());
+        }
+        public static Template ToModel(this TemplateResponseDto template)
+        {
+            return new Template(template.Id, template.Name, template.Criterias.Select(CriteriaModelConverter.ConvertToModel)) ;
+        }
+
+        public static TemplateDto ToDto(this Template template)
+        {
+            return new TemplateDto
+            {
+               Name = template.Name,
+            };
+        }
+
+        public static TemplateResponseDto ToReponseDto(this Template template)
+        {
+            return new TemplateResponseDto
+            {
+                Id = template.Id,
+                Name = template.Name,
+                Criterias = template.Criterias.Select(CriteriaModelConverter.ConvertToDto).ToList(),
+            };
+        }
+
+        public static IEnumerable<Template> ToModels(this IEnumerable<TemplateResponseDto> dtos)
+        {
+            IEnumerable<Template> templates = new List<Template>();
+            foreach (TemplateResponseDto dto in dtos)
+            {
+                (templates as List<Template>).Add(dto.ToModel());
+            }
+            return templates;
+        }
+
+        //Evaluation
+
+        public static Evaluation ToModel(this EvaluationReponseDto evalRepDto)
+        {
+            return new Evaluation(evalRepDto.Id,evalRepDto.Date,evalRepDto.CourseName,evalRepDto.Grade,evalRepDto.PairName,evalRepDto.Teacher.ToModel(),evalRepDto.Template?.ToModel(),evalRepDto.Student.ToModel());
+        }
+
+
+        public static EvaluationDto ToDto(this EvaluationCreation eval)
+        {
+            return new EvaluationDto
+            {
+                CourseName = eval.CourseName,
+                Grade = eval.Grade,
+                PairName = eval.PairName,
+                StudentId = eval.StudentId,
+                TeacherId = eval.TeacherId,
+                TemplateId =eval.TemplateId,
+
+            };
+        }
+
+        public static EvaluationReponseDto ToReponseDto(this Evaluation evaluation)
+        {
+            return new EvaluationReponseDto
+            {
+                Id = evaluation.Id,
+                CourseName= evaluation.CourseName,
+                Grade = evaluation.Grade,
+                PairName = evaluation.PairName,
+                Teacher= evaluation.Teacher.ToDto(),
+                Template = evaluation.Template.ToDto(),
+                Student = evaluation.Student.ToDto(), 
+            };
+        }
+
+        public static IEnumerable<Evaluation> ToModels(this IEnumerable<EvaluationReponseDto> dtos)
+        {
+            IEnumerable<Evaluation> evals = new List<Evaluation>();
+            foreach (EvaluationReponseDto dto in dtos)
+            {
+                (evals as List<Evaluation>).Add(dto.ToModel());
+            }
+            return evals;
+        }
+
 
     }
 }

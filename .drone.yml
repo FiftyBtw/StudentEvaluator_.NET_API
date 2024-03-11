@@ -28,6 +28,7 @@ steps:
       sonar_host: https://codefirst.iut.uca.fr/sonar/
       sonar_token:
         from_secret: SECRET_SONAR_LOGIN
+      project_key: Student_Evaluator-API
     commands:
       - cd StudentEvaluator_API_EF
       - dotnet restore StudentEvaluator_API_EF.sln

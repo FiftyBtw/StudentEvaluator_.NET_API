@@ -11,5 +11,5 @@ public class UserEntity
     
     public string Password { get; set; }
     
-    public string[] roles { get; set; }
+    public string[] Roles { get; set; }
 }

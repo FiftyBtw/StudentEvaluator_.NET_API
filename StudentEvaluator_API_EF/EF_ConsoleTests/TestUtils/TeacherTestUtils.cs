@@ -19,7 +19,7 @@ public class TeacherTestUtils
     /// <param name="roles">The roles of the teacher.</param>
     public static void AddTeacher(LibraryContext context, string username, string password, string[] roles)
     {
-        context.TeacherSet.Add(new TeacherEntity { Username = username, Password = password, roles = roles });
+        context.TeacherSet.Add(new TeacherEntity { Username = username, Password = password, Roles = roles });
         context.SaveChanges();
         Console.WriteLine($"Teacher '{username}' added to the database");
     }
@@ -35,10 +35,10 @@ public class TeacherTestUtils
                      .Include(t => t.Evaluations))
         {
             Console.WriteLine($"ID {teacher.Id}: {teacher.Username} {teacher.Password}");
-            if (teacher.roles != null)
+            if (teacher.Roles != null)
             {
                 Console.WriteLine("Roles:");
-                foreach (var role in teacher.roles)
+                foreach (var role in teacher.Roles)
                 {
                     Console.WriteLine($"  - {role}");
                 }

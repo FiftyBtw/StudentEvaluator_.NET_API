@@ -557,7 +557,7 @@ namespace Entities2Dto
                 return Task.FromResult(new LoginResponseDto
                 {
                     Username = user.Username,
-                    Roles = user.roles,
+                    Roles = user.Roles,
                     Id = user.Id
                 });
             }
@@ -578,7 +578,7 @@ namespace Entities2Dto
             if (oldUser == null) return Task.FromResult<UserDto?>(null);
             oldUser.Username = user.Username;
             oldUser.Password = user.Password == null ? oldUser.Password : BCrypt.Net.BCrypt.HashPassword(user.Password);
-            oldUser.roles = user.roles;
+            oldUser.Roles = user.roles;
             _libraryContext.SaveChanges();
             return Task.FromResult(user);
         }

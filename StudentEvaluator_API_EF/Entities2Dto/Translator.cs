@@ -551,7 +551,7 @@ namespace Entities2Dto
                     Username = teacher.Username,
                     Password = teacher.Password,
                     Templates = teacher.Templates?.ToDtos(),
-                    roles = teacher.roles,
+                    roles = teacher.Roles,
                 };
                 TeacherMapper.Set(teacher, teacherDto);
             }
@@ -575,7 +575,7 @@ namespace Entities2Dto
                     Username = teacher.Username,
                     Password = teacher.Password,
                     Templates = teacher.Templates?.ToEntities(),
-                    roles = teacher.roles,
+                    Roles = teacher.roles,
                 };
                 TeacherMapper.Set(teacherEntity, teacher);
             }
@@ -742,7 +742,7 @@ namespace Entities2Dto
                     Id = user.Id,
                     Username = user.Username,
                     Password = user.Password,
-                    roles = user.roles,
+                    roles = user.Roles,
                 };
                 UserMapper.Set(user, userDto);      
             }
@@ -766,7 +766,7 @@ namespace Entities2Dto
                     Id = user.Id,
                     Username = user.Username,
                     Password = user.Password,
-                    roles = user.roles,
+                    Roles = user.roles,
                 };
                 UserMapper.Set(userEntity, user);
             }

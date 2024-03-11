@@ -1,4 +1,4 @@
-﻿using EF_DbContextLib;
+using EF_DbContextLib;
 using EF_Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -90,11 +90,11 @@ namespace EF_StubbedContextLib
 
             // Configure les données initiales (stub) pour l'entité TeacherEntity
             modelBuilder.Entity<TeacherEntity>().HasData(
-                new TeacherEntity { Id = 1, Username = "ProfDupont", Password = "$2y$10$kx6xmLJEiXGkVroyBT0CQetdvYRwK5EnuyUntvL3BxE5PHMBB8txe" ,roles = ["Teacher"], Templates = [] },
-                new TeacherEntity { Id = 2, Username = "ProfDurand", Password = "$2y$10$v.CNQT.HevXlQcnJRh8p.u6MPlRUEWzKD9tDW.pT820nYkiUi8gEy", roles = ["Teacher"], Templates = [] },
-                new TeacherEntity { Id = 3, Username = "ProfMartin", Password = "$2y$10$D9FztiIDadYSmCgy1gy.N.V.rwCTCGAvYckGacxpbWocS7DETTn8.", roles = ["Teacher"], Templates = [] },
-                new TeacherEntity { Id = 4, Username = "ProfPetit", Password = "$2y$10$xL5hLjLYUphj2b2zFszg8.qiZCxpChGMmyOzVguqXYK7PoJrEPIOi", roles = ["Teacher"], Templates = [] },
-                new TeacherEntity { Id = 5, Username = "ProfLeroy", Password = "$2y$10$uohwx42x7pZH/weZFgBSdu5A8ZNSgvxYrzH7v8QJgUnpfM8FWL8fG", roles = ["Teacher"], Templates = [] }
+                new TeacherEntity { Id = 1, Username = "ProfDupont", Password = "$2y$10$kx6xmLJEiXGkVroyBT0CQetdvYRwK5EnuyUntvL3BxE5PHMBB8txe" ,Roles = ["Teacher"], Templates = [] },
+                new TeacherEntity { Id = 2, Username = "ProfDurand", Password = "$2y$10$v.CNQT.HevXlQcnJRh8p.u6MPlRUEWzKD9tDW.pT820nYkiUi8gEy", Roles = ["Teacher"], Templates = [] },
+                new TeacherEntity { Id = 3, Username = "ProfMartin", Password = "$2y$10$D9FztiIDadYSmCgy1gy.N.V.rwCTCGAvYckGacxpbWocS7DETTn8.", Roles = ["Teacher"], Templates = [] },
+                new TeacherEntity { Id = 4, Username = "ProfPetit", Password = "$2y$10$xL5hLjLYUphj2b2zFszg8.qiZCxpChGMmyOzVguqXYK7PoJrEPIOi", Roles = ["Teacher"], Templates = [] },
+                new TeacherEntity { Id = 5, Username = "ProfLeroy", Password = "$2y$10$uohwx42x7pZH/weZFgBSdu5A8ZNSgvxYrzH7v8QJgUnpfM8FWL8fG", Roles = ["Teacher"], Templates = [] }
             );
             
             // Configure les données initiales (stub) pour l'entité TemplateEntity

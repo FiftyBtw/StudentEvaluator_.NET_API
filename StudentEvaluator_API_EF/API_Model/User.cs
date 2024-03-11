@@ -15,7 +15,7 @@ namespace API_Model
 
         public string Password { get; set; }
 
-        public string[] roles { get; set; }
+        public string[] Roles { get; set; }
 
         public User() { }
 
@@ -24,7 +24,7 @@ namespace API_Model
             _id = id;
             Username = username;
             Password = password;
-            this.roles = roles;
+            this.Roles = roles;
         }
     }
 }

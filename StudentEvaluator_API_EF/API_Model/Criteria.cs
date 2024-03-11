@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Client_Model
 {
-    public class Criteria
+    public abstract class Criteria
     {
         private readonly long _id;
         public long Id { get { return _id; } }

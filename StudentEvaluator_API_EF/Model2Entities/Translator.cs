@@ -1,5 +1,7 @@
 ﻿using API_Model;
+using Client_Model;
 using EF_Entities;
+using Model2Entities;
 
 namespace EF_Entities2Model;
 
@@ -132,5 +134,202 @@ public static class Translator
             (groups as List<GroupEntity>).Add(model.ToEntity());
         }
         return groups;
+    }
+    
+    
+    // Teacher 
+    
+    /// <summary>
+    /// Converts a <see cref="TeacherEntity"/> object to a <see cref="Teacher"/> model.
+    /// </summary>
+    /// <param name="teacher">The teacher entity to convert.</param>
+    /// <returns>The converted teacher model.</returns>
+    public static Teacher ToModel(this TeacherEntity teacher)
+    {
+        return new Teacher(teacher.Id, teacher.Username, teacher.Password, teacher.Roles);
+    }
+    
+    /// <summary>
+    /// Converts a <see cref="Teacher"/> model to a <see cref="TeacherEntity"/> object.
+    /// </summary>
+    /// <param name="teacher">The teacher model to convert.</param>
+    /// <returns>The converted teacher entity.</returns>
+    public static TeacherEntity ToEntity(this Teacher teacher)
+    {
+        return new TeacherEntity
+        {
+            Id = teacher.Id,
+            Username = teacher.Username,
+            Password = teacher.Password,
+            Roles = teacher.Roles
+        };
+    }
+    
+    /// <summary>
+    /// Converts a collection of <see cref="TeacherEntity"/> objects to a collection of <see cref="Teacher"/> models.
+    /// </summary>
+    /// <param name="entities">The collection of teacher entities to convert.</param>
+    /// <returns>The converted collection of teacher models.</returns>
+    public static IEnumerable<Teacher> ToModels(this IEnumerable<TeacherEntity> entities)
+    {
+        IEnumerable<Teacher> teachers = new List<Teacher>();
+        foreach (var entity in entities)
+        {
+            (teachers as List<Teacher>).Add(entity.ToModel());
+        }
+        return teachers;
+    }
+    
+    /// <summary>
+    /// Converts a collection of <see cref="Teacher"/> models to a collection of <see cref="TeacherEntity"/> objects.
+    /// </summary>
+    /// <param name="models">The collection of teacher models to convert.</param>
+    /// <returns>The converted collection of teacher entities.</returns>
+    public static IEnumerable<TeacherEntity> ToEntities(this IEnumerable<Teacher> models)
+    {
+        IEnumerable<TeacherEntity> teachers = new List<TeacherEntity>();
+        foreach (var model in models)
+        {
+            (teachers as List<TeacherEntity>).Add(model.ToEntity());
+        }
+        return teachers;
+    }
+    
+    // Lesson
+    
+    /// <summary>
+    /// Converts a <see cref="LessonEntity"/> object to a <see cref="Lesson"/> model.
+    /// </summary>
+    /// <param name="lesson">The lesson entity to convert.</param>
+    /// <returns>The converted lesson model.</returns>
+    public static Lesson ToModel(this LessonEntity lesson)
+    {
+        return new Lesson(lesson.Id, lesson.Start, lesson.End, lesson.CourseName, lesson.Classroom, lesson.Teacher.ToModel(), lesson.Group.ToModel());
+    }
+    
+    /// <summary>
+    /// Converts a <see cref="Lesson"/> model to a <see cref="LessonEntity"/> object.
+    /// </summary>
+    /// <param name="lesson">The lesson model to convert.</param>
+    /// <returns>The converted lesson entity.</returns>
+    public static LessonEntity ToEntity(this LessonCreation lesson)
+    {
+        return new LessonEntity
+        {
+            Start = lesson.Start,
+            End = lesson.End,
+            CourseName = lesson.CourseName,
+            Classroom = lesson.Classroom,
+            TeacherEntityId = lesson.TeacherId,
+            GroupYear = lesson.GroupYear,
+            GroupNumber = lesson.GroupNumber
+        };
+    }
+    
+    /// <summary>
+    /// Converts a collection of <see cref="LessonEntity"/> objects to a collection of <see cref="Lesson"/> models.
+    /// </summary>
+    /// <param name="entities">The collection of lesson entities to convert.</param>
+    /// <returns>The converted collection of lesson models.</returns>
+    public static IEnumerable<Lesson> ToModels(this IEnumerable<LessonEntity> entities)
+    {
+        IEnumerable<Lesson> lessons = new List<Lesson>();
+        foreach (var entity in entities)
+        {
+            (lessons as List<Lesson>).Add(entity.ToModel());
+        }
+        return lessons;
+    }
+    
+    /// <summary>
+    /// Converts a collection of <see cref="Lesson"/> models to a collection of <see cref="LessonEntity"/> objects.
+    /// </summary>
+    /// <param name="models">The collection of lesson models to convert.</param>
+    /// <returns>The converted collection of lesson entities.</returns>
+    public static IEnumerable<LessonEntity> ToEntities(this IEnumerable<LessonCreation> models)
+    {
+        IEnumerable<LessonEntity> lessons = new List<LessonEntity>();
+        foreach (var model in models)
+        {
+            (lessons as List<LessonEntity>).Add(model.ToEntity());
+        }
+        return lessons;
+    }
+    
+    // Template
+    
+    public static Template ToModel(this TemplateEntity template)
+    {
+        return new Template(0, template.Name, new List<Criteria>());
+    }
+    
+   public static TemplateEntity ToEntity(this Template template)
+    {
+        return new TemplateEntity
+        {
+            Name = template.Name,
+            Criteria = template.Criterias.Select(CriteriaEntityConverter.ConvertToEntity)
+        };
+    }
+   
+   public static IEnumerable<Template> ToModels(this IEnumerable<TemplateEntity> entities)
+    {
+        IEnumerable<Template> templates = new List<Template>();
+        foreach (var entity in entities)
+        {
+            (templates as List<Template>).Add(entity.ToModel());
+        }
+        return templates;
+    }
+    
+    public static IEnumerable<TemplateEntity> ToEntities(this IEnumerable<Template> models)
+    {
+        IEnumerable<TemplateEntity> templates = new List<TemplateEntity>();
+        foreach (var model in models)
+        {
+            (templates as List<TemplateEntity>).Add(model.ToEntity());
+        }
+        return templates;
+    }
+    
+    // Evaluation
+    
+    public static Evaluation ToModel(this EvaluationEntity evaluation)
+    {
+        return new Evaluation(evaluation.Id, evaluation.Date, evaluation.CourseName, evaluation.Grade, evaluation.PairName, evaluation.Teacher.ToModel(), evaluation.Template?.ToModel(), evaluation.Student.ToModel());
+    }
+    
+    public static EvaluationEntity ToEntity(this EvaluationCreation evaluation)
+    {
+        return new EvaluationEntity
+        {
+            Date = evaluation.Date,
+            CourseName = evaluation.CourseName,
+            Grade = evaluation.Grade,
+            PairName = evaluation.PairName,
+            TeacherId = evaluation.TeacherId,
+            TemplateId = evaluation.TemplateId,
+            StudentId = evaluation.StudentId
+        };
+    }
+    
+    public static IEnumerable<Evaluation> ToModels(this IEnumerable<EvaluationEntity> entities)
+    {
+        IEnumerable<Evaluation> evaluations = new List<Evaluation>();
+        foreach (var entity in entities)
+        {
+            (evaluations as List<Evaluation>).Add(entity.ToModel());
+        }
+        return evaluations;
+    }
+    
+    public static IEnumerable<EvaluationEntity> ToEntities(this IEnumerable<EvaluationCreation> models)
+    {
+        IEnumerable<EvaluationEntity> evaluations = new List<EvaluationEntity>();
+        foreach (var model in models)
+        {
+            (evaluations as List<EvaluationEntity>).Add(model.ToEntity());
+        }
+        return evaluations;
     }
 }

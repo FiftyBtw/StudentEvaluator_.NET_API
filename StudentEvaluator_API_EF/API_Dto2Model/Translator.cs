@@ -111,7 +111,7 @@ namespace API_Dto2Model
                 Id = teacher.Id,
                 Username = teacher.Username,
                 Password = teacher.Password,
-                roles = teacher.roles
+                roles = teacher.Roles
 
             };
         }

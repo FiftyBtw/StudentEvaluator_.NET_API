@@ -869,7 +869,7 @@ namespace Entities2Dto
             _libraryContext.EvaluationSet.AddAsync(evalEntity);
             _libraryContext.SaveChanges();
             Translator.EvaluationMapper.Reset();
-            return Task.FromResult(evalEntity?.ToReponseDto());
+            return Task.FromResult(_libraryContext.EvaluationSet.Include(e => e.Teacher).Include(e => e.Template).Include(e => e.Student).FirstOrDefault(e => e.Id == evalEntity.Id)?.ToReponseDto());
         }
 
 
@@ -883,17 +883,18 @@ namespace Entities2Dto
         {
             var eval = _libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == id);
             if (eval == null) return Task.FromResult<EvaluationReponseDto?>(null);
-            eval.Id = newEval.Id;
             eval.CourseName = newEval.CourseName;
             eval.PairName = newEval.PairName;
             eval.Grade = newEval.Grade;
             eval.Date = newEval.Date;
-
+            eval.StudentId= newEval.StudentId;
+            eval.TemplateId=newEval.TemplateId;
             eval.TeacherId = newEval.TeacherId;
 
             _libraryContext.SaveChanges();
             Translator.EvaluationMapper.Reset();
-            return Task.FromResult(_libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == id)?.ToReponseDto());
+             eval = _libraryContext.EvaluationSet.Include(e => e.Teacher).Include(e => e.Template).Include(e => e.Student).FirstOrDefault(e => e.Id == id);
+            return Task.FromResult(eval?.ToReponseDto());
         }
 
 

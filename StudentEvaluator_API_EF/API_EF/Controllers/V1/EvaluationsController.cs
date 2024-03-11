@@ -116,7 +116,7 @@ namespace API_EF.Controllers.V1
             {
                 return StatusCode(500);
             }
-            var evalDto = await _evaluationService.PostEvaluation(eval);
+            var evalDto = await _evaluationService.PutEvaluation(id,eval);
             if (evalDto == null)
             {
                 return NotFound();

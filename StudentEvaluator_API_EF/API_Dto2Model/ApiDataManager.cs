@@ -196,7 +196,7 @@ namespace API_Dto2Model
 
         public async Task<Evaluation?> GetEvaluationById(long id)
         {
-            var evalById = await _httpClient.GetFromJsonAsync<EvaluationReponseDto>($"{_httpClient.BaseAddress}api/v{Version}/Evaluations/id/{id}");
+            var evalById = await _httpClient.GetFromJsonAsync<EvaluationReponseDto>($"{_httpClient.BaseAddress}api/v{Version}/Evaluations/{id}");
             return await Task.FromResult(evalById?.ToModel());
         }
 
@@ -230,7 +230,7 @@ namespace API_Dto2Model
 
         public async Task<bool> DeleteEvaluation(long id)
         {
-            var b = await _httpClient.DeleteAsync($"{_httpClient.BaseAddress}api/v{Version}/Evluations?id={id}");
+            var b = await _httpClient.DeleteAsync($"{_httpClient.BaseAddress}api/v{Version}/Evaluations?id={id}");
             if (b.IsSuccessStatusCode)
             {
                 return await Task.FromResult(true);

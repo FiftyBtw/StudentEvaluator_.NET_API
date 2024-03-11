@@ -232,6 +232,7 @@ namespace API_Dto2Model
         {
             return new EvaluationDto
             {
+                Date = eval.Date,
                 CourseName = eval.CourseName,
                 Grade = eval.Grade,
                 PairName = eval.PairName,
@@ -247,6 +248,7 @@ namespace API_Dto2Model
             return new EvaluationReponseDto
             {
                 Id = evaluation.Id,
+                Date = evaluation.Date,
                 CourseName= evaluation.CourseName,
                 Grade = evaluation.Grade,
                 PairName = evaluation.PairName,

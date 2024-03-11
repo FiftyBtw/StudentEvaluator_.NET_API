@@ -215,7 +215,7 @@ foreach (var eval in evalsByTeacherId.Data)
 
 Console.WriteLine("Test DeleteEvaluation :\n");
 
-repDelete = await apiDataManager.DeleteEvaluation(lessonReponse.Id);
+repDelete = await apiDataManager.DeleteEvaluation(evalReponse.Id);
 Console.WriteLine(repDelete);
 
 evals = await apiDataManager.GetEvaluations();

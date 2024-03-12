@@ -32,7 +32,7 @@ steps:
     commands:
       - cd StudentEvaluator_API_EF
       - dotnet restore StudentEvaluator_API_EF.sln
-      - dotnet sonarscanner begin /k:$${project_key} /d:sonar.host.url=$${sonar_host} /d:sonar.login=$${sonar_token}
+      - dotnet sonarscanner begin /k:$${project_key} /d:sonar.host.url=$${sonar_host} /d:sonar.login=$${sonar_token}/d:sonar.coverageReportPaths="coveragereport/SonarQube.xml" /d:sonar.coverage.exclusions="Tests/**" /d:sonar.login=$${PLUGIN_SONAR_TOKEN}
       - dotnet build StudentEvaluator_API_EF.sln -c Release --no-restore
       - dotnet test StudentEvaluator_API_EF.sln --logger trx --no-restore /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --collect "XPlat Code Coverage"
       - reportgenerator -reports:"**/coverage.cobertura.xml" -reporttypes:SonarQube -targetdir:"coveragereport"

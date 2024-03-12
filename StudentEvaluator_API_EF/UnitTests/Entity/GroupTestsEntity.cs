@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EF_UnitTests.Entity;
 
-public class EGroupTests
+public class GroupTestsEntity
 {
     [Fact]
     public void TestAddGroup()

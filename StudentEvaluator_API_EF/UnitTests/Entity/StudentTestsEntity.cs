@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EF_UnitTests.Entity;
 
-public class EStudentTests
+public class StudentTestsEntity
 {
      [Fact]
     public void TestAddStudent()
@@ -29,23 +29,16 @@ public class EStudentTests
                 GroupNumber = 1
             };
 
-            var existingGroup = context.GroupSet
-                .FirstOrDefault(g => g.GroupYear == groupToAdd.GroupYear && g.GroupNumber == groupToAdd.GroupNumber);
-
-            if (existingGroup == null)
-            {
-                context.GroupSet.Add(groupToAdd);
-                context.SaveChanges();
-                existingGroup = groupToAdd;
-            }
+            context.GroupSet.Add(groupToAdd);
+            context.SaveChanges();
 
             var studentToAdd = new StudentEntity
             {
                 Name = "John",
                 Lastname = "Doe",
                 UrlPhoto = "https://www.google.com",
-                GroupYear = existingGroup.GroupYear,
-                GroupNumber = existingGroup.GroupNumber
+                GroupYear = groupToAdd.GroupYear,
+                GroupNumber = groupToAdd.GroupNumber
             };
 
             context.StudentSet.Add(studentToAdd);
@@ -54,6 +47,8 @@ public class EStudentTests
             // Assert
             var studentFromDb = context.StudentSet.FirstOrDefault();
             Assert.NotNull(studentFromDb);
+            
+            Assert.Contains(context.GroupSet.FirstOrDefault().Students, s => s.Id == studentFromDb.Id);
 
             Assert.Equal(studentToAdd.Name, studentFromDb.Name);
             Assert.Equal(studentToAdd.Lastname, studentFromDb.Lastname);
@@ -85,23 +80,17 @@ public class EStudentTests
                 GroupNumber = 1
             };
 
-            var existingGroup = context.GroupSet
-                .FirstOrDefault(g => g.GroupYear == groupToAdd.GroupYear && g.GroupNumber == groupToAdd.GroupNumber);
-
-            if (existingGroup == null)
-            {
-                context.GroupSet.Add(groupToAdd);
-                context.SaveChanges();
-                existingGroup = groupToAdd;
-            }
+            context.GroupSet.Add(groupToAdd);
+            context.SaveChanges();
+            
 
             var studentToAdd = new StudentEntity
             {
                 Name = "John",
                 Lastname = "Doe",
                 UrlPhoto = "https://www.google.com",
-                GroupYear = existingGroup.GroupYear,
-                GroupNumber = existingGroup.GroupNumber
+                GroupYear = groupToAdd.GroupYear,
+                GroupNumber = groupToAdd.GroupNumber
             };
 
             context.StudentSet.Add(studentToAdd);
@@ -146,24 +135,18 @@ public class EStudentTests
                 GroupYear = 1,
                 GroupNumber = 1
             };
-
-            var existingGroup = context.GroupSet
-                .FirstOrDefault(g => g.GroupYear == groupToAdd.GroupYear && g.GroupNumber == groupToAdd.GroupNumber);
-
-            if (existingGroup == null)
-            {
-                context.GroupSet.Add(groupToAdd);
-                context.SaveChanges();
-                existingGroup = groupToAdd;
-            }
+            
+            context.GroupSet.Add(groupToAdd);
+            context.SaveChanges();
+            
 
             var studentToAdd = new StudentEntity
             {
                 Name = "John",
                 Lastname = "Doe",
                 UrlPhoto = "https://www.google.com",
-                GroupYear = existingGroup.GroupYear,
-                GroupNumber = existingGroup.GroupNumber
+                GroupYear = groupToAdd.GroupYear,
+                GroupNumber = groupToAdd.GroupNumber
             };
 
             context.StudentSet.Add(studentToAdd);
@@ -180,6 +163,7 @@ public class EStudentTests
                 // Assert
                 var studentFromDb = context.StudentSet.FirstOrDefault(s => s.Name == studentToDelete.Name && s.Lastname == studentToDelete.Lastname);
                 Assert.Null(studentFromDb);
+                Assert.Empty(context.GroupSet.FirstOrDefault().Students);
             }
         }
     }

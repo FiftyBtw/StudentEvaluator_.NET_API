@@ -34,13 +34,49 @@ public class TemplateTestsEntity
             context.TeacherSet.Add(teacherToAdd);
             context.SaveChanges();
             
+            var groupToAdd = new GroupEntity
+            {
+                GroupYear = 1,
+                GroupNumber = 1
+            };
+            
+            context.GroupSet.Add(groupToAdd);
+            context.SaveChanges();
+            
+            var studentToAdd = new StudentEntity
+            {
+                Name = "John",
+                Lastname = "Doe",
+                UrlPhoto = "https://www.google.com",
+                GroupYear = groupToAdd.GroupYear,
+                GroupNumber = groupToAdd.GroupNumber
+            };
+            
+            context.StudentSet.Add(studentToAdd);
+            context.SaveChanges();
+            
+            var evaluationToAdd = new EvaluationEntity
+            {
+                CourseName = "Entity Framework",
+                Date = new DateTime(2024, 3, 24),
+                StudentId = 1,
+                TemplateId = 1,
+                TeacherId = 1,
+                Grade = 10,
+                PairName = "toto",
+            };
+            
             var templateToAdd = new TemplateEntity
             {
                 Name = "Template1",
-                TeacherId = teacherToAdd.Id
+                TeacherId = teacherToAdd.Id,
+                EvaluationId = 1
             };
 
             context.TemplateSet.Add(templateToAdd);
+            context.SaveChanges();
+            
+            context.EvaluationSet.Add(evaluationToAdd);
             context.SaveChanges();
 
             // Assert
@@ -50,7 +86,8 @@ public class TemplateTestsEntity
             Assert.Equal(templateToAdd.Name, templateFromDb.Name);
             Assert.Equal(templateToAdd.TeacherId, templateFromDb.TeacherId);
             Assert.Equal(templateFromDb.Teacher, teacherToAdd);
-            Assert.Null(templateFromDb.Evaluation);
+            Assert.Equal(templateFromDb.EvaluationId, evaluationToAdd.Id);
+            Assert.Equal(templateFromDb.Evaluation, evaluationToAdd);
             Assert.Contains(context.TeacherSet.FirstOrDefault().Templates, t => t.Id == templateFromDb.Id);
         }
     }

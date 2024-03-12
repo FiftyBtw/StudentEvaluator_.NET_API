@@ -57,12 +57,14 @@ public class LessonEntityTests
             context.SaveChanges();
             
             // Assert
-            var lessonFromDb = context.LessonSet.FirstOrDefault();
+            var lessonFromDb = context.LessonSet.Include(l => l.Group).Include(l => l.Teacher).FirstOrDefault();
             Assert.NotNull(lessonFromDb);
             
             Assert.Equal(lessonToAdd.GroupYear, lessonFromDb.GroupYear);
             Assert.Equal(lessonToAdd.GroupNumber, lessonFromDb.GroupNumber);
+            Assert.Equal(lessonToAdd.Group, groupToAdd);
             Assert.Equal(lessonToAdd.TeacherEntityId, lessonFromDb.TeacherEntityId);
+            Assert.Equal(teacherToAdd.Id, lessonFromDb.TeacherEntityId);
             Assert.Equal(lessonToAdd.Classroom, lessonFromDb.Classroom);
             Assert.Equal(lessonToAdd.CourseName, lessonFromDb.CourseName);
             Assert.Equal(lessonToAdd.Start, lessonFromDb.Start);

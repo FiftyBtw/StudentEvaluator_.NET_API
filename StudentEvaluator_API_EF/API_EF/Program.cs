@@ -112,8 +112,8 @@ builder.Services
         options.SubstituteApiVersionInUrl = true;
     });
 
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
+builder.Services.AddLogging();
+
 
 var app = builder.Build();
 
@@ -163,4 +163,5 @@ var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<StubbedContext>();
 context.Database.EnsureCreated();
 
+app.Logger.LogInformation("Starting the app");
 app.Run();

@@ -1,5 +1,6 @@
 using API_Dto;
 using Asp.Versioning;
+using EventLogs;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
@@ -14,10 +15,12 @@ namespace API_EF.Controllers.V1;
 public class CriterionsController : ControllerBase
 {
     private readonly ICriteriaService<CriteriaDto,TextCriteriaDto,SliderCriteriaDto,RadioCriteriaDto> _criteriaService;
+    private readonly ILogger<CriterionsController> _logger;
     
-    public CriterionsController(ICriteriaService<CriteriaDto, TextCriteriaDto, SliderCriteriaDto, RadioCriteriaDto> criteriaService)
+    public CriterionsController(ICriteriaService<CriteriaDto, TextCriteriaDto, SliderCriteriaDto, RadioCriteriaDto> criteriaService, ILogger<CriterionsController> logger)
     {
         _criteriaService = criteriaService;
+        _logger = logger;
     }
     
     /*
@@ -57,6 +60,7 @@ public class CriterionsController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<IActionResult> GetTextCriterionById(long id)
     {
+        _logger.LogInformation(LogEvents.GetItem, "Getting item {Id}", id);
         if (_criteriaService == null) {
             return StatusCode(500);
         }
@@ -64,6 +68,7 @@ public class CriterionsController : ControllerBase
             var data = await _criteriaService.GetTextCriterionByIds(id);
             if (data == null)
             {
+                _logger.LogWarning(LogEvents.GetItemNotFound, "Get({Id}) NOT FOUND", id);
                 return NotFound();
             }
             return Ok(data);

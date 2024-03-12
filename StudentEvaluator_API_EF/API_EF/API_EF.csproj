@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Dto\API_Dto.csproj" />
     <ProjectReference Include="..\Entities2Dto\Entities2Dto.csproj" />
+    <ProjectReference Include="..\EventLogs\EventLogs.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 

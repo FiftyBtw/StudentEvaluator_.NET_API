@@ -174,7 +174,7 @@ public class RadioCriteriaEntityTests
             
             // Assert
             
-            var radioCriteriaFromDb = context.RadioCriteriaSet.FirstOrDefault();
+            var radioCriteriaFromDb = context.RadioCriteriaSet.Include(r => r.Template).FirstOrDefault();
             Assert.NotNull(radioCriteriaFromDb);
             
             Assert.Equal(radioCriteriaToAdd.Name, radioCriteriaFromDb.Name);
@@ -182,6 +182,7 @@ public class RadioCriteriaEntityTests
             Assert.Equal(radioCriteriaToAdd.TemplateId, radioCriteriaFromDb.TemplateId);
             Assert.Equal(radioCriteriaToAdd.Options, radioCriteriaFromDb.Options);
             Assert.Equal(radioCriteriaToAdd.SelectedOption, radioCriteriaFromDb.SelectedOption);
+            Assert.Equal(radioCriteriaToAdd.Template, templateToAdd);
             
             Assert.Contains(context.TemplateSet.FirstOrDefault().Criteria, t => t.Id == radioCriteriaFromDb.Id);
             

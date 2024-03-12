@@ -54,13 +54,15 @@ public class SliderCriteriaEntityTests
             
             // Assert
             
-            var sliderCriteriaFromDb = context.SliderCriteriaSet.FirstOrDefault();
+            var sliderCriteriaFromDb = context.SliderCriteriaSet.Include(s => s.Template).FirstOrDefault();
             Assert.NotNull(sliderCriteriaFromDb);
             
             Assert.Equal(sliderCriteriaToAdd.Name, sliderCriteriaFromDb.Name);
             Assert.Equal(sliderCriteriaToAdd.ValueEvaluation, sliderCriteriaFromDb.ValueEvaluation);
             Assert.Equal(sliderCriteriaToAdd.TemplateId, sliderCriteriaFromDb.TemplateId);
             Assert.Equal(sliderCriteriaToAdd.Value, sliderCriteriaFromDb.Value);
+            Assert.Equal(sliderCriteriaToAdd.Template, templateToAdd);
+
             
             Assert.Contains(context.TemplateSet.FirstOrDefault().Criteria, t => t.Id == sliderCriteriaFromDb.Id);
         }

@@ -55,6 +55,7 @@ public class StudentTestsEntity
             Assert.Equal(studentToAdd.UrlPhoto, studentFromDb.UrlPhoto);
             Assert.Equal(studentToAdd.GroupYear, studentFromDb.GroupYear);
             Assert.Equal(studentToAdd.GroupNumber, studentFromDb.GroupNumber);
+            Assert.Equal(studentToAdd.Group, groupToAdd);
         }
     }
         

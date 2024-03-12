@@ -44,11 +44,13 @@ public class TemplateTestsEntity
             context.SaveChanges();
 
             // Assert
-            var templateFromDb = context.TemplateSet.FirstOrDefault();
+            var templateFromDb = context.TemplateSet.Include(t => t.Teacher).Include(t => t.Evaluation).FirstOrDefault();
             Assert.NotNull(templateFromDb);
             
             Assert.Equal(templateToAdd.Name, templateFromDb.Name);
             Assert.Equal(templateToAdd.TeacherId, templateFromDb.TeacherId);
+            Assert.Equal(templateFromDb.Teacher, teacherToAdd);
+            Assert.Null(templateFromDb.Evaluation);
             Assert.Contains(context.TeacherSet.FirstOrDefault().Templates, t => t.Id == templateFromDb.Id);
         }
     }

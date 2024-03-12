@@ -54,13 +54,15 @@ public class TextCriteriaEntityTests
             
             // Assert
             
-            var textCriteriaFromDb = context.TextCriteriaSet.FirstOrDefault();
+            var textCriteriaFromDb = context.TextCriteriaSet.Include(t => t.Template).FirstOrDefault();
             Assert.NotNull(textCriteriaFromDb);
             
             Assert.Equal(textCriteriaToAdd.Name, textCriteriaFromDb.Name);
             Assert.Equal(textCriteriaToAdd.ValueEvaluation, textCriteriaFromDb.ValueEvaluation);
             Assert.Equal(textCriteriaToAdd.TemplateId, textCriteriaFromDb.TemplateId);
             Assert.Equal(textCriteriaToAdd.Text, textCriteriaFromDb.Text);
+            Assert.Equal(textCriteriaToAdd.Template, templateToAdd);
+            
             Assert.Contains(context.TemplateSet.FirstOrDefault().Criteria, t => t.Id == textCriteriaFromDb.Id);
         }
     }

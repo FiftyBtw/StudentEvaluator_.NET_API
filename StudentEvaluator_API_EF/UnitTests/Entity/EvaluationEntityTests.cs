@@ -29,10 +29,10 @@ public class EvaluationEntityTests
                 Password = "TotoPassword",
                 Roles = ["Teacher"]
             };
-            
+
             context.TeacherSet.Add(teacherToAdd);
             context.SaveChanges();
-            
+
             var templateToAdd = new TemplateEntity
             {
                 Name = "Template1",
@@ -41,7 +41,7 @@ public class EvaluationEntityTests
 
             context.TemplateSet.Add(templateToAdd);
             context.SaveChanges();
-            
+
             var groupToAdd = new GroupEntity
             {
                 GroupYear = 1,
@@ -50,7 +50,7 @@ public class EvaluationEntityTests
 
             context.GroupSet.Add(groupToAdd);
             context.SaveChanges();
-            
+
             var studentToAdd = new StudentEntity
             {
                 Name = "John",
@@ -62,7 +62,7 @@ public class EvaluationEntityTests
 
             context.StudentSet.Add(studentToAdd);
             context.SaveChanges();
-            
+
             var evaluationToAdd = new EvaluationEntity
             {
                 CourseName = "Entity Framework",
@@ -78,13 +78,22 @@ public class EvaluationEntityTests
             context.SaveChanges();
 
             // Assert
-            var evaluationFromDb = context.EvaluationSet.FirstOrDefault();
+            var evaluationFromDb =
+                context.EvaluationSet.Include(e => e.Student).Include(e => e.Template).Include(e => e.Teacher).FirstOrDefault();
             Assert.NotNull(evaluationFromDb);
-            
+
             Assert.Equal(evaluationToAdd.StudentId, evaluationFromDb.StudentId);
             Assert.Equal(evaluationToAdd.TemplateId, evaluationFromDb.TemplateId);
             Assert.Equal(evaluationToAdd.Grade, evaluationFromDb.Grade);
+            Assert.Equal(evaluationToAdd.PairName, evaluationFromDb.PairName);
+            Assert.Equal(evaluationToAdd.CourseName, evaluationFromDb.CourseName);
+            Assert.Equal(evaluationToAdd.Date, evaluationFromDb.Date);
+            Assert.Equal(evaluationFromDb.Student, studentToAdd);
+            Assert.Equal(evaluationFromDb.Template, templateToAdd);
+            Assert.Equal(evaluationFromDb.Teacher, teacherToAdd);
+
             Assert.Contains(context.StudentSet.FirstOrDefault().Evaluations, e => e.Id == evaluationFromDb.Id);
+            Assert.Contains(context.TeacherSet.FirstOrDefault().Evaluations, e => e.Id == evaluationFromDb.Id);
             Assert.Equal(context.TemplateSet.FirstOrDefault().Evaluation, evaluationFromDb);
         }
     }

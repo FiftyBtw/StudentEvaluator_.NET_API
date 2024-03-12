@@ -2,6 +2,8 @@
 
 public class LogEvents
 {
+    protected LogEvents() { }
+    
     public const int GenerateItems = 1000;
     public const int ListItems     = 1001;
     public const int GetItem       = 1002;

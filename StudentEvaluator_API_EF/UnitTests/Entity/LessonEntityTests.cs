@@ -64,6 +64,7 @@ public class LessonEntityTests
             Assert.Equal(lessonToAdd.GroupNumber, lessonFromDb.GroupNumber);
             Assert.Equal(lessonToAdd.Group, groupToAdd);
             Assert.Equal(lessonToAdd.TeacherEntityId, lessonFromDb.TeacherEntityId);
+            Assert.Equal(lessonToAdd.Teacher, teacherToAdd);
             Assert.Equal(teacherToAdd.Id, lessonFromDb.TeacherEntityId);
             Assert.Equal(lessonToAdd.Classroom, lessonFromDb.Classroom);
             Assert.Equal(lessonToAdd.CourseName, lessonFromDb.CourseName);

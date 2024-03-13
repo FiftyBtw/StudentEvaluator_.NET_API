@@ -55,28 +55,30 @@ public class TemplateTestsEntity
             context.StudentSet.Add(studentToAdd);
             context.SaveChanges();
             
-            var evaluationToAdd = new EvaluationEntity
-            {
-                CourseName = "Entity Framework",
-                Date = new DateTime(2024, 3, 24),
-                StudentId = 1,
-                TemplateId = 1,
-                TeacherId = 1,
-                Grade = 10,
-                PairName = "toto",
-            };
-            
             var templateToAdd = new TemplateEntity
             {
                 Name = "Template1",
                 TeacherId = teacherToAdd.Id,
-                EvaluationId = 1
             };
 
             context.TemplateSet.Add(templateToAdd);
             context.SaveChanges();
-            
+
+            var evaluationToAdd = new EvaluationEntity
+            {
+                CourseName = "Entity Framework",
+                Date = new DateTime(2024, 3, 24),
+                StudentId = studentToAdd.Id, 
+                TemplateId = templateToAdd.Id, 
+                TeacherId = teacherToAdd.Id,
+                Grade = 10,
+                PairName = "toto",
+            };
+    
             context.EvaluationSet.Add(evaluationToAdd);
+            context.SaveChanges();
+
+            templateToAdd.EvaluationId = evaluationToAdd.Id;
             context.SaveChanges();
 
             // Assert

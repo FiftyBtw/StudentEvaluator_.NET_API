@@ -37,7 +37,8 @@ namespace EF_DbContextLib
 
         public LibraryContext(DbContextOptions options) : base(options) { }
         
-        //private StreamWriter _logStream = new("ef_log.txt", append: true);
+        ILoggerFactory _loggerFactory = new LoggerFactory();
+
 
 
         /// <summary>
@@ -52,23 +53,11 @@ namespace EF_DbContextLib
             if (!optionsBuilder.IsConfigured)
             {
                 // Utilise SQLite comme fournisseur de base de données avec le chemin spécifié
-                optionsBuilder.UseSqlite($"Data Source=StudentEvaluator_API_EF.db");
+                optionsBuilder.UseSqlite($"Data Source=StudentEvaluator_API_EF.db")
+                    .EnableSensitiveDataLogging()
+                    .LogTo(Console.WriteLine, LogLevel.Information);
             }
 
-            //optionsBuilder.LogTo( log => _logStream.WriteLine(log), (eventId, logLevel) => logLevel >= LogLevel.Information
-            //        || eventId == RelationalEventId.ConnectionOpened
-            //        || eventId == RelationalEventId.ConnectionClosed
-            //        || eventId == RelationalEventId.CommandExecuted
-            //        || eventId == RelationalEventId.CommandError
-            //        || eventId == RelationalEventId.TransactionStarted
-            //        || eventId == RelationalEventId.TransactionCommitted
-            //        || eventId == RelationalEventId.TransactionRolledBack
-            //        || eventId == RelationalEventId.TransactionDisposed
-            //        || eventId == RelationalEventId.TransactionError
-            //        || eventId == RelationalEventId.CommandCreated,
-            //        DbContextLoggerOptions.SingleLine)
-            //    .EnableSensitiveDataLogging()
-            //    .EnableDetailedErrors();
         }
 
         /// <summary>
@@ -77,111 +66,77 @@ namespace EF_DbContextLib
         /// <param name="modelBuilder">The model builder used to configure the database model.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Appelle la méthode de la classe de base pour effectuer la configuration initiale du modèle
             base.OnModelCreating(modelBuilder);
-            
-            // Configure la clé primaire composite pour GroupStudent
+    
+            // Clé primaire composite pour GroupEntity
             modelBuilder.Entity<GroupEntity>()
                 .HasKey(g => new { g.GroupYear, g.GroupNumber });
-            
-            // Configure la clé primaire pour EvaluationEntity
+    
+            // Héritage pour CriteriaEntity et UserEntity
             modelBuilder.Entity<CriteriaEntity>()
                 .HasDiscriminator<string>("criteria_type")
                 .HasValue<SliderCriteriaEntity>("slider")
                 .HasValue<TextCriteriaEntity>("text")
                 .HasValue<RadioCriteriaEntity>("radio");
-            
+    
             modelBuilder.Entity<UserEntity>()
                 .HasDiscriminator<string>("user_type")
                 .HasValue<TeacherEntity>("teacher");    
-
-            // Configure la relation entre les entités StudentEntity et GroupEntity
+    
+            // Relation entre StudentEntity et GroupEntity
             modelBuilder.Entity<StudentEntity>()
-                .HasOne<GroupEntity>(s => s.Group)
+                .HasOne(s => s.Group)
                 .WithMany(g => g.Students)
                 .HasForeignKey(s => new { s.GroupYear, s.GroupNumber });
-            
-            modelBuilder.Entity<GroupEntity>()
-                .HasMany(g => g.Students)
-                .WithOne(s => s.Group)
-                .HasForeignKey(s => new { s.GroupYear, s.GroupNumber });
-            
-            // Configure la relation entre les entités TeacherEntity et TemplateEntity
+    
+            // Relation entre TeacherEntity et TemplateEntity
             modelBuilder.Entity<TeacherEntity>()
-                .HasMany<TemplateEntity>(t => t.Templates)
+                .HasMany(t => t.Templates)
                 .WithOne(te => te.Teacher)
-                .HasForeignKey(te => te.TeacherId)
-                .IsRequired(false);
-
-            modelBuilder.Entity<TemplateEntity>()
-                .HasOne<TeacherEntity>(te => te.Teacher)
-                .WithMany(t => t.Templates)
-                .HasForeignKey(te => te.TeacherId)
-                .IsRequired(false);
-            
-            // Configure la relation entre les entités TemplateEntity et CriteriaEntity
+                .HasForeignKey(te => te.TeacherId);
+    
+            // Relation entre TemplateEntity et CriteriaEntity
             modelBuilder.Entity<TemplateEntity>()
                 .HasMany(t => t.Criteria)
                 .WithOne(c => c.Template)
-                .HasForeignKey(c => c.TemplateId)
-                .IsRequired(false);
-            
-            modelBuilder.Entity<CriteriaEntity>()
-                .HasOne(c => c.Template)
-                .WithMany(t => t.Criteria)
-                .HasForeignKey(c => c.TemplateId)
-                .IsRequired(false);
-
-            // Configure la relation entre les entités EvaluationEntity et TemplateEntity
-            modelBuilder.Entity<EvaluationEntity>()
-                .HasOne(e => e.Template)
-                .WithOne(t => t.Evaluation)
-                .HasForeignKey<EvaluationEntity>(e => e.TemplateId)
-                .IsRequired(false);
-
+                .HasForeignKey(c => c.TemplateId);
+    
+            // Relation un-à-un entre EvaluationEntity et TemplateEntity
             modelBuilder.Entity<TemplateEntity>()
                 .HasOne(t => t.Evaluation)
                 .WithOne(e => e.Template)
-                .HasForeignKey<EvaluationEntity>(e => e.TemplateId)
-                .IsRequired(false);
+                .HasForeignKey<TemplateEntity>(t => t.EvaluationId);
 
-            //  Configure la relation entre les entités EvaluationEntity et TeacherEntity
+            
+            modelBuilder.Entity<EvaluationEntity>()
+                .HasOne(e => e.Template)
+                .WithOne(t => t.Evaluation)
+                .HasForeignKey<EvaluationEntity>(e => e.TemplateId);
+
+            
+            // Relation entre EvaluationEntity et TeacherEntity
             modelBuilder.Entity<EvaluationEntity>()
                 .HasOne(e => e.Teacher)
                 .WithMany(t => t.Evaluations)
-                .HasForeignKey(e => e.TeacherId)
-                .IsRequired(false);
+                .HasForeignKey(e => e.TeacherId);
 
-            modelBuilder.Entity<TeacherEntity>()
-                .HasMany(t => t.Evaluations)
-                .WithOne(e => e.Teacher)
-                .HasForeignKey(e => e.TeacherId)
-                .IsRequired(false);
-
-            // Configure la relation entre les entités EvaluationEntity et StudentEntity
+            // Relation entre EvaluationEntity et StudentEntity
             modelBuilder.Entity<EvaluationEntity>()
                 .HasOne(e => e.Student)
                 .WithMany(s => s.Evaluations)
-                .HasForeignKey(e => e.StudentId)
-                .IsRequired(false);
+                .HasForeignKey(e => e.StudentId);
 
-            modelBuilder.Entity<StudentEntity>()
-                .HasMany(e => e.Evaluations)
-                .WithOne(s => s.Student)
-                .HasForeignKey(e => e.StudentId)
-                .IsRequired(false);
-
-
-            //Configure la relation entre les entités LessonEntity et GroupEntity
+            // Relation entre LessonEntity et GroupEntity
             modelBuilder.Entity<LessonEntity>()
-               .HasOne<GroupEntity>(s => s.Group)
-               .WithMany(g => g.Lessons)
-               .HasForeignKey(s => new { s.GroupYear, s.GroupNumber });
-
-            modelBuilder.Entity<GroupEntity>()
-                .HasMany(g => g.Lessons)
-                .WithOne(s => s.Group)
-                .HasForeignKey(s => new { s.GroupYear, s.GroupNumber });
+                .HasOne(l => l.Group)
+                .WithMany(g => g.Lessons)
+                .HasForeignKey(l => new { l.GroupYear, l.GroupNumber });
+            
+            // Relation entre LessonEntity et TeacherEntity
+            modelBuilder.Entity<LessonEntity>()
+                .HasOne(l => l.Teacher)
+                .WithMany(t => t.Lessons)
+                .HasForeignKey(l => l.TeacherEntityId);
         }
     }
 

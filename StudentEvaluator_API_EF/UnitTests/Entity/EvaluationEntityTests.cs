@@ -7,96 +7,105 @@ namespace EF_UnitTests.Entity;
 
 public class EvaluationEntityTests
 {
-    [Fact]
-    public void TestAddEvaluation()
+   [Fact]
+public void TestAddEvaluation()
+{
+    // Arrange
+    var connection = new SqliteConnection("DataSource=:memory:");
+    connection.Open();
+
+    var options = new DbContextOptionsBuilder<LibraryContext>()
+        .UseSqlite(connection)
+        .Options;
+
+    // Act
+    using (var context = new LibraryContext(options))
     {
-        // Arrange
-        var connection = new SqliteConnection("DataSource=:memory:");
-        connection.Open();
+        context.Database.EnsureCreated();
 
-        var options = new DbContextOptionsBuilder<LibraryContext>()
-            .UseSqlite(connection)
-            .Options;
-
-        // Act
-        using (var context = new LibraryContext(options))
+        var teacherToAdd = new TeacherEntity
         {
-            context.Database.EnsureCreated();
+            Username = "ProfToto",
+            Password = "TotoPassword",
+            Roles = new[] {"Teacher"}
+        };
 
-            var teacherToAdd = new TeacherEntity
-            {
-                Username = "ProfToto",
-                Password = "TotoPassword",
-                Roles = ["Teacher"]
-            };
+        context.TeacherSet.Add(teacherToAdd);
+        context.SaveChanges();
 
-            context.TeacherSet.Add(teacherToAdd);
-            context.SaveChanges();
+        var templateToAdd = new TemplateEntity
+        {
+            Name = "Template1",
+            TeacherId = teacherToAdd.Id
+        };
 
-            var templateToAdd = new TemplateEntity
-            {
-                Name = "Template1",
-                TeacherId = teacherToAdd.Id
-            };
+        context.TemplateSet.Add(templateToAdd);
+        context.SaveChanges();
 
-            context.TemplateSet.Add(templateToAdd);
-            context.SaveChanges();
+        var groupToAdd = new GroupEntity
+        {
+            GroupYear = 1,
+            GroupNumber = 1
+        };
 
-            var groupToAdd = new GroupEntity
-            {
-                GroupYear = 1,
-                GroupNumber = 1
-            };
+        context.GroupSet.Add(groupToAdd);
+        context.SaveChanges();
 
-            context.GroupSet.Add(groupToAdd);
-            context.SaveChanges();
+        var studentToAdd = new StudentEntity
+        {
+            Name = "John",
+            Lastname = "Doe",
+            UrlPhoto = "https://www.google.com",
+            GroupYear = groupToAdd.GroupYear,
+            GroupNumber = groupToAdd.GroupNumber
+        };
 
-            var studentToAdd = new StudentEntity
-            {
-                Name = "John",
-                Lastname = "Doe",
-                UrlPhoto = "https://www.google.com",
-                GroupYear = groupToAdd.GroupYear,
-                GroupNumber = groupToAdd.GroupNumber
-            };
+        context.StudentSet.Add(studentToAdd);
+        context.SaveChanges();
 
-            context.StudentSet.Add(studentToAdd);
-            context.SaveChanges();
+        var evaluationToAdd = new EvaluationEntity
+        {
+            CourseName = "Entity Framework",
+            Date = new DateTime(2024, 3, 24),
+            StudentId = studentToAdd.Id, 
+            TemplateId = templateToAdd.Id, 
+            TeacherId = teacherToAdd.Id, 
+            Grade = 10,
+            PairName = "toto"
+        };
 
-            var evaluationToAdd = new EvaluationEntity
-            {
-                CourseName = "Entity Framework",
-                Date = new DateTime(2024, 3, 24),
-                StudentId = 1,
-                TemplateId = 1,
-                TeacherId = 1,
-                Grade = 10,
-                PairName = "toto"
-            };
+        context.EvaluationSet.Add(evaluationToAdd);
+        context.SaveChanges();
+        
+                    
+        templateToAdd.EvaluationId = evaluationToAdd.Id;
+        context.SaveChanges();
 
-            context.EvaluationSet.Add(evaluationToAdd);
-            context.SaveChanges();
+        // Assert
+        var evaluationFromDb = context.EvaluationSet
+                                    .Include(e => e.Student)
+                                    .Include(e => e.Template)
+                                    .Include(e => e.Teacher)
+                                    .FirstOrDefault();
+        Assert.NotNull(evaluationFromDb);
 
-            // Assert
-            var evaluationFromDb =
-                context.EvaluationSet.Include(e => e.Student).Include(e => e.Template).Include(e => e.Teacher).FirstOrDefault();
-            Assert.NotNull(evaluationFromDb);
+        Assert.Equal(evaluationToAdd.StudentId, evaluationFromDb.StudentId);
+        Assert.Equal(evaluationToAdd.TemplateId, evaluationFromDb.TemplateId);
+        Assert.Equal(evaluationToAdd.Grade, evaluationFromDb.Grade);
+        Assert.Equal(evaluationToAdd.PairName, evaluationFromDb.PairName);
+        Assert.Equal(evaluationToAdd.CourseName, evaluationFromDb.CourseName);
+        Assert.Equal(evaluationToAdd.Date, evaluationFromDb.Date);
+        
+        Assert.Equal(studentToAdd.Id, evaluationFromDb.Student.Id);
+        Assert.Equal(templateToAdd.Id, evaluationFromDb.Template.Id);
+        Assert.Equal(teacherToAdd.Id, evaluationFromDb.Teacher.Id);
 
-            Assert.Equal(evaluationToAdd.StudentId, evaluationFromDb.StudentId);
-            Assert.Equal(evaluationToAdd.TemplateId, evaluationFromDb.TemplateId);
-            Assert.Equal(evaluationToAdd.Grade, evaluationFromDb.Grade);
-            Assert.Equal(evaluationToAdd.PairName, evaluationFromDb.PairName);
-            Assert.Equal(evaluationToAdd.CourseName, evaluationFromDb.CourseName);
-            Assert.Equal(evaluationToAdd.Date, evaluationFromDb.Date);
-            Assert.Equal(evaluationFromDb.Student, studentToAdd);
-            Assert.Equal(evaluationFromDb.Template, templateToAdd);
-            Assert.Equal(evaluationFromDb.Teacher, teacherToAdd);
-
-            Assert.Contains(context.StudentSet.FirstOrDefault().Evaluations, e => e.Id == evaluationFromDb.Id);
-            Assert.Contains(context.TeacherSet.FirstOrDefault().Evaluations, e => e.Id == evaluationFromDb.Id);
-            Assert.Equal(context.TemplateSet.FirstOrDefault().Evaluation, evaluationFromDb);
-        }
+        Assert.Contains(context.StudentSet.FirstOrDefault().Evaluations, e => e.Id == evaluationFromDb.Id);
+        Assert.Contains(context.TeacherSet.FirstOrDefault().Evaluations, e => e.Id == evaluationFromDb.Id);
+        Assert.Equal(context.TemplateSet.FirstOrDefault(t => t.Id == templateToAdd.Id).EvaluationId, evaluationFromDb.Id);
     }
+}
+
 
     [Fact]
     public void TestUpdateEvaluation()

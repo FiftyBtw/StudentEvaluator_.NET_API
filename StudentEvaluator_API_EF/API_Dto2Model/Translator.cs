@@ -1,3 +1,4 @@
+
 ﻿using API_Dto;
 using API_Model;
 using Client_Model;
@@ -115,6 +116,16 @@ namespace API_Dto2Model
 
             };
         }
+
+        public static IEnumerable<Teacher> ToModels(this IEnumerable<TeacherDto> dtos)
+        {
+            IEnumerable<Teacher> teachers = new List<Teacher>();
+            foreach (TeacherDto dto in dtos)
+            {
+                (teachers as List<Teacher>).Add(dto.ToModel());
+            }
+            return teachers;
+        }
         //Lesson
         public static Lesson ToModel(this LessonReponseDto lesson)
         {
@@ -183,26 +194,16 @@ namespace API_Dto2Model
 
  
         //Template 
+
         public static Template ToModel(this TemplateDto template)
         {
-            return new Template(0, template.Name, new List<Criteria>());
+            return new Template(template.Id, template.Name, (template.Criterias??= []).Select(CriteriaModelConverter.ConvertToModel).ToList()) ;
         }
-        public static Template ToModel(this TemplateResponseDto template)
-        {
-            return new Template(template.Id, template.Name, template.Criterias.Select(CriteriaModelConverter.ConvertToModel)) ;
-        }
+
 
         public static TemplateDto ToDto(this Template template)
         {
             return new TemplateDto
-            {
-               Name = template.Name,
-            };
-        }
-
-        public static TemplateResponseDto ToReponseDto(this Template template)
-        {
-            return new TemplateResponseDto
             {
                 Id = template.Id,
                 Name = template.Name,
@@ -210,10 +211,10 @@ namespace API_Dto2Model
             };
         }
 
-        public static IEnumerable<Template> ToModels(this IEnumerable<TemplateResponseDto> dtos)
+        public static IEnumerable<Template> ToModels(this IEnumerable<TemplateDto> dtos)
         {
             IEnumerable<Template> templates = new List<Template>();
-            foreach (TemplateResponseDto dto in dtos)
+            foreach (TemplateDto dto in dtos)
             {
                 (templates as List<Template>).Add(dto.ToModel());
             }
@@ -268,6 +269,49 @@ namespace API_Dto2Model
             return evals;
         }
 
+        //Users
+        public static User ToModel(this UserDto dto)
+        {
+            return new User(dto.Id, dto.Username, dto.Password, dto.roles);
+        }
+
+        public static UserDto ToDto(this User user)
+        {
+            return new UserDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Password = user.Password,
+                roles = user.Roles,
+            };
+        }
+
+        public static LoginRequestDto ToDto(this LoginRequest loginRequest)
+        {
+            return new LoginRequestDto
+            {        
+                Username = loginRequest.Username,
+                Password = loginRequest.Password,
+            };
+        }
+
+        public static LoginReponse ToModel(this LoginResponseDto loginReponse)
+        {
+            return new LoginReponse(loginReponse.Id,loginReponse.Username,loginReponse.Roles);
+        }
+
+        public static IEnumerable<User> ToModels(this IEnumerable<UserDto> dtos)
+        {
+            IEnumerable<User> users = new List<User>();
+            foreach (UserDto dto in dtos)
+            {
+                (users as List<User>).Add(dto.ToModel());
+            }
+            return users;
+        }
+
+
 
     }
 }
+

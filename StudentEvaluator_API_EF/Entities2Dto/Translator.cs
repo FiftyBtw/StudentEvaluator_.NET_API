@@ -440,27 +440,6 @@ namespace Entities2Dto
 
 
         /// <summary>
-        /// Extension method to convert TemplateEntity to TemplateDto.
-        /// </summary>
-        /// <param name="template">The template entity object to be converted.</param>
-        /// <returns>The corresponding template DTO object.</returns>
-        public static TemplateDto ToDto(this TemplateEntity template)
-        {
-            var templateDto = TemplateMapper.GetDto(template);
-            if (templateDto == null)
-            {
-                templateDto = new TemplateDto
-                {
-                    Name = template.Name,
-                };
-                TemplateMapper.Set(template, templateDto);
-            }
-
-            return templateDto;
-        }
-
-
-        /// <summary>
         /// Extension method to convert TemplateDto to TemplateEntity.
         /// </summary>
         /// <param name="template">The template DTO object to be converted.</param>
@@ -481,21 +460,6 @@ namespace Entities2Dto
         }
 
 
-        /// <summary>
-        /// Extension method to convert IEnumerable of TemplateEntity to IEnumerable of TemplateDto.
-        /// </summary>
-        /// <param name="entities">The IEnumerable of template entities to be converted.</param>
-        /// <returns>The corresponding IEnumerable of template DTOs.</returns>
-        public static IEnumerable<TemplateDto> ToDtos(this IEnumerable<TemplateEntity> entities)
-        {
-            IEnumerable<TemplateDto> templates = new List<TemplateDto>();
-            foreach (var entity in entities)
-            {
-                (templates as List<TemplateDto>).Add(entity.ToDto());
-            }
-            return templates;
-        }
-
 
         /// <summary>
         /// Extension method to convert IEnumerable of TemplateDto to IEnumerable of TemplateEntity.
@@ -512,9 +476,9 @@ namespace Entities2Dto
             return templates;
         }
         
-        public static TemplateResponseDto ToResponseDto(this TemplateEntity template)
+        public static TemplateDto ToDto(this TemplateEntity template)
         {
-            var templateDto = new TemplateResponseDto
+            var templateDto = new TemplateDto
             {
                 Id = template.Id,
                 Name = template.Name,
@@ -523,12 +487,12 @@ namespace Entities2Dto
             return templateDto;
         }
         
-        public static  IEnumerable<TemplateResponseDto> ToResponseDtos(this IEnumerable<TemplateEntity> entities)
+        public static  IEnumerable<TemplateDto> ToDtos(this IEnumerable<TemplateEntity> entities)
         {
-            IEnumerable<TemplateResponseDto> templates = new List<TemplateResponseDto>();
+            IEnumerable<TemplateDto> templates = new List<TemplateDto>();
             foreach (var entity in entities)
             {
-                (templates as List<TemplateResponseDto>).Add(entity.ToResponseDto());
+                (templates as List<TemplateDto>).Add(entity.ToDto());
             }
             return templates;
         }

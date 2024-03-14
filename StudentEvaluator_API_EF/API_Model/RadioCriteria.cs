@@ -11,6 +11,7 @@ namespace Client_Model
         public string SelectedOption { get; set; }
         public string[] Options { get; set; }
 
+        public RadioCriteria() { }
         public RadioCriteria(long id, string name, long valueEvaluation, long templateId,string selectedOptions, string[] options) : base(id, name, valueEvaluation, templateId)
         {
             SelectedOption = selectedOptions;

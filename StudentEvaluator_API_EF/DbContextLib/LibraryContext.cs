@@ -37,7 +37,7 @@ namespace EF_DbContextLib
 
         public LibraryContext(DbContextOptions options) : base(options) { }
         
-        private StreamWriter _logStream = new("ef_log.txt", append: true);
+        //private StreamWriter _logStream = new("ef_log.txt", append: true);
 
 
         /// <summary>
@@ -55,20 +55,20 @@ namespace EF_DbContextLib
                 optionsBuilder.UseSqlite($"Data Source=StudentEvaluator_API_EF.db");
             }
 
-            optionsBuilder.LogTo( log => _logStream.WriteLine(log), (eventId, logLevel) => logLevel >= LogLevel.Information
-                    || eventId == RelationalEventId.ConnectionOpened
-                    || eventId == RelationalEventId.ConnectionClosed
-                    || eventId == RelationalEventId.CommandExecuted
-                    || eventId == RelationalEventId.CommandError
-                    || eventId == RelationalEventId.TransactionStarted
-                    || eventId == RelationalEventId.TransactionCommitted
-                    || eventId == RelationalEventId.TransactionRolledBack
-                    || eventId == RelationalEventId.TransactionDisposed
-                    || eventId == RelationalEventId.TransactionError
-                    || eventId == RelationalEventId.CommandCreated,
-                    DbContextLoggerOptions.SingleLine)
-                .EnableSensitiveDataLogging()
-                .EnableDetailedErrors();
+            //optionsBuilder.LogTo( log => _logStream.WriteLine(log), (eventId, logLevel) => logLevel >= LogLevel.Information
+            //        || eventId == RelationalEventId.ConnectionOpened
+            //        || eventId == RelationalEventId.ConnectionClosed
+            //        || eventId == RelationalEventId.CommandExecuted
+            //        || eventId == RelationalEventId.CommandError
+            //        || eventId == RelationalEventId.TransactionStarted
+            //        || eventId == RelationalEventId.TransactionCommitted
+            //        || eventId == RelationalEventId.TransactionRolledBack
+            //        || eventId == RelationalEventId.TransactionDisposed
+            //        || eventId == RelationalEventId.TransactionError
+            //        || eventId == RelationalEventId.CommandCreated,
+            //        DbContextLoggerOptions.SingleLine)
+            //    .EnableSensitiveDataLogging()
+            //    .EnableDetailedErrors();
         }
 
         /// <summary>

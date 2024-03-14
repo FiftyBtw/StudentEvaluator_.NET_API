@@ -91,7 +91,7 @@ builder.Services.AddScoped<IGroupService<GroupDto>>(x => x.GetRequiredService<Db
 builder.Services.AddScoped<ICriteriaService<CriteriaDto,TextCriteriaDto,SliderCriteriaDto,RadioCriteriaDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<ILessonService<LessonDto, LessonReponseDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<IUserService<UserDto,LoginRequestDto,LoginResponseDto>>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<ITemplateService<TemplateDto, TemplateResponseDto>>(x => x.GetRequiredService<DbDataManager>());
+builder.Services.AddScoped<ITemplateService<TemplateDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<IEvaluationService<EvaluationDto,EvaluationReponseDto>>(x => x.GetRequiredService<DbDataManager>());
 
 builder.Services.AddDbContext<StubbedContext>(options =>

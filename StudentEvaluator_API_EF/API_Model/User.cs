@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Client_Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace API_Model
 {
@@ -25,6 +27,18 @@ namespace API_Model
             Username = username;
             Password = password;
             this.Roles = roles;
+        }
+
+        public override string ToString()
+        {
+            string user = "User : " + Id + ", " + Username + "\n" + "\tRoles :";
+            foreach (var role in Roles)
+            {
+                user += role;
+               
+            }
+            user += "\n";
+            return user;
         }
     }
 }

@@ -11,9 +11,12 @@ namespace API_Dto2Model
     /// <summary>
     /// Class for managing API data related to students and groups.
     /// </summary>
-    public class ApiDataManager : IStudentService<Student>,IGroupService<Group>,ILessonService<LessonCreation,Lesson>,IEvaluationService<EvaluationCreation,Evaluation>
+    public class ApiDataManager : IStudentService<Student>, IGroupService<Group>, ILessonService<LessonCreation, Lesson>, IEvaluationService<EvaluationCreation, Evaluation>,IUserService<User,LoginRequest,LoginReponse>,ITemplateService<Template>
     {
-        private readonly HttpClient _httpClient;
+      
+    
+
+    private readonly HttpClient _httpClient;
 
         /// <summary>
         /// Constructor for the ApiDataManager class.
@@ -231,6 +234,113 @@ namespace API_Dto2Model
         public async Task<bool> DeleteEvaluation(long id)
         {
             var b = await _httpClient.DeleteAsync($"{_httpClient.BaseAddress}api/v{Version}/Evaluations?id={id}");
+            if (b.IsSuccessStatusCode)
+            {
+                return await Task.FromResult(true);
+            }
+            else return await Task.FromResult(false);
+        }
+        //User
+
+        public async Task<PageReponse<User>> GetUsers(int index=0, int count = 10)
+        {
+            var users = await _httpClient.GetFromJsonAsync<PageReponse<UserDto>>($"{_httpClient.BaseAddress}api/v{Version}/Users?index={index}&count={count}");
+            return await Task.FromResult(new PageReponse<User>(users.nbElement, users.Data.ToModels()));
+        }
+
+        public async Task<User?> GetUserById(long id)
+        {
+            var userById = await _httpClient.GetFromJsonAsync<UserDto>($"{_httpClient.BaseAddress}api/v{Version}/Users/{id}");
+            return await Task.FromResult(userById?.ToModel());
+        }
+
+        public async Task<User?> PostUser(User user)
+        {
+            var reponse = await _httpClient.PostAsJsonAsync($"{_httpClient.BaseAddress}api/v{Version}/Users", user.ToDto());
+            if (reponse.IsSuccessStatusCode)
+            {
+                var userRep = await reponse.Content.ReadFromJsonAsync<UserDto>();
+                return await Task.FromResult(userRep.ToModel());
+            }
+            return await Task.FromResult<User?>(null);
+        }
+
+        public async Task<LoginReponse?> Login(LoginRequest loginRequest)
+        {
+            var reponse = await _httpClient.PostAsJsonAsync($"{_httpClient.BaseAddress}api/v{Version}/Users/login", loginRequest.ToDto());
+            if (reponse.IsSuccessStatusCode)
+            {
+                var userRep = await reponse.Content.ReadFromJsonAsync<LoginResponseDto>();
+                return await Task.FromResult(userRep.ToModel());
+            }
+            return await Task.FromResult<LoginReponse?>(null);
+        }
+
+        public async Task<User?> PutUser(long id, User user)
+        {
+            var reponse = await _httpClient.PutAsJsonAsync($"{_httpClient.BaseAddress}api/v{Version}/Users/{id}", user.ToDto());
+            if (reponse.IsSuccessStatusCode)
+            {
+                var userRep = await reponse.Content.ReadFromJsonAsync<UserDto>();
+                return await Task.FromResult(userRep.ToModel());
+            }
+            return await Task.FromResult<User?>(null);
+        }
+
+        public async Task<bool> DeleteUser(long id)
+        {
+            var b = await _httpClient.DeleteAsync($"{_httpClient.BaseAddress}api/v{Version}/Users/{id}");
+            if (b.IsSuccessStatusCode)
+            {
+                return await Task.FromResult(true);
+            }
+            else return await Task.FromResult(false);
+        }
+
+        //Template
+        public async Task<PageReponse<Template>> GetTemplatesByUserId(long userId, int index=0, int count = 10)
+        {
+            var templatesByUserId = await _httpClient.GetFromJsonAsync<PageReponse<TemplateDto>>($"{_httpClient.BaseAddress}api/v{Version}/Templates/user/{userId}?index={index}&count={count}");
+            return await Task.FromResult(new PageReponse<Template>(templatesByUserId.nbElement, templatesByUserId.Data.ToModels()));
+        }
+
+        public async Task<PageReponse<Template>> GetEmptyTemplatesByUserId(long userId, int index=0, int count=10)
+        {
+            var emptyTemplatesByUserId = await _httpClient.GetFromJsonAsync<PageReponse<TemplateDto>>($"{_httpClient.BaseAddress}api/v{Version}/Templates/user/{userId}/models?index={index}&count={count}");
+            return await Task.FromResult(new PageReponse<Template>(emptyTemplatesByUserId.nbElement, emptyTemplatesByUserId.Data.ToModels()));
+        }
+
+        public async Task<Template?> GetTemplateById(long userId, long templateId)
+        {
+            var templateById = await _httpClient.GetFromJsonAsync<TemplateDto>($"{_httpClient.BaseAddress}api/v{Version}/Template/{templateId}/user/{userId}");
+            return await Task.FromResult(templateById?.ToModel());
+        }
+
+        public async Task<Template?> PostTemplate(long userId, Template template)
+        {
+            var reponse = await _httpClient.PostAsJsonAsync($"{_httpClient.BaseAddress}api/v{Version}/Templates?userId={userId}", template.ToDto());
+            if (reponse.IsSuccessStatusCode)
+            {
+                var templateRep = await reponse.Content.ReadFromJsonAsync<TemplateDto>();
+                return await Task.FromResult(templateRep.ToModel());
+            }
+            return await Task.FromResult<Template?>(null);
+        }
+
+        public async Task<Template?> PutTemplate(long templateId, Template template)
+        {
+            var reponse = await _httpClient.PutAsJsonAsync($"{_httpClient.BaseAddress}api/v{Version}/Templates?id={templateId}", template.ToDto());
+            if (reponse.IsSuccessStatusCode)
+            {
+                var templateRep = await reponse.Content.ReadFromJsonAsync<TemplateDto>();
+                return await Task.FromResult(templateRep.ToModel());
+            }
+            return await Task.FromResult<Template?>(null);
+        }
+
+        public async Task<bool> DeleteTemplate(long templateId)
+        {
+            var b = await _httpClient.DeleteAsync($"{_httpClient.BaseAddress}api/v{Version}/Templates?id={templateId}");
             if (b.IsSuccessStatusCode)
             {
                 return await Task.FromResult(true);

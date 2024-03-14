@@ -14,9 +14,9 @@ namespace API_EF.Controllers;
 [Route("api/v{version:apiVersion}/[controller]")]
 public class TemplatesController : ControllerBase
 {
-    private readonly ITemplateService<TemplateDto, TemplateResponseDto> _templateService;
+    private readonly ITemplateService<TemplateDto> _templateService;
     
-    public TemplatesController(ITemplateService<TemplateDto, TemplateResponseDto> templateService)
+    public TemplatesController(ITemplateService<TemplateDto> templateService)
     {
         _templateService = templateService;
     }

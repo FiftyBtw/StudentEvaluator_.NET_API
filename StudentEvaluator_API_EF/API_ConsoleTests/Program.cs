@@ -224,3 +224,116 @@ foreach (var eval in evals.Data)
 {
     Console.WriteLine(eval);
 }
+
+//User
+//GetUsers
+Console.WriteLine("Test GetUsers :\n");
+
+var users = await apiDataManager.GetUsers();
+Console.WriteLine($"Nombre d'éléments : {users.nbElement}");
+foreach (var user in users.Data)
+{
+    Console.WriteLine(user);
+}
+
+//PostUser
+
+Console.WriteLine("Test PostUser :\n");
+var newUser = new User(0, "ProfDupuit", "test", []);
+var userRep = await apiDataManager.PostUser(newUser);
+
+Console.WriteLine(userRep);
+
+//PutUser
+
+Console.WriteLine("Test PutUser :\n");
+newUser.Username = "ProfMarc";
+userRep = await apiDataManager.PutUser(userRep.Id, newUser);
+
+Console.WriteLine(userRep);
+//GetUserById
+
+Console.WriteLine("Test GetUserById (id=1) :\n");
+var userById = await apiDataManager.GetUserById(1);
+
+Console.WriteLine(userById);
+
+//Login
+
+Console.WriteLine("Test Login () :\n");
+
+var loginRequest = new LoginRequest("ProfMarc","test");
+var loginReponse = await apiDataManager.Login(loginRequest);
+
+Console.WriteLine(loginReponse);
+
+//DeleteUser
+
+Console.WriteLine("Test DeleteUser :\n");
+
+repDelete = await apiDataManager.DeleteUser(userRep.Id);
+Console.WriteLine(repDelete);
+
+users = await apiDataManager.GetUsers();
+Console.WriteLine($"Nombre d'éléments : {users.nbElement}");
+foreach (var user in users.Data)
+{
+    Console.WriteLine(user);
+}
+
+//Template
+////GetTemplateByUserId
+//Console.WriteLine("Test GetTemplatesByUserId :\n");
+
+//var templates = await apiDataManager.GetTemplatesByUserId(1);
+//Console.WriteLine($"Nombre d'éléments : {evals.nbElement}");
+//foreach (var template in templates.Data)
+//{
+//    Console.WriteLine(template);
+//}
+
+////GetEmptyTemplateByUserId
+//Console.WriteLine("Test GetEmptyTemplatesByUserId :\n");
+
+//var EmptyTemplates = await apiDataManager.GetEmptyTemplatesByUserId(1);
+//Console.WriteLine($"Nombre d'éléments : {EmptyTemplates.nbElement}");
+//foreach (var template in EmptyTemplates.Data)
+//{
+//    Console.WriteLine(template);
+//}
+////PostTemplate
+
+//Console.WriteLine("Test PostTemplate :\n");
+
+//var newTemplate = new Template(0,"Exam de Crypto",new List<Criteria>());
+//var templateRep = await apiDataManager.PostTemplate(1,newTemplate);
+
+//Console.WriteLine(templateRep);
+
+////PutTemplate
+//Console.WriteLine("Test PutTemplate :\n");
+//newTemplate.Name = "Exam de Proba";
+//templateRep = await apiDataManager.PutTemplate(templateRep.Id, newTemplate);
+
+//Console.WriteLine(templateRep);
+////GetTemplateById
+
+//Console.WriteLine("Test GetEvaluationById ( userid=1 ,templateid=1) :\n");
+//var templateId = await apiDataManager.GetTemplateById(1,1);
+
+//Console.WriteLine(templateId);
+
+
+////DeleteTemplate
+//Console.WriteLine("Test DeleteTemplate :\n");
+
+//repDelete = await apiDataManager.DeleteTemplate(templateRep.Id);
+//Console.WriteLine(repDelete);
+
+//templates = await apiDataManager.GetEmptyTemplatesByUserId(1);
+//Console.WriteLine($"Nombre d'éléments : {templates.nbElement}");
+//foreach (var template in templates.Data)
+//{
+//    Console.WriteLine(template);
+//}
+

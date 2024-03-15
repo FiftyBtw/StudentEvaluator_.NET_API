@@ -115,6 +115,7 @@ public class CriterionsController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<IActionResult> GetSliderCriterionById(long id)
     {
+        _logger.LogInformation(LogEvents.GetItem, "Getting item {Id}", id);
         if (_criteriaService == null) {
             return StatusCode(500);
         }
@@ -122,6 +123,7 @@ public class CriterionsController : ControllerBase
             var data = await _criteriaService.GetSliderCriterionByIds(id);
             if (data == null)
             {
+                _logger.LogWarning(LogEvents.GetItemNotFound, "Get({Id}) NOT FOUND", id);
                 return NotFound();
             }
             return Ok(data);
@@ -168,6 +170,7 @@ public class CriterionsController : ControllerBase
     [ProducesResponseType(500)]
     public  async Task<IActionResult> GetRadioCriterionById(long id)
     {
+        _logger.LogInformation(LogEvents.GetItem, "Getting item {Id}", id);
         if (_criteriaService == null) {
             return StatusCode(500);
         }
@@ -175,6 +178,7 @@ public class CriterionsController : ControllerBase
             var data = await _criteriaService.GetRadioCriterionByIds(id);
             if (data == null)
             {
+                _logger.LogWarning(LogEvents.GetItemNotFound, "Get({Id}) NOT FOUND", id);
                 return NotFound();
             }
             return Ok(data);
@@ -196,6 +200,7 @@ public class CriterionsController : ControllerBase
      [ProducesResponseType(500)]
      public async Task<IActionResult> GetCriterionsByTemplateId(long id)
      {
+         _logger.LogInformation(LogEvents.GetItem, "Getting item {Id}", id);
          if (_criteriaService == null) {
              return StatusCode(500);
          }
@@ -203,6 +208,7 @@ public class CriterionsController : ControllerBase
              var data = await _criteriaService.GetCriterionsByTemplateId(id);
              if (data == null)
              {
+                    _logger.LogWarning(LogEvents.GetItemNotFound, "Get({Id}) NOT FOUND", id);
                  return NotFound();
              }
              return Ok(data);
@@ -224,6 +230,7 @@ public class CriterionsController : ControllerBase
      [ProducesResponseType(500)]
      public async Task<IActionResult> PostTextCriterion(long id, [FromBody] TextCriteriaDto text)
      {
+         _logger.LogInformation(LogEvents.InsertItem, "Inserting item {Id}", id);
          if (_criteriaService == null) {
              return StatusCode(500);
          }
@@ -252,6 +259,7 @@ public class CriterionsController : ControllerBase
      [ProducesResponseType(500)]
      public async Task<IActionResult> PostSliderCriterion(long id, [FromBody] SliderCriteriaDto slider)
      {
+         _logger.LogInformation(LogEvents.InsertItem, "Inserting item {Id}", id);
          if (_criteriaService == null) {
              return StatusCode(500);
          }
@@ -259,6 +267,7 @@ public class CriterionsController : ControllerBase
              var data = await _criteriaService.PostSliderCriterion(id, slider);
              if (data == null)
              {
+                 _logger.LogWarning(LogEvents.InsertItemBadRequest, "Insert({Id}) BAD REQUEST", id);
                  return BadRequest();
              }
              return Created();
@@ -280,6 +289,7 @@ public class CriterionsController : ControllerBase
      [ProducesResponseType(500)]
      public async Task<IActionResult> PostRadioCriterion(long id, [FromBody] RadioCriteriaDto radio)
      {
+            _logger.LogInformation(LogEvents.InsertItem, "Inserting item {Id}", id);
          if (_criteriaService == null) {
              return StatusCode(500);
          }
@@ -287,6 +297,7 @@ public class CriterionsController : ControllerBase
              var data = await _criteriaService.PostRadioCriterion(id, radio);
              if (data == null)
              {
+                 _logger.LogWarning(LogEvents.InsertItemBadRequest, "Insert({Id}) BAD REQUEST", id);
                  return BadRequest();
              }
              return Created();
@@ -308,6 +319,7 @@ public class CriterionsController : ControllerBase
      [ProducesResponseType(500)]
      public async Task<IActionResult> PutTextCriterion(long id, [FromBody] TextCriteriaDto text)
      {
+            _logger.LogInformation(LogEvents.UpdateItem, "Updating item {Id}", id);
          if (_criteriaService == null) {
              return StatusCode(500);
          }
@@ -315,6 +327,7 @@ public class CriterionsController : ControllerBase
              var data = await _criteriaService.PutTextCriterion(id, text);
              if (data == null)
              {
+                 _logger.LogWarning(LogEvents.UpdateItemBadRequest, "Update({Id}) BAD REQUEST", id);
                  return BadRequest();
              }
              return Created();
@@ -336,6 +349,7 @@ public class CriterionsController : ControllerBase
      [ProducesResponseType(500)]
      public async Task<IActionResult> PutSliderCriterion(long id, [FromBody] SliderCriteriaDto slider)
      {
+            _logger.LogInformation(LogEvents.UpdateItem, "Updating item {Id}", id);
          if (_criteriaService == null) {
              return StatusCode(500);
          }
@@ -343,6 +357,7 @@ public class CriterionsController : ControllerBase
              var data = await _criteriaService.PutSliderCriterion(id, slider);
              if (data == null)
              {
+                    _logger.LogWarning(LogEvents.UpdateItemBadRequest, "Update({Id}) BAD REQUEST", id);
                  return BadRequest();
              }
              return Created();
@@ -364,6 +379,7 @@ public class CriterionsController : ControllerBase
      [ProducesResponseType(500)]
      public async Task<IActionResult> PutRadioCriterion(long id, [FromBody] RadioCriteriaDto radio)
      {
+         _logger.LogInformation(LogEvents.UpdateItem, "Updating item {Id}", id);
          if (_criteriaService == null) {
              return StatusCode(500);
          }
@@ -371,6 +387,7 @@ public class CriterionsController : ControllerBase
              var data = await _criteriaService.PutRadioCriterion(id, radio);
              if (data == null)
              {
+                 _logger.LogWarning(LogEvents.UpdateItemBadRequest, "Update({Id}) BAD REQUEST", id);
                  return BadRequest();
              }
              return Created();
@@ -391,6 +408,7 @@ public class CriterionsController : ControllerBase
      [ProducesResponseType(500)]
      public async Task<IActionResult> DeleteCriterion(long id)
      {
+         _logger.LogInformation(LogEvents.DeleteItem, "Deleting item {Id}", id);
          if (_criteriaService == null) {
              return StatusCode(500);
          }
@@ -398,6 +416,7 @@ public class CriterionsController : ControllerBase
              var data = await _criteriaService.DeleteCriteria(id);
              if (data == null)
              {
+                 _logger.LogWarning(LogEvents.DeleteItemBadRequest, "Delete({Id}) BAD REQUEST", id);
                  return BadRequest();
              }
              return Created();

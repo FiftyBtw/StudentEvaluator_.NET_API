@@ -4,18 +4,22 @@ using Shared;
 using API_EF;
 using API_EF.Controllers.V1;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+
 namespace EF_UnitTests.WebApi;
 
 
 public class GroupTests
 {
     private readonly Mock<IGroupService<GroupDto>> _mockRepo;
+    private readonly Mock<ILogger<GroupsController>> _mockLogger;
     private readonly GroupsController _groupsController;
 
     public GroupTests()
     {
         _mockRepo = new Mock<IGroupService<GroupDto>>();
-        _groupsController = new GroupsController(_mockRepo.Object);
+        _mockLogger = new Mock<ILogger<GroupsController>>();
+        _groupsController = new GroupsController(_mockRepo.Object, _mockLogger.Object);
     }
 
 
@@ -24,12 +28,14 @@ public class GroupTests
     {
         // Arrange
         var mockGroupService = new Mock<IGroupService<GroupDto>>();
+        var mockGroupLogger = new Mock<ILogger<GroupsController>>();
+
         var newGroupDto = new GroupDto(2024, 1, new List<StudentDto>());
 
         mockGroupService.Setup(service => service.PostGroup(It.IsAny<GroupDto>()))
             .ReturnsAsync(newGroupDto);
 
-        var controller = new GroupsController(mockGroupService.Object);
+        var controller = new GroupsController(mockGroupService.Object, mockGroupLogger.Object);
 
         // Act
         var result = await controller.PostGroup(newGroupDto);
@@ -46,11 +52,12 @@ public class GroupTests
     {
         // Arrange
         var mockGroupService = new Mock<IGroupService<GroupDto>>();
+        var mockGroupLogger = new Mock<ILogger<GroupsController>>();
 
         mockGroupService.Setup(service => service.PostGroup(It.IsAny<GroupDto>()))
             .ReturnsAsync((GroupDto group) => null);
 
-        var controller = new GroupsController(mockGroupService.Object);
+        var controller = new GroupsController(mockGroupService.Object, mockGroupLogger.Object);
 
         // Act
         var result = await controller.PostGroup(new GroupDto());
@@ -65,10 +72,11 @@ public class GroupTests
     {
         // Arrange
         var mockGroupService = new Mock<IGroupService<GroupDto>>();
+        var mockGroupLogger = new Mock<ILogger<GroupsController>>();
         mockGroupService.Setup(service => service.DeleteGroup(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(true); 
 
-        var controller = new GroupsController(mockGroupService.Object);
+        var controller = new GroupsController(mockGroupService.Object,mockGroupLogger.Object );
 
         // Act
         var result = await controller.DeleteGroup(2024, 1); 
@@ -85,10 +93,11 @@ public class GroupTests
     {
         // Arrange
         var mockGroupService = new Mock<IGroupService<GroupDto>>();
+        var mockGroupLogger = new Mock<ILogger<GroupsController>>();
         mockGroupService.Setup(service => service.DeleteGroup(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(false); 
 
-        var controller = new GroupsController(mockGroupService.Object);
+        var controller = new GroupsController(mockGroupService.Object, mockGroupLogger.Object);
 
         // Act
         var result = await controller.DeleteGroup(2024, 1); 
@@ -103,6 +112,7 @@ public class GroupTests
     {
         // Arrange
         var mockGroupService = new Mock<IGroupService<GroupDto>>();
+        var mockGroupLogger = new Mock<ILogger<GroupsController>>();
         var groups = new List<GroupDto>
         {
             new GroupDto(2024, 1, new List<StudentDto>()),
@@ -113,7 +123,7 @@ public class GroupTests
         mockGroupService.Setup(service => service.GetGroups(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(pageResponse);
 
-        var controller = new GroupsController(mockGroupService.Object);
+        var controller = new GroupsController(mockGroupService.Object, mockGroupLogger.Object);
 
         // Act
         var result = await controller.GetGroups();
@@ -129,11 +139,12 @@ public class GroupTests
     {
         // Arrange
         var mockGroupService = new Mock<IGroupService<GroupDto>>();
+        var mockGroupLogger = new Mock<ILogger<GroupsController>>();
 
         mockGroupService.Setup(service => service.GetGroups(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync((PageReponse<GroupDto>)null);
 
-        var controller = new GroupsController(mockGroupService.Object);
+        var controller = new GroupsController(mockGroupService.Object, mockGroupLogger.Object);
 
         // Act
         var result = await controller.GetGroups();
@@ -151,10 +162,11 @@ public class GroupTests
         var existingGroupDto = new GroupDto(gyear, gnumber, new List<StudentDto>());
 
         var mockGroupService = new Mock<IGroupService<GroupDto>>();
+        var mockGroupLogger = new Mock<ILogger<GroupsController>>();
         mockGroupService.Setup(service => service.GetGroupByIds(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(existingGroupDto); 
 
-        var controller = new GroupsController(mockGroupService.Object);
+        var controller = new GroupsController(mockGroupService.Object, mockGroupLogger.Object);
 
         // Act
         var result = await controller.GetGroupById(gyear, gnumber);
@@ -174,10 +186,11 @@ public class GroupTests
         var gnumber = 1;
 
         var mockGroupService = new Mock<IGroupService<GroupDto>>();
+        var mockGroupLogger = new Mock<ILogger<GroupsController>>();
         mockGroupService.Setup(service => service.GetGroupByIds(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync((GroupDto)null); 
 
-        var controller = new GroupsController(mockGroupService.Object);
+        var controller = new GroupsController(mockGroupService.Object, mockGroupLogger.Object);
 
         // Act
         var result = await controller.GetGroupById(gyear, gnumber);

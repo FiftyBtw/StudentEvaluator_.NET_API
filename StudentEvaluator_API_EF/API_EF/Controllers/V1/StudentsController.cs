@@ -1,5 +1,6 @@
 using API_Dto;
 using Asp.Versioning;
+using EventLogs;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
@@ -15,10 +16,13 @@ namespace API_EF.Controllers.V1
     public class StudentsController : ControllerBase
     {
         private readonly IStudentService<StudentDto> _studentService;
+        
+        private readonly ILogger<StudentsController> _logger;
 
-        public StudentsController(IStudentService<StudentDto> studentService)
+        public StudentsController(IStudentService<StudentDto> studentService, ILogger<StudentsController> logger)
         {
             _studentService = studentService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -30,6 +34,7 @@ namespace API_EF.Controllers.V1
         [HttpGet]
         public async Task<IActionResult> GetStudents(int index = 0 , int count = 10)
         {
+            _logger.LogInformation(LogEvents.GetItems, "GetStudents");
             if (_studentService == null)
             {
                 return StatusCode(500);
@@ -37,6 +42,7 @@ namespace API_EF.Controllers.V1
             var data = await _studentService.GetStudents(index, count);
             if (data == null)       
             {
+                _logger.LogInformation(LogEvents.GetItemsNoContent, "GetStudents");
                 return NoContent();
             }
             else
@@ -54,6 +60,7 @@ namespace API_EF.Controllers.V1
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudentById(long id)
         {
+            _logger.LogInformation(LogEvents.GetItem, "GetStudentById");
             if (_studentService == null)
             {
                 return StatusCode(500);
@@ -61,6 +68,7 @@ namespace API_EF.Controllers.V1
             var book = await _studentService.GetStudentById(id);
             if(book == null)
             {
+                _logger.LogInformation(LogEvents.GetItemNotFound, "GetStudentById");
                 return NotFound();
             }
             else return Ok(book);
@@ -74,6 +82,7 @@ namespace API_EF.Controllers.V1
         [HttpPost]
         public async Task<IActionResult> PostStudent([FromBody] StudentDto student)
         {
+            _logger.LogInformation(LogEvents.InsertItem, "PostStudent");
             if (_studentService == null)
             {
                 return StatusCode(500);
@@ -81,6 +90,7 @@ namespace API_EF.Controllers.V1
             var studentDto = await _studentService.PostStudent(student);
             if (studentDto == null)
             {
+                _logger.LogInformation(LogEvents.InsertItemBadRequest, "PostStudent");
                 return BadRequest();
             }
             else
@@ -98,12 +108,17 @@ namespace API_EF.Controllers.V1
         [HttpPut]
         public async Task<IActionResult> PutStudent(long id, [FromBody] StudentDto student)
         {
+            _logger.LogInformation(LogEvents.UpdateItem, "PutStudent");
             if (_studentService == null)
             {
                 return StatusCode(500);
             }
             var studentDto = await _studentService.PutStudent(id, student);
-            if (studentDto == null) return NotFound();
+            if (studentDto == null) 
+            {
+                _logger.LogInformation(LogEvents.UpdateItemBadRequest, "PutStudent");
+                return NotFound();
+            }
             else return Ok(studentDto);           
         }
 
@@ -115,19 +130,22 @@ namespace API_EF.Controllers.V1
         [HttpDelete]
         public async Task<IActionResult> DeleteStudent(long id)
         {
+            _logger.LogInformation(LogEvents.DeleteItem, "DeleteStudent");
             if (_studentService == null)
             {
                 return StatusCode(500);
             }
             else
             {
-                bool b = await _studentService.DeleteStudent(id);
-                if (b)
+                if (await _studentService.DeleteStudent(id))
                 {
-                    return Ok(b);
+                    return Ok(true);
                 }
                 else
-                { return NotFound(); }
+                {
+                    _logger.LogInformation(LogEvents.DeleteItemNotFound, "DeleteStudent");
+                    return NotFound();
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 using API_Dto;
 using Asp.Versioning;
+using EventLogs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
@@ -16,9 +17,12 @@ public class TemplatesController : ControllerBase
 {
     private readonly ITemplateService<TemplateDto> _templateService;
     
-    public TemplatesController(ITemplateService<TemplateDto> templateService)
+    private readonly ILogger<TemplatesController> _logger;
+    
+    public TemplatesController(ITemplateService<TemplateDto> templateService, ILogger<TemplatesController> logger)
     {
         _templateService = templateService;
+        _logger = logger;
     }
     
     /// <summary>
@@ -34,6 +38,7 @@ public class TemplatesController : ControllerBase
     [ProducesResponseType(500)]
     public async Task<IActionResult> GetTemplatesByUserId(long id, int index = 0, int count = 10)
     {
+        _logger.LogInformation(LogEvents.GetItems, "GetTemplatesByUserId");
         if (_templateService == null)
         {
             return StatusCode(500);
@@ -41,6 +46,7 @@ public class TemplatesController : ControllerBase
         var data = await _templateService.GetTemplatesByUserId(id, index, count);
         if (data == null)
         {
+            _logger.LogInformation(LogEvents.GetItems, "NoContent");
             return NoContent();
         }
         else
@@ -59,6 +65,7 @@ public class TemplatesController : ControllerBase
     [HttpGet("user/{id}/models")]
     public async Task<IActionResult> GetEmptyTemplatesByUserId(long id, int index = 0, int count = 10)
     {
+        _logger.LogInformation(LogEvents.GetItems, "GetEmptyTemplatesByUserId");
         if (_templateService == null)
         {
             return StatusCode(500);
@@ -66,6 +73,7 @@ public class TemplatesController : ControllerBase
         var data = await _templateService.GetEmptyTemplatesByUserId(id, index, count);
         if (data == null)
         {
+            _logger.LogInformation(LogEvents.GetItems, "NoContent");
             return NoContent();
         }
         else
@@ -83,6 +91,7 @@ public class TemplatesController : ControllerBase
     [HttpGet("{id}/user/{userId}")]
     public async Task<IActionResult> GetTemplateById(long userId, long id)
     {
+        _logger.LogInformation(LogEvents.GetItem, "GetTemplateById");
         if (_templateService == null)
         {
             return StatusCode(500);
@@ -90,6 +99,7 @@ public class TemplatesController : ControllerBase
         var data = await _templateService.GetTemplateById(userId, id);
         if (data == null)
         {
+            _logger.LogInformation(LogEvents.GetItem, "NoContent");
             return NoContent();
         }
         else
@@ -107,6 +117,7 @@ public class TemplatesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> PostTemplate(long userId, [FromBody] TemplateDto template)
     {
+        _logger.LogInformation(LogEvents.InsertItem, "PostTemplate");
         if (_templateService == null)
         {
             return StatusCode(500);
@@ -131,6 +142,7 @@ public class TemplatesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutTemplate(long id, [FromBody] TemplateDto template)
     {
+        _logger.LogInformation(LogEvents.UpdateItem, "PutTemplate");
         if (_templateService == null)
         {
             return StatusCode(500);
@@ -154,6 +166,7 @@ public class TemplatesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTemplate(long id)
     {
+        _logger.LogInformation(LogEvents.DeleteItem, "DeleteTemplate");
         if (_templateService == null)
         {
             return StatusCode(500);

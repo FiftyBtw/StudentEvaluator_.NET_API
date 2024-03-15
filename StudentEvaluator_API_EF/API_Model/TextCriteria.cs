@@ -14,6 +14,12 @@ namespace Client_Model
         {
             Text = text;
         }
+        public override string ToString()
+        {
+            string radioCriteria = "TextCriteria : " + Id + ", Nom :" + Name + ", Value :" + ValueEvaluation + ", (" + TemplateId + ")\nText : ";
+            radioCriteria += Text + "\n\n";
+            return radioCriteria;
+        }
     }
 
 }

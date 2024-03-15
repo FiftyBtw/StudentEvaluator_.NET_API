@@ -293,48 +293,48 @@ foreach (var template in templates.Data)
     Console.WriteLine(template);
 }
 
-////GetEmptyTemplateByUserId
-//Console.WriteLine("Test GetEmptyTemplatesByUserId :\n");
+//GetEmptyTemplateByUserId
+Console.WriteLine("Test GetEmptyTemplatesByUserId :\n");
 
-//var EmptyTemplates = await apiDataManager.GetEmptyTemplatesByUserId(1);
-//Console.WriteLine($"Nombre d'éléments : {EmptyTemplates.nbElement}");
-//foreach (var template in EmptyTemplates.Data)
-//{
-//    Console.WriteLine(template);
-//}
-////PostTemplate
+var EmptyTemplates = await apiDataManager.GetEmptyTemplatesByUserId(1);
+Console.WriteLine($"Nombre d'éléments : {EmptyTemplates.nbElement}");
+foreach (var template in EmptyTemplates.Data)
+{
+    Console.WriteLine(template);
+}
+//PostTemplate
 
-//Console.WriteLine("Test PostTemplate :\n");
+Console.WriteLine("Test PostTemplate :\n");
 
-//var newTemplate = new Template(0,"Exam de Crypto",new List<Criteria>());
-//var templateRep = await apiDataManager.PostTemplate(1,newTemplate);
+var newTemplate = new Template(0, "Exam de Crypto", new List<Criteria>());
+var templateRep = await apiDataManager.PostTemplate(1, newTemplate);
 
-//Console.WriteLine(templateRep);
+Console.WriteLine(templateRep);
 
-////PutTemplate
-//Console.WriteLine("Test PutTemplate :\n");
-//newTemplate.Name = "Exam de Proba";
-//templateRep = await apiDataManager.PutTemplate(templateRep.Id, newTemplate);
+//PutTemplate
+Console.WriteLine("Test PutTemplate :\n");
+newTemplate.Name = "Exam de Proba";
+templateRep = await apiDataManager.PutTemplate(templateRep.Id, newTemplate);
 
-//Console.WriteLine(templateRep);
-////GetTemplateById
+Console.WriteLine(templateRep);
+//GetTemplateById
 
-//Console.WriteLine("Test GetEvaluationById ( userid=1 ,templateid=1) :\n");
-//var templateId = await apiDataManager.GetTemplateById(1,1);
+Console.WriteLine("Test GetEvaluationById ( userid=1 ,templateid=1) :\n");
+var templateId = await apiDataManager.GetTemplateById(1, 1);
 
-//Console.WriteLine(templateId);
+Console.WriteLine(templateId);
 
 
-////DeleteTemplate
-//Console.WriteLine("Test DeleteTemplate :\n");
+//DeleteTemplate
+Console.WriteLine("Test DeleteTemplate :\n");
 
-//repDelete = await apiDataManager.DeleteTemplate(templateRep.Id);
-//Console.WriteLine(repDelete);
+repDelete = await apiDataManager.DeleteTemplate(templateRep.Id);
+Console.WriteLine(repDelete);
 
-//templates = await apiDataManager.GetEmptyTemplatesByUserId(1);
-//Console.WriteLine($"Nombre d'éléments : {templates.nbElement}");
-//foreach (var template in templates.Data)
-//{
-//    Console.WriteLine(template);
-//}
+templates = await apiDataManager.GetEmptyTemplatesByUserId(1);
+Console.WriteLine($"Nombre d'éléments : {templates.nbElement}");
+foreach (var template in templates.Data)
+{
+    Console.WriteLine(template);
+}
 

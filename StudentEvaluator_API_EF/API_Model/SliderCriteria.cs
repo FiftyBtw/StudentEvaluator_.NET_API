@@ -17,5 +17,10 @@ namespace Client_Model
         {
             Value = value;
         }
+
+        public override string ToString()
+        {
+            return "SliderCriteria : " + Id + ",, Nom : " + Name + ", Value : " + ValueEvaluation +", SliderValue : " +Value+", (" + TemplateId + ")\n\n";
+        }
     }
 }

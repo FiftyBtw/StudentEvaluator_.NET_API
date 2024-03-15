@@ -17,5 +17,16 @@ namespace Client_Model
             SelectedOption = selectedOptions;
             Options = options;
         }
+
+        public override string ToString()
+        {
+            string radioCriteria = "RadioCriteria : " + Id + ", Nom :" + Name + ", Value :" + ValueEvaluation + ", (" + TemplateId + ")\nOptions :";
+            foreach(var option in Options) {
+                radioCriteria+= option+", ";
+            }
+            radioCriteria += "Selected options : " + SelectedOption+"\n\n";
+
+            return radioCriteria;
+        }
     }
 }

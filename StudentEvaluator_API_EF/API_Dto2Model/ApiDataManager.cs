@@ -300,10 +300,10 @@ namespace API_Dto2Model
         //Template
         public async Task<PageReponse<Template>> GetTemplatesByUserId(long userId, int index=0, int count = 10)
         {
-            var jsonPromise = await _httpClient.GetFromJsonAsync<PageReponse<TemplateDto>>($"{_httpClient.BaseAddress}api/v{Version}/Templates/user/{userId}?index={index}&count={count}");
+            var templatesByUserId = await _httpClient.GetFromJsonAsync<PageReponse<TemplateDto>>($"{_httpClient.BaseAddress}api/v{Version}/Templates/user/{userId}?index={index}&count={count}");
        
 
-            return await Task.FromResult(new PageReponse<Template>(50,new List<Template>()));
+            return await Task.FromResult(new PageReponse<Template>(templatesByUserId.nbElement,templatesByUserId.Data.ToModels()));
         }
 
         public async Task<PageReponse<Template>> GetEmptyTemplatesByUserId(long userId, int index=0, int count=10)
@@ -314,7 +314,7 @@ namespace API_Dto2Model
 
         public async Task<Template?> GetTemplateById(long userId, long templateId)
         {
-            var templateById = await _httpClient.GetFromJsonAsync<TemplateDto>($"{_httpClient.BaseAddress}api/v{Version}/Template/{templateId}/user/{userId}");
+            var templateById = await _httpClient.GetFromJsonAsync<TemplateDto>($"{_httpClient.BaseAddress}api/v{Version}/Templates/{templateId}/user/{userId}");
             return await Task.FromResult(templateById?.ToModel());
         }
 
@@ -331,7 +331,7 @@ namespace API_Dto2Model
 
         public async Task<Template?> PutTemplate(long templateId, Template template)
         {
-            var reponse = await _httpClient.PutAsJsonAsync($"{_httpClient.BaseAddress}api/v{Version}/Templates?id={templateId}", template.ToDto());
+            var reponse = await _httpClient.PutAsJsonAsync($"{_httpClient.BaseAddress}api/v{Version}/Templates/{templateId}", template.ToDto());
             if (reponse.IsSuccessStatusCode)
             {
                 var templateRep = await reponse.Content.ReadFromJsonAsync<TemplateDto>();
@@ -342,7 +342,7 @@ namespace API_Dto2Model
 
         public async Task<bool> DeleteTemplate(long templateId)
         {
-            var b = await _httpClient.DeleteAsync($"{_httpClient.BaseAddress}api/v{Version}/Templates?id={templateId}");
+            var b = await _httpClient.DeleteAsync($"{_httpClient.BaseAddress}api/v{Version}/Templates/{templateId}");
             if (b.IsSuccessStatusCode)
             {
                 return await Task.FromResult(true);

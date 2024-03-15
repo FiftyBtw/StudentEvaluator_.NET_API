@@ -29,7 +29,7 @@ namespace Client_Model
 
         public override string ToString()
         {
-            string template = "Template : " + Id + ", " + Name + "\n" + "\tCriterias :";
+            string template = "Template : " + Id + ", " + Name + "\n" + "\nCriterias :\n";
             foreach (var criteria in Criterias)
             {
                 template += criteria.ToString();

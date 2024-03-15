@@ -37,7 +37,7 @@ namespace Client_Model
 
         public override string ToString()
         {
-            return "Criteria : "+Id+", "+Name+", "+ValueEvaluation+", ("+TemplateId+")\n";
+            return "Criteria : "+Id+ ",, Nom : " + Name + ", Value : " + ValueEvaluation+", ("+TemplateId+")\n";
         }
     }
 }

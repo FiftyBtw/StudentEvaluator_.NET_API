@@ -1,5 +1,6 @@
 using API_Dto;
 using Asp.Versioning;
+using EventLogs;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
@@ -15,10 +16,13 @@ namespace API_EF.Controllers.V1
     {
 
         private readonly IGroupService<GroupDto>  _groupService;
+        
+        private readonly ILogger<GroupsController> _logger;
 
-        public GroupsController(IGroupService<GroupDto> groupService)
+        public GroupsController(IGroupService<GroupDto> groupService, ILogger<GroupsController> logger)
         {
             _groupService = groupService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -30,12 +34,17 @@ namespace API_EF.Controllers.V1
         [HttpGet]
         public async Task<IActionResult> GetGroups(int index=0, int count=10)
         {
+            _logger.LogInformation(LogEvents.GetItems, "GetGroups");
             if (_groupService == null)
             {
                 return StatusCode(500);
             }
             var data = await _groupService.GetGroups(index, count);
-            if (data == null) return NoContent();
+            if (data == null)
+            {
+                _logger.LogInformation(LogEvents.GetItemsNoContent, "GetGroups");
+                return NoContent();
+            }
             else return Ok(data);
         }
     
@@ -49,6 +58,7 @@ namespace API_EF.Controllers.V1
         [Route("{gyear}/{gnumber}")]
         public async Task<IActionResult> GetGroupById(int gyear,int gnumber)
         {
+            _logger.LogInformation(LogEvents.GetItem, "GetGroupById");
             if (_groupService == null)
             {
                 return StatusCode(500);
@@ -56,6 +66,7 @@ namespace API_EF.Controllers.V1
             var book = await _groupService.GetGroupByIds(gyear,gnumber);
             if(book == null)
             {
+                _logger.LogInformation(LogEvents.GetItemNotFound, "GetGroupById");
                 return NotFound();
             }
             else return Ok(book);
@@ -69,6 +80,7 @@ namespace API_EF.Controllers.V1
         [HttpPost]
         public async Task<IActionResult> PostGroup([FromBody] GroupDto group)
         {
+            _logger.LogInformation(LogEvents.InsertItem, "PostGroup");
             if (_groupService == null)
             {
                 return StatusCode(500);
@@ -76,6 +88,7 @@ namespace API_EF.Controllers.V1
             var studentDto = await _groupService.PostGroup(group);
             if (studentDto == null)
             {
+                _logger.LogInformation(LogEvents.InsertItemBadRequest, "PostGroup");
                 return BadRequest();
             }
             else
@@ -93,6 +106,7 @@ namespace API_EF.Controllers.V1
         [HttpDelete]
         public async Task<IActionResult> DeleteGroup(int gyear, int gnumber)
         {
+            _logger.LogInformation(LogEvents.DeleteItem, "DeleteGroup");
             if (_groupService == null)
             {
                 return StatusCode(500);
@@ -101,10 +115,12 @@ namespace API_EF.Controllers.V1
             {
                 bool b = await _groupService.DeleteGroup(gyear,gnumber);
                 if (b) return Ok(b);
-                else return NotFound(); 
+                else
+                {
+                    _logger.LogInformation(LogEvents.DeleteItemNotFound, "DeleteGroup");
+                    return NotFound();
+                }
             }
         }
-
-
     }
 }

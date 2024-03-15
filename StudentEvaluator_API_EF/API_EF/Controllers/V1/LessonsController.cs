@@ -1,5 +1,6 @@
 using API_Dto;
 using Asp.Versioning;
+using EventLogs;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
@@ -15,10 +16,13 @@ namespace API_EF.Controllers.V1
     {
 
         private readonly ILessonService<LessonDto,LessonReponseDto>  _lessonService;
+        
+        private readonly ILogger<LessonsController> _logger;
 
-        public LessonsController(ILessonService<LessonDto, LessonReponseDto> lessonService)
+        public LessonsController(ILessonService<LessonDto, LessonReponseDto> lessonService, ILogger<LessonsController> logger)
         {
             _lessonService = lessonService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -30,12 +34,17 @@ namespace API_EF.Controllers.V1
         [HttpGet]
         public async Task<IActionResult> GetLessons(int index=0, int count=10)
         {
+            _logger.LogInformation(LogEvents.GetItems, "GetLessons");
             if (_lessonService == null)
             {
                 return StatusCode(500);
             }
             var data = await _lessonService.GetLessons(index, count);
-            if (data == null) return NoContent();
+            if (data == null)
+            {
+                _logger.LogInformation(LogEvents.GetItemsNoContent, "GetLessons");
+                return NoContent();
+            }
             else return Ok(data);
         }
 
@@ -48,6 +57,7 @@ namespace API_EF.Controllers.V1
         [Route("id/{id}")]
         public async Task<IActionResult> GetLessonById(long id)
         {
+            _logger.LogInformation(LogEvents.GetItem, "GetLessonById");
             if (_lessonService == null)
             {
                 return StatusCode(500);
@@ -55,6 +65,7 @@ namespace API_EF.Controllers.V1
             var lesson = await _lessonService.GetLessonById(id);
             if(lesson == null)
             {
+                _logger.LogInformation(LogEvents.GetItemNotFound, "GetLessonById");
                 return NotFound();
             }
             else return Ok(lesson);
@@ -71,12 +82,17 @@ namespace API_EF.Controllers.V1
         [Route("teacher/{id}")]
         public async Task<IActionResult> GetLessonsByTeacherId(long id,int index = 0, int count = 10)
         {
+            _logger.LogInformation(LogEvents.GetItems, "GetLessonsByTeacherId");
             if (_lessonService == null)
             {
                 return StatusCode(500);
             }
             var data = await _lessonService.GetLessonsByTeacherId(id,index,count);
-            if (data == null) return NoContent();
+            if (data == null)
+            {
+                _logger.LogInformation(LogEvents.GetItemsNoContent, "GetLessonsByTeacherId");
+                return NoContent();
+            }
             else return Ok(data);
         }
 
@@ -88,6 +104,7 @@ namespace API_EF.Controllers.V1
         [HttpPost]
         public async Task<IActionResult> PostLesson([FromBody] LessonDto lesson)
         {
+            _logger.LogInformation(LogEvents.InsertItem, "PostLesson");
             if (_lessonService == null)
             {
                 return StatusCode(500);
@@ -95,6 +112,7 @@ namespace API_EF.Controllers.V1
             var lessonDto = await _lessonService.PostLesson(lesson);
             if (lessonDto == null)
             {
+                _logger.LogInformation(LogEvents.InsertItemBadRequest, "PostLesson");
                 return BadRequest();
             }
             else
@@ -112,6 +130,7 @@ namespace API_EF.Controllers.V1
         [HttpPut]
         public async Task<IActionResult> PutLesson(long id, [FromBody] LessonDto lesson)
         {
+            _logger.LogInformation(LogEvents.UpdateItem, "PutLesson");
             if (_lessonService == null)
             {
                 return StatusCode(500);
@@ -119,6 +138,7 @@ namespace API_EF.Controllers.V1
             var lessonDto = await _lessonService.PutLesson(id,lesson);
             if (lessonDto == null)
             {
+                _logger.LogInformation(LogEvents.UpdateItemBadRequest, "PutLesson");
                 return NotFound();
             }
             else
@@ -135,6 +155,7 @@ namespace API_EF.Controllers.V1
         [HttpDelete]
         public async Task<IActionResult> DeleteLesson(long id)
         {
+            _logger.LogInformation(LogEvents.DeleteItem, "DeleteLesson");
             if (_lessonService == null)
             {
                 return StatusCode(500);
@@ -143,10 +164,12 @@ namespace API_EF.Controllers.V1
             {
                 bool b = await _lessonService.DeleteLesson(id);
                 if (b) return Ok(b);
-                else return NotFound(); 
+                else
+                {
+                    _logger.LogInformation(LogEvents.DeleteItemNotFound, "DeleteLesson");
+                    return NotFound();
+                }
             }
         }
-
-
     }
 }

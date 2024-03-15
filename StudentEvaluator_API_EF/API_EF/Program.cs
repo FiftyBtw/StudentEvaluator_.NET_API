@@ -3,7 +3,6 @@ using API_Dto;
 using Asp.Versioning;
 using EF_StubbedContextLib;
 using Entities2Dto;
-using JsonSubTypes;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

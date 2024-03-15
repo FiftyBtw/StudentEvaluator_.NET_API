@@ -1,5 +1,6 @@
 using API_Dto;
 using Asp.Versioning;
+using EventLogs;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
@@ -14,10 +15,13 @@ namespace API_EF.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IUserService<UserDto,LoginRequestDto,LoginResponseDto> _userService;
+    
+    private readonly ILogger<UsersController> _logger;
 
-    public UsersController(IUserService<UserDto, LoginRequestDto, LoginResponseDto> userService)
+    public UsersController(IUserService<UserDto, LoginRequestDto, LoginResponseDto> userService, ILogger<UsersController> logger)
     {
         _userService = userService;
+        _logger = logger;
     }
 
     /// <summary>
@@ -29,6 +33,7 @@ public class UsersController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetUsers(int index = 0, int count = 10)
     {
+        _logger.LogInformation(LogEvents.GetItems, "GetUsers");
         if (_userService == null)
         {
             return StatusCode(500);
@@ -36,6 +41,7 @@ public class UsersController : ControllerBase
         var data = await _userService.GetUsers(index, count);
         if (data == null)       
         {
+            _logger.LogInformation(LogEvents.GetItems, "NoContent");
             return NoContent();
         }
         else
@@ -53,6 +59,7 @@ public class UsersController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetUserById(long id)
     {
+        _logger.LogInformation(LogEvents.GetItem, "GetUserById");
         if (_userService == null)
         {
             return StatusCode(500);
@@ -60,6 +67,7 @@ public class UsersController : ControllerBase
         var user = await _userService.GetUserById(id);
         if(user == null)
         {
+            _logger.LogInformation(LogEvents.GetItem, "NotFound");
             return NotFound();
         }
         else return Ok(user);
@@ -73,6 +81,7 @@ public class UsersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> PostUser([FromBody] UserDto user)
     {
+        _logger.LogInformation(LogEvents.InsertItem, "PostUser");
         if (_userService == null)
         {
             return StatusCode(500);
@@ -97,6 +106,7 @@ public class UsersController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> PutUser(long id, [FromBody] UserDto user)
     {
+        _logger.LogInformation(LogEvents.UpdateItem, "PutUser");
         if (_userService == null)
         {
             return StatusCode(500);
@@ -120,6 +130,7 @@ public class UsersController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(long id)
     {
+        _logger.LogInformation(LogEvents.DeleteItem, "DeleteUser");
         if (_userService == null)
         {
             return StatusCode(500);
@@ -143,6 +154,7 @@ public class UsersController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest)
     {
+        _logger.LogInformation(LogEvents.GetItem, "Login");
         if (_userService == null)
         {
             return StatusCode(500);

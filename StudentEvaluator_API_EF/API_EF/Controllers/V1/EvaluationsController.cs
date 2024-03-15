@@ -1,5 +1,6 @@
 using API_Dto;
 using Asp.Versioning;
+using EventLogs;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
@@ -15,10 +16,13 @@ namespace API_EF.Controllers.V1
     {
 
         private readonly IEvaluationService<EvaluationDto,EvaluationReponseDto>  _evaluationService;
+        
+        private readonly ILogger<EvaluationsController> _logger;
 
-        public EvaluationsController(IEvaluationService<EvaluationDto, EvaluationReponseDto> evaluationService)
+        public EvaluationsController(IEvaluationService<EvaluationDto, EvaluationReponseDto> evaluationService, ILogger<EvaluationsController> logger)
         {
             _evaluationService = evaluationService;
+            _logger = logger;
         }
         
         /// <summary>
@@ -30,12 +34,17 @@ namespace API_EF.Controllers.V1
         [HttpGet]
         public async Task<IActionResult> GetEvaluations(int index=0, int count=10)
         {
+            _logger.LogInformation(LogEvents.GetItems, "GetEvaluations");
             if (_evaluationService == null)
             {
                 return StatusCode(500);
             }
             var data = await _evaluationService.GetEvaluations(index, count);
-            if (data == null) return NoContent();
+            if (data == null)
+            {
+                _logger.LogInformation(LogEvents.GetItemsNoContent, "GetEvaluations");
+                return NoContent();
+            }
             else return Ok(data);
         }
 
@@ -48,6 +57,7 @@ namespace API_EF.Controllers.V1
         [Route("{id}")]
         public async Task<IActionResult> GetEvaluationById(long id)
         {
+            _logger.LogInformation(LogEvents.GetItem, "GetEvaluationById");
             if (_evaluationService == null)
             {
                 return StatusCode(500);
@@ -55,6 +65,7 @@ namespace API_EF.Controllers.V1
             var eval = await _evaluationService.GetEvaluationById(id);
             if(eval == null)
             {
+                _logger.LogInformation(LogEvents.GetItemNotFound, "GetEvaluationById");
                 return NotFound();
             }
             else return Ok(eval);
@@ -71,12 +82,17 @@ namespace API_EF.Controllers.V1
         [Route("teacher/{id}")]
         public async Task<IActionResult> GetEvaluationsByTeacherId(long id,int index = 0, int count = 10)
         {
+            _logger.LogInformation(LogEvents.GetItems, "GetEvaluationsByTeacherId");
             if (_evaluationService == null)
             {
                 return StatusCode(500);
             }
             var data = await _evaluationService.GetEvaluationsByTeacherId(id,index,count);
-            if (data == null) return NoContent();
+            if (data == null)
+            {
+                _logger.LogInformation(LogEvents.GetItemsNotFound, "GetEvaluationsByTeacherId");
+                return NoContent();
+            }
             else return Ok(data);
         }
         
@@ -88,6 +104,7 @@ namespace API_EF.Controllers.V1
         [HttpPost]
         public async Task<IActionResult> PostEvaluation([FromBody] EvaluationDto eval)
         {
+            _logger.LogInformation(LogEvents.InsertItem, "PostEvaluation");
             if (_evaluationService == null)
             {
                 return StatusCode(500);
@@ -95,6 +112,7 @@ namespace API_EF.Controllers.V1
             var evalDto = await _evaluationService.PostEvaluation(eval);
             if (evalDto == null)
             {
+                _logger.LogInformation(LogEvents.InsertItemBadRequest, "PostEvaluation");
                 return BadRequest();
             }
             else
@@ -112,6 +130,7 @@ namespace API_EF.Controllers.V1
         [HttpPut]
         public async Task<IActionResult> PutEvaluation(long id, [FromBody] EvaluationDto eval)
         {
+            _logger.LogInformation(LogEvents.UpdateItem, "PutEvaluation");
             if (_evaluationService == null)
             {
                 return StatusCode(500);
@@ -119,6 +138,7 @@ namespace API_EF.Controllers.V1
             var evalDto = await _evaluationService.PutEvaluation(id,eval);
             if (evalDto == null)
             {
+                _logger.LogInformation(LogEvents.UpdateItemBadRequest, "PutEvaluation");
                 return NotFound();
             }
             else
@@ -135,6 +155,7 @@ namespace API_EF.Controllers.V1
         [HttpDelete]
         public async Task<IActionResult> DeleteEvaluation(long id)
         {
+            _logger.LogInformation(LogEvents.DeleteItem, "DeleteEvaluation");
             if (_evaluationService == null)
             {
                 return StatusCode(500);
@@ -143,7 +164,11 @@ namespace API_EF.Controllers.V1
             {
                 bool b = await _evaluationService.DeleteEvaluation(id);
                 if (b) return Ok(b);
-                else return NotFound(); 
+                else
+                {
+                    _logger.LogInformation(LogEvents.DeleteItemBadRequest, "DeleteEvaluation");
+                    return NotFound();
+                }
             }
         }
     }

@@ -107,11 +107,9 @@ public class GroupTests
         {
             new GroupDto(2024, 1, new List<StudentDto>()),
             new GroupDto(2024, 2, new List<StudentDto>())
-            // Ajoutez plus de données si nécessaire pour simuler différents groupes
         };
         var pageResponse = new PageReponse<GroupDto>(groups.Count, groups);
 
-        // Configure the mock to return the page response when GetGroups is called
         mockGroupService.Setup(service => service.GetGroups(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(pageResponse);
 
@@ -123,7 +121,6 @@ public class GroupTests
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
         var returnedPageResponse = Assert.IsType<PageReponse<GroupDto>>(okResult.Value);
-        // Assurez-vous que la liste renvoyée contient le même nombre d'éléments que les groupes simulés
         Assert.Equal(groups.Count, returnedPageResponse.Data.Count());
     }
 

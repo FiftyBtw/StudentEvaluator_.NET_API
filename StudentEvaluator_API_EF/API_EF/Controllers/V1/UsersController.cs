@@ -1,6 +1,7 @@
 using API_Dto;
 using Asp.Versioning;
 using EventLogs;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
@@ -89,7 +90,7 @@ public class UsersController : ControllerBase
         var userDto = await _userService.PostUser(user);
         if (userDto == null)
         {
-            return StatusCode(500);
+            return BadRequest();
         }
         else
         {
@@ -114,7 +115,7 @@ public class UsersController : ControllerBase
         var userDto = await _userService.PutUser(id, user);
         if (userDto == null)
         {
-            return StatusCode(500);
+            return NotFound();
         }
         else
         {
@@ -138,11 +139,11 @@ public class UsersController : ControllerBase
         var result = await _userService.DeleteUser(id);
         if (result)
         {
-            return Ok();
+            return Ok(result);
         }
         else
         {
-            return StatusCode(500);
+            return NotFound();
         }
     }
     

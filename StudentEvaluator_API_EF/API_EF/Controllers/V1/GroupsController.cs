@@ -91,7 +91,7 @@ namespace API_EF.Controllers.V1
         /// <param name="gnumber"></param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<IActionResult> DeleteStudent(int gyear, int gnumber)
+        public async Task<IActionResult> DeleteGroup(int gyear, int gnumber)
         {
             if (_groupService == null)
             {

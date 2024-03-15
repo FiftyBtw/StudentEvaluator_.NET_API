@@ -16,12 +16,23 @@ namespace Client_Model
         public long TemplateId { get; set; }
 
         public Criteria() { }
-        [JsonConstructor]
+        
         public Criteria(long id,string name,long valueEvaluation,long templateId) { 
             _id = id;
             Name = name;
             ValueEvaluation = valueEvaluation;
             TemplateId = templateId;
+        }
+        [JsonConstructor]
+        public Criteria(long id, string name, long valueEvaluation, long templateId,string criteriaType)
+        {
+           
+                            
+            _id = id;
+            Name = name;
+            ValueEvaluation = valueEvaluation;
+            TemplateId = templateId;
+            
         }
 
         public override string ToString()

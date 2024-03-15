@@ -282,15 +282,16 @@ foreach (var user in users.Data)
 }
 
 //Template
-////GetTemplateByUserId
-//Console.WriteLine("Test GetTemplatesByUserId :\n");
 
-//var templates = await apiDataManager.GetTemplatesByUserId(1);
-//Console.WriteLine($"Nombre d'éléments : {evals.nbElement}");
-//foreach (var template in templates.Data)
-//{
-//    Console.WriteLine(template);
-//}
+//GetTemplateByUserId
+Console.WriteLine("Test GetTemplatesByUserId :\n");
+
+var templates = await apiDataManager.GetTemplatesByUserId(1);
+Console.WriteLine($"Nombre d'éléments : {evals.nbElement}");
+foreach (var template in templates.Data)
+{
+    Console.WriteLine(template);
+}
 
 ////GetEmptyTemplateByUserId
 //Console.WriteLine("Test GetEmptyTemplatesByUserId :\n");

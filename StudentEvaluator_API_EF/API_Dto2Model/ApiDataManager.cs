@@ -300,8 +300,10 @@ namespace API_Dto2Model
         //Template
         public async Task<PageReponse<Template>> GetTemplatesByUserId(long userId, int index=0, int count = 10)
         {
-            var templatesByUserId = await _httpClient.GetFromJsonAsync<PageReponse<TemplateDto>>($"{_httpClient.BaseAddress}api/v{Version}/Templates/user/{userId}?index={index}&count={count}");
-            return await Task.FromResult(new PageReponse<Template>(templatesByUserId.nbElement, templatesByUserId.Data.ToModels()));
+            var jsonPromise = await _httpClient.GetFromJsonAsync<PageReponse<TemplateDto>>($"{_httpClient.BaseAddress}api/v{Version}/Templates/user/{userId}?index={index}&count={count}");
+       
+
+            return await Task.FromResult(new PageReponse<Template>(50,new List<Template>()));
         }
 
         public async Task<PageReponse<Template>> GetEmptyTemplatesByUserId(long userId, int index=0, int count=10)

@@ -25,19 +25,6 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Add services to the container.
-
-builder.Services.AddControllers().AddNewtonsoftJson(options =>
-{
-    options.SerializerSettings.Converters.Add(
-        JsonSubtypesConverterBuilder
-            .Of(typeof(CriteriaDto), "criteriaType")
-            .RegisterSubtype(typeof(TextCriteriaDto), "text")
-            .RegisterSubtype(typeof(SliderCriteriaDto), "slider")
-            .RegisterSubtype(typeof(RadioCriteriaDto), "radio")
-            .SerializeDiscriminatorProperty()
-            .Build()
-        );
-});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 

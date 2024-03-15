@@ -4,17 +4,20 @@ using Shared;
 using API_EF;
 using API_EF.Controllers.V1;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 namespace EF_UnitTests.WebApi;
 
 public class LessonTests
 {
     private readonly Mock<ILessonService<LessonDto, LessonReponseDto>> _mockRepo;
+    private readonly Mock<ILogger<LessonsController>> _mockLogger;
     private readonly LessonsController _lessonsController;
 
     public LessonTests()
     {
         _mockRepo = new Mock<ILessonService<LessonDto, LessonReponseDto>>();
-        _lessonsController = new LessonsController(_mockRepo.Object);
+        _mockLogger = new Mock<ILogger<LessonsController>>();
+        _lessonsController = new LessonsController(_mockRepo.Object, _mockLogger.Object);
     }
 
     [Fact]
@@ -45,7 +48,7 @@ public class LessonTests
                 Group = new GroupDto(lessonDto.GroupYear, lessonDto.GroupNumber, new List<StudentDto>())
             });
 
-        var controller = new LessonsController(mockLessonService.Object);
+        var controller = new LessonsController(mockLessonService.Object,_mockLogger.Object);
 
         // Act
         var result = await controller.PostLesson(lessonDto);
@@ -70,7 +73,7 @@ public class LessonTests
         var mockLessonService = new Mock<ILessonService<LessonDto, LessonReponseDto>>();
         mockLessonService.Setup(service => service.PostLesson(lessonDto))
             .ReturnsAsync((LessonReponseDto)null); 
-        var controller = new LessonsController(mockLessonService.Object);
+        var controller = new LessonsController(mockLessonService.Object, _mockLogger.Object);
 
         // Act
         var result = await controller.PostLesson(lessonDto);
@@ -90,7 +93,7 @@ public class LessonTests
         mockLessonService.Setup(service => service.DeleteLesson(lessonId))
             .ReturnsAsync(true); 
 
-        var controller = new LessonsController(mockLessonService.Object);
+        var controller = new LessonsController(mockLessonService.Object, _mockLogger.Object);
 
         // Act
         var result = await controller.DeleteLesson(lessonId);
@@ -112,7 +115,7 @@ public class LessonTests
         mockLessonService.Setup(service => service.DeleteLesson(lessonId))
             .ReturnsAsync(false); 
 
-        var controller = new LessonsController(mockLessonService.Object);
+        var controller = new LessonsController(mockLessonService.Object, _mockLogger.Object);
 
         // Act
         var result = await controller.DeleteLesson(lessonId);
@@ -145,7 +148,7 @@ public class LessonTests
         mockLessonService.Setup(service => service.PutLesson(lessonId, newLessonDto))
             .ReturnsAsync(updatedLessonDto); 
 
-        var controller = new LessonsController(mockLessonService.Object);
+        var controller = new LessonsController(mockLessonService.Object, _mockLogger.Object);
 
         // Act
         var result = await controller.PutLesson(lessonId, newLessonDto);
@@ -173,7 +176,7 @@ public class LessonTests
         mockLessonService.Setup(service => service.PutLesson(lessonId, newLessonDto))
             .ReturnsAsync((LessonReponseDto)null);
 
-        var controller = new LessonsController(mockLessonService.Object);
+        var controller = new LessonsController(mockLessonService.Object, _mockLogger.Object);
 
         // Act
         var result = await controller.PutLesson(lessonId, newLessonDto);

@@ -41,7 +41,7 @@ public class EvaluationTests
         var student = new Student (1,"John", "Doeeeee", "https:::/www.google.com",  1, 1);
         var template = new Template(1, "Template1", new List<Criteria>());
         var evaluation = new Evaluation(1,date, course , grade, pairName, teacher, template, student);
-        var expectedFormat = "Evaluation : 1, Mathematics, 16/03/2024 09:00:00, 10, toto\n" +
+        var expectedFormat = $"Evaluation : 1, Mathematics, {new DateTime(2024, 3, 16, 9, 0, 0) }, 10, toto\n" +
                              "\tTeacher : ProfSmith\n" +
                              "\tStudent : John Doeeeee\n" +
                              "\tTemplate : Template1\n";

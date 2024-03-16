@@ -1,34 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Client_Model
+﻿namespace Client_Model
 {
-    public class EvaluationCreation
+    public class EvaluationCreation(
+        DateTime date,
+        string courseName,
+        long grade,
+        string? pairName,
+        long teacherId,
+        long templateId,
+        long studentId)
     {
-        public DateTime Date { get; set; }
+        public DateTime Date { get; } = date;
 
-        public string CourseName { get; set; }
+        public string CourseName { get; set; } = courseName;
 
-        public long Grade { get; set; }
-        public string? PairName { get; set; }
-        public long TeacherId { get; set; }
+        public long Grade { get; } = grade;
+        public string? PairName { get;  } = pairName;
+        public long TeacherId { get;  } = teacherId;
 
-        public long TemplateId { get; set; }
+        public long TemplateId { get;  } = templateId;
 
-        public long StudentId { get; set; }
-
-        public EvaluationCreation(DateTime date, string courseName, long grade, string? pairName, long teacherId, long templateId, long studentId)
-        {
-            Date = date;
-            CourseName = courseName;
-            Grade = grade;
-            PairName = pairName;
-            TeacherId = teacherId;
-            TemplateId = templateId;
-            StudentId = studentId;
-        }
+        public long StudentId { get;  } = studentId;
     }
 }

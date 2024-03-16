@@ -1,24 +1,24 @@
-﻿using API_Model;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+
 
 namespace Client_Model
 {
     public class Template
     {
         private readonly long _id;
-        public long Id { get { return _id; } }
+
+        public long Id
+        {
+            get => _id;
+        }
+
         public string Name { get; set; }
         public IReadOnlyCollection<Criteria> Criterias
         {
             get;
-            private set;
         }
-        List<Criteria> _criterias = new List<Criteria>();
+
+        private List<Criteria> _criterias = [];
 
         public Template(long id, string name, IEnumerable<Criteria> criterias) {
             _id = id;

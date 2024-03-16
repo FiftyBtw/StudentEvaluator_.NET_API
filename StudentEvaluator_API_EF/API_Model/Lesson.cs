@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace API_Model
+﻿namespace Client_Model
 {
     public class Lesson
     {
         private readonly long _id;
-        public long Id { get { return _id; } }
-        public DateTime Start { get; set; }
-        public DateTime End { get; set; }
-        public string CourseName { get; set; }
-        public string Classroom { get; set; }
-        public Teacher Teacher { get; set; }
-        public Group Group { get; set; }
+        public long Id { get => _id;  }
+        public DateTime Start { get; }
+        public DateTime End { get;  }
+        public string CourseName { get; } = "";
+        public string Classroom { get;  } = "";
+        public Teacher Teacher { get;  } = new();
+        public Group Group { get; } = new();
 
         //public IEnumerable<EvaluationDto> Evaluations { get; set; } = new List<EvaluationDto>();
 
@@ -34,7 +28,7 @@ namespace API_Model
 
         public override string ToString()
         {
-            string lesson = "Lesson : " + Id + ", " + CourseName + ","+ Classroom + ", "+Start.ToString()+"-"+End.ToString()+"\n";
+            string lesson = "Lesson : " + Id + ", " + CourseName + ","+ Classroom + ", "+Start+"-"+End+"\n";
             lesson += "\tTeacher : " + Teacher.Username + "\n";
             lesson += "\tGroup  :" + Group.GroupYear + "A G" + Group.GroupNumber + "\n";
             return lesson;

@@ -1,4 +1,4 @@
-﻿namespace API_Model
+﻿namespace Client_Model
 {
     /// <summary>
     /// Represents a student.

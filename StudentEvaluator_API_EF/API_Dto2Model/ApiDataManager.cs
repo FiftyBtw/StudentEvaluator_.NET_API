@@ -1,16 +1,14 @@
 ﻿using API_Dto;
-using API_Model;
 using Client_Model;
 using Shared;
 using System.Net.Http.Json;
-using API_Dto2Model;
 
 namespace Dto2Model
 {
     /// <summary>
     /// Class for managing API data related to students and groups.
     /// </summary>
-    public class ApiDataManager : IStudentService<Student>, IGroupService<Group>, ILessonService<LessonCreation, Lesson>, IEvaluationService<EvaluationCreation, Evaluation>,IUserService<User,LoginRequest,LoginReponse>,ITemplateService<Template>
+    public class ApiDataManager : IStudentService<Student>, IGroupService<Group>, ILessonService<LessonCreation, Lesson>, IEvaluationService<EvaluationCreation, Evaluation>,IUserService<User,LoginRequest,LoginResponse>,ITemplateService<Template>
     {
       
     
@@ -312,7 +310,7 @@ namespace Dto2Model
             return await Task.FromResult<User?>(null);
         }
 
-        public async Task<LoginReponse?> Login(LoginRequest loginRequest)
+        public async Task<LoginResponse?> Login(LoginRequest loginRequest)
         {
             var reponse = await _httpClient.PostAsJsonAsync($"{_httpClient.BaseAddress}api/v{_version}/Users/login", loginRequest.ToDto());
             if (reponse.IsSuccessStatusCode)
@@ -323,7 +321,7 @@ namespace Dto2Model
                     return await Task.FromResult(userRep.ToModel());
                 }
             }
-            return await Task.FromResult<LoginReponse?>(null);
+            return await Task.FromResult<LoginResponse?>(null);
         }
 
         public async Task<User?> PutUser(long id, User user)

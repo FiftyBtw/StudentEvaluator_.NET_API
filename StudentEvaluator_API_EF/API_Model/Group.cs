@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.Collections.ObjectModel;
 
-namespace API_Model
+namespace Client_Model
 {
     /// <summary>
     /// Represents a group of students.
@@ -18,16 +12,12 @@ namespace API_Model
         private readonly int _groupenumber;
         public int GroupNumber { get { return _groupenumber; } }
 
+        private List<Student> _students = new List<Student>();
+
         /// <summary>
         /// Gets the collection of students in the group.
         /// </summary>
-        public IReadOnlyCollection<Student> Students 
-        { 
-            get;
-            private set;
-        } 
-        List<Student> _students =new List<Student>();
-            
+        public IReadOnlyCollection<Student> Students => new ReadOnlyCollection<Student>(_students);
 
         public Group() { }
 
@@ -40,7 +30,6 @@ namespace API_Model
         {
             _groupeyear = groupYear;
             _groupenumber = groupNumber;
-            Students = new ReadOnlyCollection<Student>(_students);
         }
 
         /// <summary>
@@ -53,8 +42,7 @@ namespace API_Model
         {
             _groupeyear = groupYear;
             _groupenumber = groupNumber;
-            Students = new ReadOnlyCollection<Student>(_students);
-            _students.AddRange(students);
+            _students = new List<Student>(students);
         }
 
         /// <summary>
@@ -64,9 +52,9 @@ namespace API_Model
         public override string ToString()
         {
             string group = "Group : " + GroupYear + "A G" +GroupNumber +" :\n";
-            foreach(var Student in _students)
+            foreach(var student in _students)
             {
-                group += Student.ToString()+"\n";
+                group += student+"\n";
             }
             return group;
         }

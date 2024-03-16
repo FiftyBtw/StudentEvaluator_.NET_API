@@ -846,4 +846,499 @@ public class TranslatorEntities2DtoTests
             Assert.Equal(radioCriteriaDto.TemplateId, radioCriteriaEntity.TemplateId);
         }
     }
+
+    [Fact]
+    public void TemplateEntity_To_TemplateDto()
+    {
+        // Arrange
+        var templateEntity = new TemplateEntity
+        {
+            Id = 1,
+            Name = "Template1",
+            Criteria = new List<CriteriaEntity>
+            {
+                new TextCriteriaEntity
+                {
+                    Id = 1,
+                    Name = "Text1",
+                    ValueEvaluation = 4,
+                    Text = "This is a text",
+                    TemplateId = 1
+                },
+                new TextCriteriaEntity
+                {
+                    Id = 2,
+                    Name = "Text2",
+                    ValueEvaluation = 3,
+                    Text = "This is another text",
+                    TemplateId = 1
+                },
+                new SliderCriteriaEntity
+                {
+                    Id = 1,
+                    Name = "Slider1",
+                    ValueEvaluation = 4,
+                    Value = 5,
+                    TemplateId = 1
+                },
+                new SliderCriteriaEntity
+                {
+                    Id = 2,
+                    Name = "Slider2",
+                    ValueEvaluation = 3,
+                    Value = 4,
+                    TemplateId = 1
+                },
+                new RadioCriteriaEntity
+                {
+                    Id = 1,
+                    Name = "Radio1",
+                    ValueEvaluation = 4,
+                    Options = ["Option 1", "Option 2"],
+                    SelectedOption = "Option 1",
+                    TemplateId = 1
+                },
+                new RadioCriteriaEntity
+                {
+                    Id = 2,
+                    Name = "Radio2",
+                    ValueEvaluation = 3,
+                    Options = ["Option 1", "Option 2"],
+                    SelectedOption = "Option 2",
+                    TemplateId = 1
+                }
+            }
+        };
+
+        // Act
+        var templateDto = Entities2Dto.Translator.ToDto(templateEntity);
+
+        // Assert
+        Assert.NotNull(templateDto);
+        Assert.Equal(templateEntity.Id, templateDto.Id);
+        Assert.Equal(templateEntity.Name, templateDto.Name);
+        Assert.NotNull(templateDto.Criterias);
+        Assert.Equal(templateEntity.Criteria.Count(), templateDto.Criterias.Count());
+    }
+
+    [Fact]
+    public void TemplateDto_To_TemplateEntity()
+    {
+        // Arrange
+        var templateDto = new TemplateDto
+        {
+            Id = 1,
+            Name = "Template1",
+            Criterias = new List<CriteriaDto>
+            {
+                new TextCriteriaDto
+                {
+                    Id = 1,
+                    Name = "Text1",
+                    ValueEvaluation = 4,
+                    Text = "This is a text",
+                    TemplateId = 1
+                },
+                new TextCriteriaDto
+                {
+                    Id = 2,
+                    Name = "Text2",
+                    ValueEvaluation = 3,
+                    Text = "This is another text",
+                    TemplateId = 1
+                },
+                new SliderCriteriaDto
+                {
+                    Id = 1,
+                    Name = "Slider1",
+                    ValueEvaluation = 4,
+                    Value = 5,
+                    TemplateId = 1
+                },
+                new SliderCriteriaDto
+                {
+                    Id = 2,
+                    Name = "Slider2",
+                    ValueEvaluation = 3,
+                    Value = 4,
+                    TemplateId = 1
+                },
+                new RadioCriteriaDto
+                {
+                    Id = 1,
+                    Name = "Radio1",
+                    ValueEvaluation = 4,
+                    Options = ["Option 1", "Option 2"],
+                    SelectedOption = "Option 1",
+                    TemplateId = 1
+                },
+                new RadioCriteriaDto
+                {
+                    Id = 2,
+                    Name = "Radio2",
+                    ValueEvaluation = 3,
+                    Options = ["Option 1", "Option 2"],
+                    SelectedOption = "Option 2",
+                    TemplateId = 1
+                }
+            }
+        };
+
+        // Act
+        var templateEntity = Entities2Dto.Translator.ToEntity(templateDto);
+
+        // Assert
+        Assert.NotNull(templateEntity);
+        Assert.Equal(templateDto.Id, templateEntity.Id);
+        Assert.Equal(templateDto.Name, templateEntity.Name);
+        Assert.NotNull(templateEntity.Criteria);
+        Assert.Equal(templateDto.Criterias.Count(), templateEntity.Criteria.Count());
+    }
+
+    [Fact]
+    public void TemplateEntities_To_TemplateDtos()
+    {
+        // Arrange 
+        var templateEntities = new List<TemplateEntity>
+        {
+            new TemplateEntity
+            {
+                Id = 1,
+                Name = "Template1",
+                Criteria = new List<CriteriaEntity>
+                {
+                    new TextCriteriaEntity
+                    {
+                        Id = 1,
+                        Name = "Text1",
+                        ValueEvaluation = 4,
+                        Text = "This is a text",
+                        TemplateId = 1
+                    },
+                    new TextCriteriaEntity
+                    {
+                        Id = 2,
+                        Name = "Text2",
+                        ValueEvaluation = 3,
+                        Text = "This is another text",
+                        TemplateId = 1
+                    },
+                    new SliderCriteriaEntity
+                    {
+                        Id = 1,
+                        Name = "Slider1",
+                        ValueEvaluation = 4,
+                        Value = 5,
+                        TemplateId = 1
+                    },
+                    new SliderCriteriaEntity
+                    {
+                        Id = 2,
+                        Name = "Slider2",
+                        ValueEvaluation = 3,
+                        Value = 4,
+                        TemplateId = 1
+                    },
+                    new RadioCriteriaEntity
+                    {
+                        Id = 1,
+                        Name = "Radio1",
+                        ValueEvaluation = 4,
+                        Options = ["Option 1", "Option 2"],
+                        SelectedOption = "Option 1",
+                        TemplateId = 1
+                    },
+                    new RadioCriteriaEntity
+                    {
+                        Id = 2,
+                        Name = "Radio2",
+                        ValueEvaluation = 3,
+                        Options = ["Option 1", "Option 2"],
+                        SelectedOption = "Option 2",
+                        TemplateId = 1
+                    }
+                }
+            },
+            new TemplateEntity
+            {
+                Id = 2,
+                Name = "Template2",
+                Criteria = new List<CriteriaEntity>
+                {
+                    new TextCriteriaEntity
+                    {
+                        Id = 3,
+                        Name = "Text3",
+                        ValueEvaluation = 4,
+                        Text = "This is a text",
+                        TemplateId = 2
+                    },
+                    new TextCriteriaEntity
+                    {
+                        Id = 4,
+                        Name = "Text4",
+                        ValueEvaluation = 3,
+                        Text = "This is another text",
+                        TemplateId = 2
+                    },
+                    new SliderCriteriaEntity
+                    {
+                        Id = 3,
+                        Name = "Slider3",
+                        ValueEvaluation = 4,
+                        Value = 5,
+                        TemplateId = 2
+                    },
+                    new SliderCriteriaEntity
+                    {
+                        Id = 4,
+                        Name = "Slider4",
+                        ValueEvaluation = 3,
+                        Value = 4,
+                        TemplateId = 2
+                    },
+                    new RadioCriteriaEntity
+                    {
+                        Id = 3,
+                        Name = "Radio3",
+                        ValueEvaluation = 4,
+                        Options = ["Option 1", "Option 2"],
+                        SelectedOption = "Option 1",
+                        TemplateId = 2
+                    },
+                    new RadioCriteriaEntity
+                    {
+                        Id = 4,
+                        Name = "Radio4",
+                        ValueEvaluation = 3,
+                        Options = ["Option 1", "Option 2"],
+                        SelectedOption = "Option 2",
+                        TemplateId = 2
+                    }
+                }
+            }
+        };
+
+        // Act
+        var templateDtos = Entities2Dto.Translator.ToDtos(templateEntities);
+        
+        // Assert
+        Assert.NotNull(templateDtos);
+        Assert.Equal(templateEntities.Count, templateDtos.Count());
+        foreach (var templateDto in templateDtos)
+        {
+            var templateEntity = templateEntities.FirstOrDefault(s => s.Id == templateDto.Id);
+            Assert.NotNull(templateEntity);
+            Assert.Equal(templateEntity.Id, templateDto.Id);
+            Assert.Equal(templateEntity.Name, templateDto.Name);
+            Assert.NotNull(templateDto.Criterias);
+            Assert.Equal(templateEntity.Criteria.Count(), templateDto.Criterias.Count());
+        }
+    }
+
+
+    [Fact]
+    public void TemplateDtos_To_TemplateEntities()
+    {
+        // Arrange 
+        var templateDtos = new List<TemplateDto>
+        {
+            new TemplateDto
+            {
+                Id = 1,
+                Name = "Template1",
+                Criterias = new List<CriteriaDto>
+                {
+                    new TextCriteriaDto
+                    {
+                        Id = 1,
+                        Name = "Text1",
+                        ValueEvaluation = 4,
+                        Text = "This is a text",
+                        TemplateId = 1
+                    },
+                    new TextCriteriaDto
+                    {
+                        Id = 2,
+                        Name = "Text2",
+                        ValueEvaluation = 3,
+                        Text = "This is another text",
+                        TemplateId = 1
+                    },
+                    new SliderCriteriaDto
+                    {
+                        Id = 1,
+                        Name = "Slider1",
+                        ValueEvaluation = 4,
+                        Value = 5,
+                        TemplateId = 1
+                    },
+                    new SliderCriteriaDto
+                    {
+                        Id = 2,
+                        Name = "Slider2",
+                        ValueEvaluation = 3,
+                        Value = 4,
+                        TemplateId = 1
+                    },
+                    new RadioCriteriaDto
+                    {
+                        Id = 1,
+                        Name = "Radio1",
+                        ValueEvaluation = 4,
+                        Options = ["Option 1", "Option 2"],
+                        SelectedOption = "Option 1",
+                        TemplateId = 1
+                    },
+                    new RadioCriteriaDto
+                    {
+                        Id = 2,
+                        Name = "Radio2",
+                        ValueEvaluation = 3,
+                        Options = ["Option 1", "Option 2"],
+                        SelectedOption = "Option 2",
+                        TemplateId = 1
+                    }
+                }
+            },
+            new TemplateDto
+            {
+                Id = 2,
+                Name = "Template2",
+                Criterias = new List<CriteriaDto>
+                {
+                    new TextCriteriaDto
+                    {
+                        Id = 3,
+                        Name = "Text3",
+                        ValueEvaluation = 4,
+                        Text = "This is a text",
+                        TemplateId = 2
+                    },
+                    new TextCriteriaDto
+                    {
+                        Id = 4,
+                        Name = "Text4",
+                        ValueEvaluation = 3,
+                        Text = "This is another text",
+                        TemplateId = 2
+                    },
+                    new SliderCriteriaDto
+                    {
+                        Id = 5,
+                        Name = "Slider3",
+                        ValueEvaluation = 4,
+                        Value = 5,
+                        TemplateId = 2
+                    },
+                    new SliderCriteriaDto
+                    {
+                        Id = 6,
+                        Name = "Slider4",
+                        ValueEvaluation = 3,
+                        Value = 4,
+                        TemplateId = 2
+                    },
+                    new RadioCriteriaDto
+                    {
+                        Id = 7,
+                        Name = "Radio3",
+                        ValueEvaluation = 4,
+                        Options = ["Option 1", "Option 2"],
+                        SelectedOption = "Option 1",
+                        TemplateId = 2
+                    },
+                    new RadioCriteriaDto
+                    {
+                        Id = 8,
+                        Name = "Radio4",
+                        ValueEvaluation = 3,
+                        Options = ["Option 1", "Option 2"],
+                        SelectedOption = "Option 2",
+                        TemplateId = 2
+                    }
+                }
+            }
+        };
+        
+        // Act
+        var templateEntities = Entities2Dto.Translator.ToEntities(templateDtos);
+        
+        // Assert
+        Assert.NotNull(templateEntities);
+        Assert.Equal(templateDtos.Count, templateEntities.Count());
+        foreach (var templateEntity in templateEntities)
+        {
+            var templateDto = templateDtos.FirstOrDefault(s => s.Id == templateEntity.Id);
+            Assert.NotNull(templateDto);
+            Assert.Equal(templateEntity.Id, templateDto.Id);
+            Assert.Equal(templateEntity.Name, templateDto.Name);
+            Assert.NotNull(templateEntity.Criteria);
+            Assert.Equal(templateDto.Criterias.Count(), templateEntity.Criteria.Count());
+        }
+    }
+    
+    [Fact]
+    public void EvaluationEntity_To_EvaluationDto()
+    {
+        // Arrange
+        var evaluationEntity = new EvaluationEntity
+        {
+            Id = 1,
+            StudentId = 1,
+            TemplateId = 1,
+            TeacherId = 1,
+            CourseName = "Course 1",
+            Date = new DateTime(2024, 3, 16),
+            Grade = 0,
+            PairName = ""
+        };
+
+        // Act
+        var evaluationDto = Entities2Dto.Translator.ToDto(evaluationEntity);
+
+        // Assert
+        Assert.NotNull(evaluationDto);
+        Assert.Equal(evaluationEntity.Id, evaluationDto.Id);
+        Assert.Equal(evaluationEntity.StudentId, evaluationDto.StudentId);
+        Assert.Equal(evaluationEntity.TemplateId, evaluationDto.TemplateId);
+        Assert.Equal(evaluationEntity.TeacherId, evaluationDto.TeacherId);
+        Assert.Equal(evaluationEntity.CourseName, evaluationDto.CourseName);
+        Assert.Equal(evaluationEntity.Date, evaluationDto.Date);
+        Assert.Equal(evaluationEntity.Grade, evaluationDto.Grade);
+        Assert.Equal(evaluationEntity.PairName, evaluationDto.PairName);
+    }
+    
+    [Fact]
+    public void EvaluationDto_To_EvaluationEntity()
+    {
+        // Arrange
+        var evaluationDto = new EvaluationDto
+        {
+            Id = 1,
+            StudentId = 1,
+            TemplateId = 1,
+            TeacherId = 1,
+            CourseName = "Course 1",
+            Date = new DateTime(2024, 3, 16),
+            Grade = 0,
+            PairName = ""
+        };
+
+        // Act
+        var evaluationEntity = Entities2Dto.Translator.ToEntity(evaluationDto);
+        
+        // Assert
+        Assert.NotNull(evaluationEntity);
+        Assert.Equal(evaluationDto.Id, evaluationEntity.Id);
+        Assert.Equal(evaluationDto.StudentId, evaluationEntity.StudentId);
+        Assert.Equal(evaluationDto.TemplateId, evaluationEntity.TemplateId);
+        Assert.Equal(evaluationDto.TeacherId, evaluationEntity.TeacherId);
+        Assert.Equal(evaluationDto.CourseName, evaluationEntity.CourseName);
+        Assert.Equal(evaluationDto.Date, evaluationEntity.Date);
+        Assert.Equal(evaluationDto.Grade, evaluationEntity.Grade);
+        Assert.Equal(evaluationDto.PairName, evaluationEntity.PairName);
+    }
+    
+    
 }

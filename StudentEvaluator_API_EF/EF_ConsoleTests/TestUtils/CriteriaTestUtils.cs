@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 
 namespace EF_ConsoleTests.TestUtils;
 
-public class CriteriaTestUtils
+public static class CriteriaTestUtils
 {
     // TextCriteria
     

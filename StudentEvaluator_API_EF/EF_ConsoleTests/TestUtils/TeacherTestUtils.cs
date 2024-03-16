@@ -7,7 +7,7 @@ namespace EF_ConsoleTests.TestUtils;
 /// <summary>
 /// Class containing utility methods for Teacher tests.
 /// </summary>
-public class TeacherTestUtils
+public static class TeacherTestUtils
 {
 
     /// <summary>

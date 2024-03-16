@@ -1,12 +1,6 @@
-﻿
-using API_Dto;
-using System.Net.Http.Json;
-using System.Text.Json;
-using System.Text;
-using API_Dto2Model;
-using API_Model;
+﻿using API_Model;
 using Client_Model;
-using EF_Entities;
+using Dto2Model;
 
 HttpClient httpClient = new HttpClient();
 httpClient.BaseAddress = new Uri("https://localhost:7140");
@@ -32,15 +26,27 @@ var newStudent = new Student(0,"Mathieu", "Berger", "photo", 1, 1);
 
 newStudent = await apiDataManager.PostStudent(newStudent);
 
-Console.WriteLine(newStudent);
+if (newStudent != null)
+{
+    Console.WriteLine(newStudent);
+}
+else
+{
+    Console.WriteLine("PostStudent returned null.");
+}
+
 //PutStudent :
 Console.WriteLine("Test PutStudent :");
 
-newStudent.Name = "Pierre";
+if (newStudent != null)
+{
+    newStudent.Name = "Pierre";
+}
 
-
-newStudent = await apiDataManager.PutStudent(newStudent.Id, newStudent);
-
+if (newStudent != null)
+{
+    newStudent = await apiDataManager.PutStudent(newStudent.Id, newStudent);
+}
 
 Console.WriteLine(newStudent);
 //GetStudentById :
@@ -52,9 +58,11 @@ Console.WriteLine(studentById);
 
 //DeleteStudent :
 Console.WriteLine("Test DeleteStudent :");
-
-var repDelete = await apiDataManager.DeleteStudent(newStudent.Id);
-Console.WriteLine(repDelete);
+if (newStudent != null)
+{
+    var repDelete = await apiDataManager.DeleteStudent(newStudent.Id);
+    Console.WriteLine(repDelete);
+}
 
 students = await apiDataManager.GetStudents();
 Console.WriteLine($"Nombre d'éléments : {students.nbElement}");
@@ -97,9 +105,11 @@ Console.WriteLine(groupById);
 //DeleteGroup
 
 Console.WriteLine("Test DeleteGroup :\n");
-
- repDelete = await apiDataManager.DeleteGroup(newGroup.GroupYear, newGroup.GroupNumber);
-Console.WriteLine(repDelete);
+if (newGroup != null)
+{
+    var repDelete = await apiDataManager.DeleteGroup(newGroup.GroupYear, newGroup.GroupNumber);
+    Console.WriteLine(repDelete);
+}
 
 groups = await apiDataManager.GetGroups();
 Console.WriteLine($"Nombre d'éléments : {groups.nbElement}");
@@ -133,9 +143,11 @@ Console.WriteLine(lessonReponse);
 //PutLesson
 Console.WriteLine("Test PutLesson :\n");
 newLesson.Classroom = "Amphi B";
-lessonReponse = await apiDataManager.PutLesson(lessonReponse.Id, newLesson);
-
-Console.WriteLine(lessonReponse);
+if (lessonReponse != null)
+{
+    lessonReponse = await apiDataManager.PutLesson(lessonReponse.Id, newLesson);
+    Console.WriteLine(lessonReponse);
+}
 //GetLessonById
 
 Console.WriteLine("Test GetLessonById (id=1) :\n");
@@ -156,9 +168,11 @@ foreach (var lesson in lessonsByTeacherId.Data)
 //DeleteLesson
 
 Console.WriteLine("Test DeleteLesson :\n");
-
-repDelete = await apiDataManager.DeleteLesson(lessonReponse.Id);
-Console.WriteLine(repDelete);
+if (lessonReponse != null)
+{
+    var repDelete = await apiDataManager.DeleteLesson(lessonReponse.Id);
+    Console.WriteLine(repDelete);
+}
 
 lessons = await apiDataManager.GetLessons();
 Console.WriteLine($"Nombre d'éléments : {lessons.nbElement}");
@@ -191,8 +205,10 @@ Console.WriteLine(evalReponse);
 //PutEvaluation
 Console.WriteLine("Test PutEvaluation :\n");
 newEval.CourseName= "PHP";
-evalReponse = await apiDataManager.PutEvaluation(evalReponse.Id, newEval);
-
+if (evalReponse != null)
+{
+    evalReponse = await apiDataManager.PutEvaluation(evalReponse.Id, newEval);
+}
 Console.WriteLine(evalReponse);
 //GetEvaluationById
 
@@ -214,9 +230,11 @@ foreach (var eval in evalsByTeacherId.Data)
 //DeleteEvalation
 
 Console.WriteLine("Test DeleteEvaluation :\n");
-
-repDelete = await apiDataManager.DeleteEvaluation(evalReponse.Id);
-Console.WriteLine(repDelete);
+if (evalReponse != null)
+{
+    var repDelete = await apiDataManager.DeleteEvaluation(evalReponse.Id);
+    Console.WriteLine(repDelete);
+}
 
 evals = await apiDataManager.GetEvaluations();
 Console.WriteLine($"Nombre d'éléments : {evals.nbElement}");
@@ -248,8 +266,10 @@ Console.WriteLine(userRep);
 
 Console.WriteLine("Test PutUser :\n");
 newUser.Username = "ProfMarc";
-userRep = await apiDataManager.PutUser(userRep.Id, newUser);
-
+if (userRep != null)
+{
+    userRep = await apiDataManager.PutUser(userRep.Id, newUser);
+}
 Console.WriteLine(userRep);
 //GetUserById
 
@@ -270,9 +290,11 @@ Console.WriteLine(loginReponse);
 //DeleteUser
 
 Console.WriteLine("Test DeleteUser :\n");
-
-repDelete = await apiDataManager.DeleteUser(userRep.Id);
-Console.WriteLine(repDelete);
+if (userRep != null)
+{
+    var repDelete = await apiDataManager.DeleteUser(userRep.Id);
+    Console.WriteLine(repDelete);
+}
 
 users = await apiDataManager.GetUsers();
 Console.WriteLine($"Nombre d'éléments : {users.nbElement}");
@@ -296,9 +318,9 @@ foreach (var template in templates.Data)
 //GetEmptyTemplateByUserId
 Console.WriteLine("Test GetEmptyTemplatesByUserId :\n");
 
-var EmptyTemplates = await apiDataManager.GetEmptyTemplatesByUserId(1);
-Console.WriteLine($"Nombre d'éléments : {EmptyTemplates.nbElement}");
-foreach (var template in EmptyTemplates.Data)
+var emptyTemplates = await apiDataManager.GetEmptyTemplatesByUserId(1);
+Console.WriteLine($"Nombre d'éléments : {emptyTemplates.nbElement}");
+foreach (var template in emptyTemplates.Data)
 {
     Console.WriteLine(template);
 }
@@ -314,8 +336,10 @@ Console.WriteLine(templateRep);
 //PutTemplate
 Console.WriteLine("Test PutTemplate :\n");
 newTemplate.Name = "Exam de Proba";
-templateRep = await apiDataManager.PutTemplate(templateRep.Id, newTemplate);
-
+if (templateRep != null)
+{
+    templateRep = await apiDataManager.PutTemplate(templateRep.Id, newTemplate);
+}
 Console.WriteLine(templateRep);
 //GetTemplateById
 
@@ -327,9 +351,11 @@ Console.WriteLine(templateId);
 
 //DeleteTemplate
 Console.WriteLine("Test DeleteTemplate :\n");
-
-repDelete = await apiDataManager.DeleteTemplate(templateRep.Id);
-Console.WriteLine(repDelete);
+if (templateRep != null)
+{
+    var repDelete = await apiDataManager.DeleteTemplate(templateRep.Id);
+    Console.WriteLine(repDelete);
+}
 
 templates = await apiDataManager.GetEmptyTemplatesByUserId(1);
 Console.WriteLine($"Nombre d'éléments : {templates.nbElement}");
@@ -337,4 +363,3 @@ foreach (var template in templates.Data)
 {
     Console.WriteLine(template);
 }
-

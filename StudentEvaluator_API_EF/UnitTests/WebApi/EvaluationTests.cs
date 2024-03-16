@@ -5,6 +5,7 @@ using API_EF;
 using API_EF.Controllers.V1;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using API_EF.Controllers;
 
 namespace EF_UnitTests.WebApi;
 
@@ -298,5 +299,38 @@ public class EvaluationTests
         var noContentResult = Assert.IsType<NoContentResult>(result);
     }
 
+    [Fact]
+    public async void TestUpdateEval_OkResult()
+    {
+        // Arrange
+        _mockRepo.Setup(service => service.PutEvaluation(It.IsAny<long>(), It.IsAny<EvaluationDto>()))
+            .ReturnsAsync(new EvaluationReponseDto
+            {
+                CourseName = "Java",
+                Date = DateTime.Now,
+                PairName = null
+            });
+
+        // Act
+        var result = await _evalController.PutEvaluation(123, new EvaluationDto());
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnedStudent = Assert.IsType<EvaluationReponseDto>(okResult.Value);
+    }
+
+    [Fact]
+    public async void TestUpdateEval_NotFoundResult()
+    {
+        // Arrange
+        _mockRepo.Setup(service => service.PutEvaluation(It.IsAny<long>(), It.IsAny<EvaluationDto>()))
+            .ReturnsAsync((EvaluationReponseDto)null);
+
+        // Act
+        var result = await _evalController.PutEvaluation(123, new EvaluationDto());
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result);
+    }
 }
 

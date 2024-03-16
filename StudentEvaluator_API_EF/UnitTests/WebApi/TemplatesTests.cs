@@ -26,21 +26,22 @@ public class TemplatesTests
     public async void TestAddTemplate_OkResult()
     {
         // Arrange
-        var newTemplateDto = new TemplateDto{
-            Id=1,
-            Name="Exam SQL",
-            Criterias= new List<CriteriaDto>{
+        var newTemplateDto = new TemplateDto
+        {
+            Id = 1,
+            Name = "Exam SQL",
+            Criterias = new List<CriteriaDto>{
                 new TextCriteriaDto(),
                 new RadioCriteriaDto()
                 }
 
         };
 
-        _mockRepo.Setup(service => service.PostTemplate(It.IsAny<long>(),It.IsAny<TemplateDto>()))
+        _mockRepo.Setup(service => service.PostTemplate(It.IsAny<long>(), It.IsAny<TemplateDto>()))
              .ReturnsAsync(newTemplateDto);
 
         // Act
-        var result = await _templateController.PostTemplate(1,newTemplateDto);
+        var result = await _templateController.PostTemplate(1, newTemplateDto);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -70,10 +71,10 @@ public class TemplatesTests
         // Arrange
 
         _mockRepo.Setup(service => service.DeleteTemplate(It.IsAny<long>()))
-            .ReturnsAsync(true); 
+            .ReturnsAsync(true);
 
         // Act
-        var result = await _templateController.DeleteTemplate(1); 
+        var result = await _templateController.DeleteTemplate(1);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -87,10 +88,10 @@ public class TemplatesTests
     {
         // Arrange
         _mockRepo.Setup(service => service.DeleteTemplate(It.IsAny<long>()))
-            .ReturnsAsync(false); 
+            .ReturnsAsync(false);
 
         // Act
-        var result = await _templateController.DeleteTemplate(1); 
+        var result = await _templateController.DeleteTemplate(1);
 
         // Assert
         Assert.IsType<NotFoundResult>(result);
@@ -166,11 +167,11 @@ public class TemplatesTests
 
         };
 
-        _mockRepo.Setup(service => service.GetTemplateById(It.IsAny<long>(),It.IsAny<long>()))
-            .ReturnsAsync(existingTemplateDto); 
+        _mockRepo.Setup(service => service.GetTemplateById(It.IsAny<long>(), It.IsAny<long>()))
+            .ReturnsAsync(existingTemplateDto);
 
         // Act
-        var result = await _templateController.GetTemplateById(userid,templateid);
+        var result = await _templateController.GetTemplateById(userid, templateid);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -184,11 +185,11 @@ public class TemplatesTests
     public async void TestGetTemplateById_NotFound()
     {
         // Arrange
-        _mockRepo.Setup(service => service.GetTemplateById(It.IsAny<long>(),It.IsAny<long>()))
-            .ReturnsAsync((TemplateDto)null); 
+        _mockRepo.Setup(service => service.GetTemplateById(It.IsAny<long>(), It.IsAny<long>()))
+            .ReturnsAsync((TemplateDto)null);
 
         // Act
-        var result = await _templateController.GetTemplateById(1,1);
+        var result = await _templateController.GetTemplateById(1, 1);
 
         // Assert
         Assert.IsType<NotFoundResult>(result);
@@ -234,15 +235,44 @@ public class TemplatesTests
     public async void TestGetEmptyTemplateByUserId_NotFound()
     {
         // Arrange
-        _mockRepo.Setup(service => service.GetEmptyTemplatesByUserId(It.IsAny<long>(),It.IsAny<int>(), It.IsAny<int>()))
+        _mockRepo.Setup(service => service.GetEmptyTemplatesByUserId(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync((PageReponse<TemplateDto>)null);
 
         // Act
-        var result = await _templateController.GetEmptyTemplatesByUserId(1,1);
+        var result = await _templateController.GetEmptyTemplatesByUserId(1, 1);
 
         // Assert
         var noContentResult = Assert.IsType<NoContentResult>(result);
     }
 
+    [Fact]
+    public async void TestUpdateTemplate_OkResult()
+    {
+        // Arrange
+
+        _mockRepo.Setup(service => service.PutTemplate(It.IsAny<long>(), It.IsAny<TemplateDto>()))
+            .ReturnsAsync((long id, TemplateDto template) => template);
+
+        // Act
+        var result = await _templateController.PutTemplate(123, new TemplateDto());
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnedStudent = Assert.IsType<TemplateDto>(okResult.Value);
+    }
+
+    [Fact]
+    public async void TestUpdateTemplate_NotFoundResult()
+    {
+        // Arrange
+        _mockRepo.Setup(service => service.PutTemplate(It.IsAny<long>(), It.IsAny<TemplateDto>()))
+            .ReturnsAsync((long id, TemplateDto template) => null);
+
+        // Act
+        var result = await _templateController.PutTemplate(123, new TemplateDto());
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result);
+    }
 }
 

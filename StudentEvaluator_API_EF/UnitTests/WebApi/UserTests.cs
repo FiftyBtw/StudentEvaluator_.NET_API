@@ -102,14 +102,61 @@ public class UserTests
         _mockRepo.Setup(service => service.PutUser(It.IsAny<long>(), It.IsAny<UserDto>()))
             .ReturnsAsync((long id, UserDto user) => user);
 
-     
-
         // Act
         var result = await _usersController.PutUser(123, new UserDto());
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
         var returnedStudent = Assert.IsType<UserDto>(okResult.Value);
+    }
+  
+
+    [Fact]
+    public async void TestGetUsers_OkResult()
+    {
+        // Arrange
+        var users = new List<UserDto>
+        {
+            new UserDto{
+                Id=1,
+                Username="ProfDupuit",
+                Password="test",
+                roles=[]
+            },
+             new UserDto{
+                Id=2,
+                Username="ProfMarc",
+                Password="test2",
+                roles=[]
+            },
+
+        };
+        var pageResponse = new PageReponse<UserDto>(users.Count, users);
+
+        _mockRepo.Setup(service => service.GetUsers(It.IsAny<int>(), It.IsAny<int>()))
+            .ReturnsAsync(pageResponse);
+
+        // Act
+        var result = await _usersController.GetUsers();
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnedPageResponse = Assert.IsType<PageReponse<UserDto>>(okResult.Value);
+        Assert.Equal(users.Count, returnedPageResponse.Data.Count());
+    }
+
+    [Fact]
+    public async void TestGetUsers_NotContent()
+    {
+        // Arrange
+        _mockRepo.Setup(service => service.GetUsers(It.IsAny<int>(), It.IsAny<int>()))
+            .ReturnsAsync((PageReponse<UserDto>)null);
+
+        // Act
+        var result = await _usersController.GetUsers();
+
+        // Assert
+        Assert.IsType<NoContentResult>(result);
     }
 
     [Fact]
@@ -149,19 +196,66 @@ public class UserTests
         Assert.Equal(existingUser.roles, returnedUser.roles);
     }
 
+ 
     [Fact]
     public async void TestGetUserById_NotFoundResult()
     {
         // Arrange
         _mockRepo.Setup(service => service.GetUserById(It.IsAny<long>()))
-            .ReturnsAsync((long id) => null); 
+            .ReturnsAsync((long id) => null);
 
         // Act
-        var result = await _usersController.GetUserById(123); 
+        var result = await _usersController.GetUserById(123);
 
         // Assert
         Assert.IsType<NotFoundResult>(result);
     }
+
+    [Fact]
+    public async void TestLogin_UnAuthorized()
+    {
+        // Arrange
+        _mockRepo.Setup(service => service.Login(It.IsAny<LoginRequestDto>()))
+            .ReturnsAsync((LoginRequestDto loginRequestDto) => null);
+
+        // Act
+        var result = await _usersController.Login(new LoginRequestDto
+        {
+            Username = "adjaziodjazodi",
+            Password = "adiazoidjazdioazd"
+        });
+
+        // Assert
+        Assert.IsType<UnauthorizedResult>(result);
+    }
+
+    [Fact]
+    public async void TestLogin_OkResult()
+    {
+        // Arrange
+        var loginRequestDto = new LoginRequestDto
+        {
+            Username = "ProfDupuit",
+            Password ="test"
+
+        };
+        _mockRepo.Setup(service => service.Login(It.IsAny<LoginRequestDto>()))
+            .ReturnsAsync(new LoginResponseDto
+            {
+                Id = 1,
+                Username="ProfDupuit",
+                Roles = []
+            });
+
+        // Act
+        var result = await _usersController.Login(loginRequestDto);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnedLoginReponse = Assert.IsType<LoginResponseDto>(okResult.Value);
+        Assert.Equal(loginRequestDto.Username, returnedLoginReponse.Username);
+    }
+
 
 }
 

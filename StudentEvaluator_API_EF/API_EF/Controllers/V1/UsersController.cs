@@ -35,10 +35,8 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> GetUsers(int index = 0, int count = 10)
     {
         _logger.LogInformation(LogEvents.GetItems, "GetUsers");
-        if (_userService == null)
-        {
-            return StatusCode(500);
-        }
+        if (_userService == null) return StatusCode(500);
+
         var data = await _userService.GetUsers(index, count);
         if (data == null)       
         {

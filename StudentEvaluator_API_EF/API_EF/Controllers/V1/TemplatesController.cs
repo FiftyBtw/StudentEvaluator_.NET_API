@@ -141,7 +141,7 @@ public class TemplatesController : ControllerBase
         var data = await _templateService.PutTemplate(id, template);
         if (data == null)
         {
-            return StatusCode(500);
+            return NotFound();
         }
         else
         {

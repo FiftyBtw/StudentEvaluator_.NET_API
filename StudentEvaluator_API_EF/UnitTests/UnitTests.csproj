@@ -32,6 +32,7 @@
       <ProjectReference Include="..\DbContextLib\EF_DbContextLib.csproj" />
       <ProjectReference Include="..\Dto\API_Dto.csproj" />
       <ProjectReference Include="..\EF_Entities\EF_Entities.csproj" />
+      <ProjectReference Include="..\Model2Entities\Model2Entities.csproj" />
       <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 

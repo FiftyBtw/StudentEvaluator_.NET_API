@@ -259,15 +259,16 @@ public static class Translator
     
     public static Template ToModel(this TemplateEntity template)
     {
-        return new Template(0, template.Name, new List<Criteria>());
+        return new Template(template.Id, template.Name, template.Criteria.Select(CriteriaEntityConverter.ConvertToModel));
     }
     
    public static TemplateEntity ToEntity(this Template template)
     {
         return new TemplateEntity
         {
+            Id = template.Id,
             Name = template.Name,
-            Criteria = template.Criterias.Select(CriteriaEntityConverter.ConvertToEntity)
+            Criteria = template.Criterias.Select(CriteriaEntityConverter.ConvertToEntity),
         };
     }
    
@@ -331,4 +332,44 @@ public static class Translator
         }
         return evaluations;
     }
+    
+    // User
+    
+    public static User ToModel(this UserEntity user)
+    {
+        return new User(user.Id, user.Username, user.Password, user.Roles);
+    }
+    
+    public static UserEntity ToEntity(this User user)
+    {
+        return new UserEntity
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Password = user.Password,
+            Roles = user.Roles
+        };
+    }
+    
+    public static IEnumerable<User> ToModels(this IEnumerable<UserEntity> entities)
+    {
+        IEnumerable<User> users = new List<User>();
+        foreach (var entity in entities)
+        {
+            (users as List<User>).Add(entity.ToModel());
+        }
+        return users;
+    }
+    
+    public static IEnumerable<UserEntity> ToEntities(this IEnumerable<User> models)
+    {
+        IEnumerable<UserEntity> users = new List<UserEntity>();
+        foreach (var model in models)
+        {
+            (users as List<UserEntity>).Add(model.ToEntity());
+        }
+        return users;
+    }
+    
+    
 }

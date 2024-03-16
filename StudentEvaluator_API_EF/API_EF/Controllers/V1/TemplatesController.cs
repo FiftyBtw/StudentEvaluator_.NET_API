@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
-namespace API_EF.Controllers;
+namespace API_EF.Controllers.V1;
 
 /// <summary>
 ///  Controller for templates

@@ -1,4 +1,4 @@
-using Xunit;
+using System.Diagnostics;
 using EF_Entities; // Adjust the namespace based on your project structure
 using API_Dto; // Adjust the namespace based on your project structure
 
@@ -15,7 +15,7 @@ public class TranslatorEntities2DtoTests
             Id = 1,
             Name = "John",
             Lastname = "Doe",
-            UrlPhoto = "http://example.com/photo.jpg",
+            UrlPhoto = "https://example.com/photo.jpg",
             GroupNumber = 1,
             GroupYear = 1
         };
@@ -42,7 +42,7 @@ public class TranslatorEntities2DtoTests
             Id = 1,
             Name = "John",
             Lastname = "Doe",
-            UrlPhoto = "http://example.com/photo.jpg",
+            UrlPhoto = "https://example.com/photo.jpg",
             GroupNumber = 1,
             GroupYear = 1
         };
@@ -71,7 +71,7 @@ public class TranslatorEntities2DtoTests
                 Id = 1,
                 Name = "John",
                 Lastname = "Doe",
-                UrlPhoto = "http://example.com/photo.jpg",
+                UrlPhoto = "https://example.com/photo.jpg",
                 GroupNumber = 1,
                 GroupYear = 1
             },
@@ -80,7 +80,7 @@ public class TranslatorEntities2DtoTests
                 Id = 2,
                 Name = "Jane",
                 Lastname = "Doe",
-                UrlPhoto = "http://example.com/photo.jpg",
+                UrlPhoto = "https://example.com/photo.jpg",
                 GroupNumber = 1,
                 GroupYear = 1
             }
@@ -91,8 +91,9 @@ public class TranslatorEntities2DtoTests
         
         // Assert
         Assert.NotNull(studentDtos);
-        Assert.Equal(studentEntities.Count, studentDtos.Count());
-        foreach (var studentDto in studentDtos)
+        var enumerable = studentDtos as StudentDto[] ?? studentDtos.ToArray();
+        Assert.Equal(studentEntities.Count, enumerable.Length);
+        foreach (var studentDto in enumerable)
         {
             var studentEntity = studentEntities.FirstOrDefault(s => s.Id == studentDto.Id);
             Assert.NotNull(studentEntity);
@@ -116,7 +117,7 @@ public class TranslatorEntities2DtoTests
                 Id = 1,
                 Name = "John",
                 Lastname = "Doe",
-                UrlPhoto = "http://example.com/photo.jpg",
+                UrlPhoto = "https://example.com/photo.jpg",
                 GroupNumber = 1,
                 GroupYear = 1
             },
@@ -125,7 +126,7 @@ public class TranslatorEntities2DtoTests
                 Id = 2,
                 Name = "Jane",
                 Lastname = "Doe",
-                UrlPhoto = "http://example.com/photo.jpg",
+                UrlPhoto = "https://example.com/photo.jpg",
                 GroupNumber = 1,
                 GroupYear = 1
             }
@@ -136,8 +137,9 @@ public class TranslatorEntities2DtoTests
         
         // Assert
         Assert.NotNull(studentEntities);
-        Assert.Equal(studentDtos.Count, studentEntities.Count());
-        foreach (var studentEntity in studentEntities)
+        var enumerable = studentEntities as StudentEntity[] ?? studentEntities.ToArray();
+        Assert.Equal(studentDtos.Count, enumerable.Length);
+        foreach (var studentEntity in enumerable)
         {
             var studentDto = studentDtos.FirstOrDefault(s => s.Id == studentEntity.Id);
             Assert.NotNull(studentDto);
@@ -165,7 +167,7 @@ public class TranslatorEntities2DtoTests
                     Id = 1,
                     Name = "John",
                     Lastname = "Doe",
-                    UrlPhoto = "http://example.com/photo.jpg",
+                    UrlPhoto = "https://example.com/photo.jpg",
                     GroupNumber = 1,
                     GroupYear = 1
                 },
@@ -174,7 +176,7 @@ public class TranslatorEntities2DtoTests
                     Id = 2,
                     Name = "Jane",
                     Lastname = "Doe",
-                    UrlPhoto = "http://example.com/photo.jpg",
+                    UrlPhoto = "https//example.com/photo.jpg",
                     GroupNumber = 1,
                     GroupYear = 1
                 }
@@ -219,7 +221,7 @@ public class TranslatorEntities2DtoTests
                     Id = 1,
                     Name = "John",
                     Lastname = "Doe",
-                    UrlPhoto = "http://example.com/photo.jpg",
+                    UrlPhoto = "https://example.com/photo.jpg",
                     GroupNumber = 1,
                     GroupYear = 1
                 },
@@ -228,7 +230,7 @@ public class TranslatorEntities2DtoTests
                     Id = 2,
                     Name = "Jane",
                     Lastname = "Doe",
-                    UrlPhoto = "http://example.com/photo.jpg",
+                    UrlPhoto = "https://example.com/photo.jpg",
                     GroupNumber = 1,
                     GroupYear = 1
                 }
@@ -275,7 +277,7 @@ public class TranslatorEntities2DtoTests
                         Id = 1,
                         Name = "John",
                         Lastname = "Doe",
-                        UrlPhoto = "http://example.com/photo.jpg",
+                        UrlPhoto = "https://example.com/photo.jpg",
                         GroupNumber = 1,
                         GroupYear = 1
                     },
@@ -284,7 +286,7 @@ public class TranslatorEntities2DtoTests
                         Id = 2,
                         Name = "Jane",
                         Lastname = "Doe",
-                        UrlPhoto = "http://example.com/photo.jpg",
+                        UrlPhoto = "https://example.com/photo.jpg",
                         GroupNumber = 1,
                         GroupYear = 1
                     }
@@ -301,7 +303,7 @@ public class TranslatorEntities2DtoTests
                         Id = 3,
                         Name = "John",
                         Lastname = "Doe",
-                        UrlPhoto = "http://example.com/photo.jpg",
+                        UrlPhoto = "https://example.com/photo.jpg",
                         GroupNumber = 2,
                         GroupYear = 1
                     },
@@ -310,7 +312,7 @@ public class TranslatorEntities2DtoTests
                         Id = 4,
                         Name = "Jane",
                         Lastname = "Doe",
-                        UrlPhoto = "http://example.com/photo.jpg",
+                        UrlPhoto = "https://example.com/photo.jpg",
                         GroupNumber = 2,
                         GroupYear = 1
                     }
@@ -323,8 +325,9 @@ public class TranslatorEntities2DtoTests
         
         // Assert
         Assert.NotNull(groupDtos);
-        Assert.Equal(groupEntities.Count, groupDtos.Count());
-        foreach (var groupDto in groupDtos)
+        var enumerable = groupDtos as GroupDto[] ?? groupDtos.ToArray();
+        Assert.Equal(groupEntities.Count, enumerable.Length);
+        foreach (var groupDto in enumerable)
         {
             var groupEntity = groupEntities.FirstOrDefault(s => s.GroupYear == groupDto.GroupYear && s.GroupNumber == groupDto.GroupNumber);
             Assert.NotNull(groupEntity);
@@ -363,7 +366,7 @@ public class TranslatorEntities2DtoTests
                         Id = 1,
                         Name = "John",
                         Lastname = "Doe",
-                        UrlPhoto = "http://example.com/photo.jpg",
+                        UrlPhoto = "https://example.com/photo.jpg",
                         GroupNumber = 1,
                         GroupYear = 1
                     },
@@ -372,7 +375,7 @@ public class TranslatorEntities2DtoTests
                         Id = 2,
                         Name = "Jane",
                         Lastname = "Doe",
-                        UrlPhoto = "http://example.com/photo.jpg",
+                        UrlPhoto = "https://example.com/photo.jpg",
                         GroupNumber = 1,
                         GroupYear = 1
                     }
@@ -389,7 +392,7 @@ public class TranslatorEntities2DtoTests
                         Id = 3,
                         Name = "John",
                         Lastname = "Doe",
-                        UrlPhoto = "http://example.com/photo.jpg",
+                        UrlPhoto = "https://example.com/photo.jpg",
                         GroupNumber = 2,
                         GroupYear = 1
                     },
@@ -398,7 +401,7 @@ public class TranslatorEntities2DtoTests
                         Id = 4,
                         Name = "Jane",
                         Lastname = "Doe",
-                        UrlPhoto = "http://example.com/photo.jpg",
+                        UrlPhoto = "https://example.com/photo.jpg",
                         GroupNumber = 2,
                         GroupYear = 1
                     }
@@ -411,8 +414,9 @@ public class TranslatorEntities2DtoTests
 
         // Assert
         Assert.NotNull(groupEntities);
-        Assert.Equal(groupDtos.Count, groupEntities.Count());
-        foreach (var groupEntity in groupEntities)
+        var enumerable = groupEntities as GroupEntity[] ?? groupEntities.ToArray();
+        Assert.Equal(groupDtos.Count, enumerable.Length);
+        foreach (var groupEntity in enumerable)
         {
             var groupDto = groupDtos.FirstOrDefault(s =>
                 s.GroupYear == groupEntity.GroupYear && s.GroupNumber == groupEntity.GroupNumber);
@@ -514,8 +518,9 @@ public class TranslatorEntities2DtoTests
         
         // Assert
         Assert.NotNull(textCriteriaDtos);
-        Assert.Equal(textCriteriaEntities.Count, textCriteriaDtos.Count());
-        foreach (var textCriteriaDto in textCriteriaDtos)
+        var criteriaDtos = textCriteriaDtos as TextCriteriaDto[] ?? textCriteriaDtos.ToArray();
+        Assert.Equal(textCriteriaEntities.Count, criteriaDtos.Length);
+        foreach (var textCriteriaDto in criteriaDtos)
         {
             var textCriteriaEntity = textCriteriaEntities.FirstOrDefault(s => s.Id == textCriteriaDto.Id);
             Assert.NotNull(textCriteriaEntity);
@@ -556,8 +561,9 @@ public class TranslatorEntities2DtoTests
         
         // Assert
         Assert.NotNull(textCriteriaEntities);
-        Assert.Equal(textCriteriaDtos.Count, textCriteriaEntities.Count());
-        foreach (var textCriteriaEntity in textCriteriaEntities)
+        var criteriaEntities = textCriteriaEntities as TextCriteriaEntity[] ?? textCriteriaEntities.ToArray();
+        Assert.Equal(textCriteriaDtos.Count, criteriaEntities.Length);
+        foreach (var textCriteriaEntity in criteriaEntities)
         {
             var textCriteriaDto = textCriteriaDtos.FirstOrDefault(s => s.Id == textCriteriaEntity.Id);
             Assert.NotNull(textCriteriaDto);
@@ -648,8 +654,9 @@ public class TranslatorEntities2DtoTests
         
         // Assert
         Assert.NotNull(sliderCriteriaDtos);
-        Assert.Equal(sliderCriteriaEntities.Count, sliderCriteriaDtos.Count());
-        foreach (var sliderCriteriaDto in sliderCriteriaDtos)
+        var criteriaDtos = sliderCriteriaDtos as SliderCriteriaDto[] ?? sliderCriteriaDtos.ToArray();
+        Assert.Equal(sliderCriteriaEntities.Count, criteriaDtos.Length);
+        foreach (var sliderCriteriaDto in criteriaDtos)
         {
             var sliderCriteriaEntity = sliderCriteriaEntities.FirstOrDefault(s => s.Id == sliderCriteriaDto.Id);
             Assert.NotNull(sliderCriteriaEntity);
@@ -690,8 +697,9 @@ public class TranslatorEntities2DtoTests
         
         // Assert
         Assert.NotNull(sliderCriteriaEntities);
-        Assert.Equal(sliderCriteriaDtos.Count, sliderCriteriaEntities.Count());
-        foreach (var sliderCriteriaEntity in sliderCriteriaEntities)
+        var criteriaEntities = sliderCriteriaEntities as SliderCriteriaEntity[] ?? sliderCriteriaEntities.ToArray();
+        Assert.Equal(sliderCriteriaDtos.Count, criteriaEntities.Length);
+        foreach (var sliderCriteriaEntity in criteriaEntities)
         {
             var sliderCriteriaDto = sliderCriteriaDtos.FirstOrDefault(s => s.Id == sliderCriteriaEntity.Id);
             Assert.NotNull(sliderCriteriaDto);
@@ -788,8 +796,9 @@ public class TranslatorEntities2DtoTests
         
         // Assert
         Assert.NotNull(radioCriteriaDtos);
-        Assert.Equal(radioCriteriaEntities.Count, radioCriteriaDtos.Count());
-        foreach (var radioCriteriaDto in radioCriteriaDtos)
+        var criteriaDtos = radioCriteriaDtos as RadioCriteriaDto[] ?? radioCriteriaDtos.ToArray();
+        Assert.Equal(radioCriteriaEntities.Count, criteriaDtos.Length);
+        foreach (var radioCriteriaDto in criteriaDtos)
         {
             var radioCriteriaEntity = radioCriteriaEntities.FirstOrDefault(s => s.Id == radioCriteriaDto.Id);
             Assert.NotNull(radioCriteriaEntity);
@@ -833,8 +842,9 @@ public class TranslatorEntities2DtoTests
         
         // Assert
         Assert.NotNull(radioCriteriaEntities);
-        Assert.Equal(radioCriteriaDtos.Count, radioCriteriaEntities.Count());
-        foreach (var radioCriteriaEntity in radioCriteriaEntities)
+        var criteriaEntities = radioCriteriaEntities as RadioCriteriaEntity[] ?? radioCriteriaEntities.ToArray();
+        Assert.Equal(radioCriteriaDtos.Count, criteriaEntities.Length);
+        foreach (var radioCriteriaEntity in criteriaEntities)
         {
             var radioCriteriaDto = radioCriteriaDtos.FirstOrDefault(s => s.Id == radioCriteriaEntity.Id);
             Assert.NotNull(radioCriteriaDto);
@@ -929,8 +939,8 @@ public class TranslatorEntities2DtoTests
         {
             Id = 1,
             Name = "Template1",
-            Criterias = new List<CriteriaDto>
-            {
+            Criterias =
+            [
                 new TextCriteriaDto
                 {
                     Id = 1,
@@ -939,6 +949,7 @@ public class TranslatorEntities2DtoTests
                     Text = "This is a text",
                     TemplateId = 1
                 },
+
                 new TextCriteriaDto
                 {
                     Id = 2,
@@ -947,6 +958,7 @@ public class TranslatorEntities2DtoTests
                     Text = "This is another text",
                     TemplateId = 1
                 },
+
                 new SliderCriteriaDto
                 {
                     Id = 1,
@@ -955,6 +967,7 @@ public class TranslatorEntities2DtoTests
                     Value = 5,
                     TemplateId = 1
                 },
+
                 new SliderCriteriaDto
                 {
                     Id = 2,
@@ -963,6 +976,7 @@ public class TranslatorEntities2DtoTests
                     Value = 4,
                     TemplateId = 1
                 },
+
                 new RadioCriteriaDto
                 {
                     Id = 1,
@@ -972,6 +986,7 @@ public class TranslatorEntities2DtoTests
                     SelectedOption = "Option 1",
                     TemplateId = 1
                 },
+
                 new RadioCriteriaDto
                 {
                     Id = 2,
@@ -981,7 +996,7 @@ public class TranslatorEntities2DtoTests
                     SelectedOption = "Option 2",
                     TemplateId = 1
                 }
-            }
+            ]
         };
 
         // Act
@@ -999,8 +1014,8 @@ public class TranslatorEntities2DtoTests
     public void TemplateEntities_To_TemplateDtos()
     {
         // Arrange 
-        var templateEntities = new List<TemplateEntity>
-        {
+        List<TemplateEntity> templateEntities =
+        [
             new TemplateEntity
             {
                 Id = 1,
@@ -1059,6 +1074,7 @@ public class TranslatorEntities2DtoTests
                     }
                 }
             },
+
             new TemplateEntity
             {
                 Id = 2,
@@ -1117,21 +1133,23 @@ public class TranslatorEntities2DtoTests
                     }
                 }
             }
-        };
+        ];
 
         // Act
-        var templateDtos = Entities2Dto.Translator.ToDtos(templateEntities);
+        IEnumerable<TemplateDto> templateDtos = Entities2Dto.Translator.ToDtos(templateEntities);
         
         // Assert
         Assert.NotNull(templateDtos);
-        Assert.Equal(templateEntities.Count, templateDtos.Count());
-        foreach (var templateDto in templateDtos)
+        var enumerable = templateDtos as TemplateDto[] ?? templateDtos.ToArray();
+        Assert.Equal(templateEntities.Count, enumerable.Length);
+        foreach (TemplateDto templateDto in enumerable)
         {
-            var templateEntity = templateEntities.FirstOrDefault(s => s.Id == templateDto.Id);
+            TemplateEntity? templateEntity = templateEntities.FirstOrDefault(s => s.Id == templateDto.Id);
             Assert.NotNull(templateEntity);
             Assert.Equal(templateEntity.Id, templateDto.Id);
             Assert.Equal(templateEntity.Name, templateDto.Name);
             Assert.NotNull(templateDto.Criterias);
+            Debug.Assert(templateEntity.Criteria != null, "templateEntity.Criteria != null");
             Assert.Equal(templateEntity.Criteria.Count(), templateDto.Criterias.Count());
         }
     }
@@ -1147,8 +1165,8 @@ public class TranslatorEntities2DtoTests
             {
                 Id = 1,
                 Name = "Template1",
-                Criterias = new List<CriteriaDto>
-                {
+                Criterias =
+                [
                     new TextCriteriaDto
                     {
                         Id = 1,
@@ -1157,6 +1175,7 @@ public class TranslatorEntities2DtoTests
                         Text = "This is a text",
                         TemplateId = 1
                     },
+
                     new TextCriteriaDto
                     {
                         Id = 2,
@@ -1165,6 +1184,7 @@ public class TranslatorEntities2DtoTests
                         Text = "This is another text",
                         TemplateId = 1
                     },
+
                     new SliderCriteriaDto
                     {
                         Id = 1,
@@ -1173,6 +1193,7 @@ public class TranslatorEntities2DtoTests
                         Value = 5,
                         TemplateId = 1
                     },
+
                     new SliderCriteriaDto
                     {
                         Id = 2,
@@ -1181,6 +1202,7 @@ public class TranslatorEntities2DtoTests
                         Value = 4,
                         TemplateId = 1
                     },
+
                     new RadioCriteriaDto
                     {
                         Id = 1,
@@ -1190,6 +1212,7 @@ public class TranslatorEntities2DtoTests
                         SelectedOption = "Option 1",
                         TemplateId = 1
                     },
+
                     new RadioCriteriaDto
                     {
                         Id = 2,
@@ -1199,14 +1222,14 @@ public class TranslatorEntities2DtoTests
                         SelectedOption = "Option 2",
                         TemplateId = 1
                     }
-                }
+                ]
             },
             new TemplateDto
             {
                 Id = 2,
                 Name = "Template2",
-                Criterias = new List<CriteriaDto>
-                {
+                Criterias =
+                [
                     new TextCriteriaDto
                     {
                         Id = 3,
@@ -1215,6 +1238,7 @@ public class TranslatorEntities2DtoTests
                         Text = "This is a text",
                         TemplateId = 2
                     },
+
                     new TextCriteriaDto
                     {
                         Id = 4,
@@ -1223,6 +1247,7 @@ public class TranslatorEntities2DtoTests
                         Text = "This is another text",
                         TemplateId = 2
                     },
+
                     new SliderCriteriaDto
                     {
                         Id = 5,
@@ -1231,6 +1256,7 @@ public class TranslatorEntities2DtoTests
                         Value = 5,
                         TemplateId = 2
                     },
+
                     new SliderCriteriaDto
                     {
                         Id = 6,
@@ -1239,6 +1265,7 @@ public class TranslatorEntities2DtoTests
                         Value = 4,
                         TemplateId = 2
                     },
+
                     new RadioCriteriaDto
                     {
                         Id = 7,
@@ -1248,6 +1275,7 @@ public class TranslatorEntities2DtoTests
                         SelectedOption = "Option 1",
                         TemplateId = 2
                     },
+
                     new RadioCriteriaDto
                     {
                         Id = 8,
@@ -1257,7 +1285,7 @@ public class TranslatorEntities2DtoTests
                         SelectedOption = "Option 2",
                         TemplateId = 2
                     }
-                }
+                ]
             }
         };
         
@@ -1266,8 +1294,9 @@ public class TranslatorEntities2DtoTests
         
         // Assert
         Assert.NotNull(templateEntities);
-        Assert.Equal(templateDtos.Count, templateEntities.Count());
-        foreach (var templateEntity in templateEntities)
+        var enumerable = templateEntities as TemplateEntity[] ?? templateEntities.ToArray();
+        Assert.Equal(templateDtos.Count, enumerable.Length);
+        foreach (var templateEntity in enumerable)
         {
             var templateDto = templateDtos.FirstOrDefault(s => s.Id == templateEntity.Id);
             Assert.NotNull(templateDto);

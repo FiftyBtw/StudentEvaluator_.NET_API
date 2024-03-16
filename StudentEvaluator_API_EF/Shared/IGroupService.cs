@@ -16,9 +16,7 @@ namespace Shared;
 
         public Task<T?> GetGroupByIds(int gyear, int gnumber);
         public Task<T?> PostGroup(T group);
-
-        public Task<T?> PutGroup(int gyear, int gnumber, T group);
-
+        
         public Task<bool> DeleteGroup(int gyear, int gnumber);
     }
 

@@ -26,5 +26,11 @@
     <ProjectReference Include="..\EventLogs\EventLogs.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
-
+  
+<ItemGroup>
+  <SonarQubeSetting Include="sonar.coverage.exclusions">
+    <Value>**/swagger/*</Value>
+  </SonarQubeSetting>
+</ItemGroup>
+  
 </Project>

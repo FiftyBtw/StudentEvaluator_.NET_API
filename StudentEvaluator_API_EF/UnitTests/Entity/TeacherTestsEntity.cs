@@ -80,7 +80,7 @@ public class TeacherTestsEntity
             var teacherFromDb = context.TeacherSet.FirstOrDefault();
             Assert.NotNull(teacherFromDb);
 
-            Assert.Equal(context.TeacherSet.Count(), 1);
+            Assert.Equal(1, context.TeacherSet.Count());
             Assert.Equal(teacherToAdd.Username, teacherFromDb.Username);
             Assert.Equal(teacherToAdd.Password, teacherFromDb.Password);
             Assert.Equal(teacherToAdd.Roles, teacherFromDb.Roles);

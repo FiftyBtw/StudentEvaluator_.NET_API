@@ -451,8 +451,9 @@ namespace Entities2Dto
             {
                 return new TemplateEntity
                 {
+                    Id = template.Id,
                     Name = template.Name,
-                    Criteria = new List<CriteriaEntity>(),
+                    Criteria = template.Criterias?.Select(CriteriaDtoConverter.ConvertToEntity).ToList()
                 };
             }
             TemplateMapper.Set(templateEntity, template);

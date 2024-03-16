@@ -6,7 +6,7 @@ namespace EF_ConsoleTests.TestUtils;
 /// <summary>
 /// Class containing utility methods for Student tests.
 /// </summary>
-public class StudentTestUtils
+public static class StudentTestUtils
 {
     /// <summary>
     /// Adds a new student to the database.

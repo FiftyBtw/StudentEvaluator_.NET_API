@@ -32,15 +32,11 @@ namespace EF_DbContextLib
         public DbSet<EvaluationEntity> EvaluationSet { get; set; }
         // Propriété DbSet pour représenter l'ensemble des cours dans la base de données
         public DbSet<LessonEntity> LessonSet { get; set; }
-
+        
         public LibraryContext() { }
-
+        
         public LibraryContext(DbContextOptions options) : base(options) { }
         
-        ILoggerFactory _loggerFactory = new LoggerFactory();
-
-
-
         /// <summary>
         /// Method called when configuring the database context.
         /// </summary>
@@ -55,7 +51,7 @@ namespace EF_DbContextLib
                 // Utilise SQLite comme fournisseur de base de données avec le chemin spécifié
                 optionsBuilder.UseSqlite($"Data Source=StudentEvaluator_API_EF.db")
                     .EnableSensitiveDataLogging()
-                    .LogTo(Console.WriteLine, LogLevel.Information);
+                    .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information);
             }
 
         }

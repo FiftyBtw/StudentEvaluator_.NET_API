@@ -3,7 +3,7 @@ using EF_Entities;
 
 namespace EF_ConsoleTests.TestUtils;
 
-public class LessonTestUtils
+public static class LessonTestUtils
 {
     public static void AddLesson(LibraryContext context, string courseName, DateTime start, DateTime end, long teacherId, string classroom, int groupYear, int groupNumber)
     {

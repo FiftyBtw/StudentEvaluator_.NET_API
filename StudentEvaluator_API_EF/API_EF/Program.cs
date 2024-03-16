@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using Shared;
 using TP_ConsoDev.Data;
 using API_EF.Swagger;
+using EF_DbContextLib;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -98,7 +99,12 @@ builder.Services
         options.SubstituteApiVersionInUrl = true;
     });
 
-builder.Services.AddLogging();
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddConsole()
+        .AddDebug()
+        .SetMinimumLevel(LogLevel.Information);
+});
 
 
 var app = builder.Build();

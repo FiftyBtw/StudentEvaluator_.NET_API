@@ -3,7 +3,7 @@ using EF_Entities;
 
 namespace EF_ConsoleTests.TestUtils;
 
-public class EvaluationTestUtils
+public static class EvaluationTestUtils
 {
     public static void AddEvaluation(LibraryContext context, long templateId, long teacherId, long studentId, DateTime date, string courseName, string pairName, int grade)
     {

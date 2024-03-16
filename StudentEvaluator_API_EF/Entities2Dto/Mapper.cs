@@ -6,9 +6,15 @@
     /// </summary>
     /// <typeparam name="T">The type of the entity object.</typeparam>
     /// <typeparam name="U">The type of the DTO object.</typeparam>
-    public class Mapper<T,U>
+    public class Mapper<T,U> where T : notnull
     {
-        public Dictionary<T, U> map = new Dictionary<T,U>();
+        private Dictionary<T, U> map = new Dictionary<T, U>();
+
+        public Dictionary<T, U> Map
+        {
+            get { return map; }
+            set { map = value; }
+        }
 
 
         /// <summary>
@@ -32,11 +38,7 @@
         /// <returns>The entity object corresponding to the DTO object, or null if not found.</returns>
         public T? GetEntity(U dto)
         {
-            foreach (KeyValuePair<T, U> pair in map)
-            {
-                if (pair.Value.Equals(dto)) return pair.Key;
-            }
-            return default;
+            return map.FirstOrDefault(pair => pair.Value != null && pair.Value.Equals(dto)).Key;
         }
 
         /// <summary>
@@ -48,8 +50,7 @@
         {
             map.Add(entity,dto);
         }
-
-
+        
         /// <summary>
         /// Clears the mapping dictionary.
         /// </summary>

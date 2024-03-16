@@ -3,7 +3,7 @@ using EF_Entities;
 
 namespace EF_ConsoleTests.TestUtils;
 
-public class TemplateTestUtils
+public static class TemplateTestUtils
 {
     public static void AddTemplate(LibraryContext context, string name, long teacherId)
     {

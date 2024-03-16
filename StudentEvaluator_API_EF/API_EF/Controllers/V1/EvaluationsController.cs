@@ -35,10 +35,7 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> GetEvaluations(int index=0, int count=10)
         {
             _logger.LogInformation(LogEvents.GetItems, "GetEvaluations");
-            if (_evaluationService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_evaluationService == null) return StatusCode(500);
             var data = await _evaluationService.GetEvaluations(index, count);
             if (data == null)
             {
@@ -58,10 +55,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> GetEvaluationById(long id)
         {
             _logger.LogInformation(LogEvents.GetItem, "GetEvaluationById");
-            if (_evaluationService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_evaluationService == null)return StatusCode(500);
+
             var eval = await _evaluationService.GetEvaluationById(id);
             if(eval == null)
             {
@@ -83,10 +78,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> GetEvaluationsByTeacherId(long id,int index = 0, int count = 10)
         {
             _logger.LogInformation(LogEvents.GetItems, "GetEvaluationsByTeacherId");
-            if (_evaluationService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_evaluationService == null)return StatusCode(500);
+
             var data = await _evaluationService.GetEvaluationsByTeacherId(id,index,count);
             if (data == null)
             {
@@ -105,10 +98,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> PostEvaluation([FromBody] EvaluationDto eval)
         {
             _logger.LogInformation(LogEvents.InsertItem, "PostEvaluation");
-            if (_evaluationService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_evaluationService == null) return StatusCode(500);
+
             var evalDto = await _evaluationService.PostEvaluation(eval);
             if (evalDto == null)
             {
@@ -131,10 +122,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> PutEvaluation(long id, [FromBody] EvaluationDto eval)
         {
             _logger.LogInformation(LogEvents.UpdateItem, "PutEvaluation");
-            if (_evaluationService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_evaluationService == null) return StatusCode(500);
+
             var evalDto = await _evaluationService.PutEvaluation(id,eval);
             if (evalDto == null)
             {
@@ -156,10 +145,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> DeleteEvaluation(long id)
         {
             _logger.LogInformation(LogEvents.DeleteItem, "DeleteEvaluation");
-            if (_evaluationService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_evaluationService == null)return StatusCode(500);
+
             else
             {
                 bool b = await _evaluationService.DeleteEvaluation(id);

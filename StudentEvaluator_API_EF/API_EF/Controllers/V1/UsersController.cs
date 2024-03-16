@@ -61,10 +61,9 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> GetUserById(long id)
     {
         _logger.LogInformation(LogEvents.GetItem, "GetUserById");
-        if (_userService == null)
-        {
-            return StatusCode(500);
-        }
+
+        if (_userService == null)return StatusCode(500);
+
         var user = await _userService.GetUserById(id);
         if(user == null)
         {
@@ -83,10 +82,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> PostUser([FromBody] UserDto user)
     {
         _logger.LogInformation(LogEvents.InsertItem, "PostUser");
-        if (_userService == null)
-        {
-            return StatusCode(500);
-        }
+        if (_userService == null)return StatusCode(500);
         var userDto = await _userService.PostUser(user);
         if (userDto == null)
         {
@@ -108,10 +104,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> PutUser(long id, [FromBody] UserDto user)
     {
         _logger.LogInformation(LogEvents.UpdateItem, "PutUser");
-        if (_userService == null)
-        {
-            return StatusCode(500);
-        }
+        if (_userService == null)return StatusCode(500);
         var userDto = await _userService.PutUser(id, user);
         if (userDto == null)
         {
@@ -132,10 +125,8 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> DeleteUser(long id)
     {
         _logger.LogInformation(LogEvents.DeleteItem, "DeleteUser");
-        if (_userService == null)
-        {
-            return StatusCode(500);
-        }
+        if (_userService == null)return StatusCode(500);
+      
         var result = await _userService.DeleteUser(id);
         if (result)
         {
@@ -156,10 +147,8 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest)
     {
         _logger.LogInformation(LogEvents.GetItem, "Login");
-        if (_userService == null)
-        {
-            return StatusCode(500);
-        }
+        if (_userService == null)return StatusCode(500);
+       
         var loginResponse = await _userService.Login(loginRequest);
         if (loginResponse == null)
         {

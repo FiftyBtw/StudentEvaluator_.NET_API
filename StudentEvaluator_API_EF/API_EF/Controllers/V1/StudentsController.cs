@@ -35,10 +35,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> GetStudents(int index = 0 , int count = 10)
         {
             _logger.LogInformation(LogEvents.GetItems, "GetStudents");
-            if (_studentService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_studentService == null)return StatusCode(500);
+
             var data = await _studentService.GetStudents(index, count);
             if (data == null)       
             {
@@ -61,10 +59,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> GetStudentById(long id)
         {
             _logger.LogInformation(LogEvents.GetItem, "GetStudentById");
-            if (_studentService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_studentService == null) return StatusCode(500);
+
             var book = await _studentService.GetStudentById(id);
             if(book == null)
             {
@@ -83,10 +79,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> PostStudent([FromBody] StudentDto student)
         {
             _logger.LogInformation(LogEvents.InsertItem, "PostStudent");
-            if (_studentService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_studentService == null)return StatusCode(500);
+
             var studentDto = await _studentService.PostStudent(student);
             if (studentDto == null)
             {
@@ -109,10 +103,7 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> PutStudent(long id, [FromBody] StudentDto student)
         {
             _logger.LogInformation(LogEvents.UpdateItem, "PutStudent");
-            if (_studentService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_studentService == null)return StatusCode(500);
             var studentDto = await _studentService.PutStudent(id, student);
             if (studentDto == null) 
             {
@@ -131,10 +122,7 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> DeleteStudent(long id)
         {
             _logger.LogInformation(LogEvents.DeleteItem, "DeleteStudent");
-            if (_studentService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_studentService == null)return StatusCode(500);
             else
             {
                 if (await _studentService.DeleteStudent(id))

@@ -35,10 +35,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> GetLessons(int index=0, int count=10)
         {
             _logger.LogInformation(LogEvents.GetItems, "GetLessons");
-            if (_lessonService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_lessonService == null)return StatusCode(500);
+
             var data = await _lessonService.GetLessons(index, count);
             if (data == null)
             {
@@ -58,10 +56,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> GetLessonById(long id)
         {
             _logger.LogInformation(LogEvents.GetItem, "GetLessonById");
-            if (_lessonService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_lessonService == null) return StatusCode(500);
+
             var lesson = await _lessonService.GetLessonById(id);
             if(lesson == null)
             {
@@ -83,10 +79,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> GetLessonsByTeacherId(long id,int index = 0, int count = 10)
         {
             _logger.LogInformation(LogEvents.GetItems, "GetLessonsByTeacherId");
-            if (_lessonService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_lessonService == null)return StatusCode(500);
+
             var data = await _lessonService.GetLessonsByTeacherId(id,index,count);
             if (data == null)
             {
@@ -105,10 +99,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> PostLesson([FromBody] LessonDto lesson)
         {
             _logger.LogInformation(LogEvents.InsertItem, "PostLesson");
-            if (_lessonService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_lessonService == null) return StatusCode(500);
+
             var lessonDto = await _lessonService.PostLesson(lesson);
             if (lessonDto == null)
             {
@@ -131,10 +123,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> PutLesson(long id, [FromBody] LessonDto lesson)
         {
             _logger.LogInformation(LogEvents.UpdateItem, "PutLesson");
-            if (_lessonService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_lessonService == null)return StatusCode(500);
+
             var lessonDto = await _lessonService.PutLesson(id,lesson);
             if (lessonDto == null)
             {
@@ -156,10 +146,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> DeleteLesson(long id)
         {
             _logger.LogInformation(LogEvents.DeleteItem, "DeleteLesson");
-            if (_lessonService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_lessonService == null)return StatusCode(500);
+
             else
             {
                 bool b = await _lessonService.DeleteLesson(id);

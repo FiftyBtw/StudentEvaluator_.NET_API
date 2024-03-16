@@ -61,9 +61,8 @@ public class CriterionsController : ControllerBase
     public async Task<IActionResult> GetTextCriterionById(long id)
     {
         _logger.LogInformation(LogEvents.GetItem, "Getting item {Id}", id);
-        if (_criteriaService == null) {
-            return StatusCode(500);
-        }
+        if (_criteriaService == null)return StatusCode(500);
+
         try {
             var data = await _criteriaService.GetTextCriterionByIds(id);
             if (data == null)
@@ -116,9 +115,8 @@ public class CriterionsController : ControllerBase
     public async Task<IActionResult> GetSliderCriterionById(long id)
     {
         _logger.LogInformation(LogEvents.GetItem, "Getting item {Id}", id);
-        if (_criteriaService == null) {
-            return StatusCode(500);
-        }
+        if (_criteriaService == null)return StatusCode(500);
+
         try {
             var data = await _criteriaService.GetSliderCriterionByIds(id);
             if (data == null)
@@ -231,9 +229,8 @@ public class CriterionsController : ControllerBase
      public async Task<IActionResult> PostTextCriterion(long id, [FromBody] TextCriteriaDto text)
      {
          _logger.LogInformation(LogEvents.InsertItem, "Inserting item {Id}", id);
-         if (_criteriaService == null) {
-             return StatusCode(500);
-         }
+         if (_criteriaService == null)return StatusCode(500);
+
          try {
              var data = await _criteriaService.PostTextCriterion(id, text);
              if (data == null)
@@ -260,9 +257,8 @@ public class CriterionsController : ControllerBase
      public async Task<IActionResult> PostSliderCriterion(long id, [FromBody] SliderCriteriaDto slider)
      {
          _logger.LogInformation(LogEvents.InsertItem, "Inserting item {Id}", id);
-         if (_criteriaService == null) {
-             return StatusCode(500);
-         }
+         if (_criteriaService == null)return StatusCode(500);
+
          try {
              var data = await _criteriaService.PostSliderCriterion(id, slider);
              if (data == null)
@@ -290,9 +286,7 @@ public class CriterionsController : ControllerBase
      public async Task<IActionResult> PostRadioCriterion(long id, [FromBody] RadioCriteriaDto radio)
      {
             _logger.LogInformation(LogEvents.InsertItem, "Inserting item {Id}", id);
-         if (_criteriaService == null) {
-             return StatusCode(500);
-         }
+         if (_criteriaService == null)return StatusCode(500);
          try {
              var data = await _criteriaService.PostRadioCriterion(id, radio);
              if (data == null)
@@ -320,9 +314,8 @@ public class CriterionsController : ControllerBase
      public async Task<IActionResult> PutTextCriterion(long id, [FromBody] TextCriteriaDto text)
      {
             _logger.LogInformation(LogEvents.UpdateItem, "Updating item {Id}", id);
-         if (_criteriaService == null) {
-             return StatusCode(500);
-         }
+         if (_criteriaService == null)return StatusCode(500);
+
          try {
              var data = await _criteriaService.PutTextCriterion(id, text);
              if (data == null)
@@ -350,9 +343,8 @@ public class CriterionsController : ControllerBase
      public async Task<IActionResult> PutSliderCriterion(long id, [FromBody] SliderCriteriaDto slider)
      {
             _logger.LogInformation(LogEvents.UpdateItem, "Updating item {Id}", id);
-         if (_criteriaService == null) {
-             return StatusCode(500);
-         }
+         if (_criteriaService == null)return StatusCode(500);
+
          try {
              var data = await _criteriaService.PutSliderCriterion(id, slider);
              if (data == null)
@@ -380,9 +372,8 @@ public class CriterionsController : ControllerBase
      public async Task<IActionResult> PutRadioCriterion(long id, [FromBody] RadioCriteriaDto radio)
      {
          _logger.LogInformation(LogEvents.UpdateItem, "Updating item {Id}", id);
-         if (_criteriaService == null) {
-             return StatusCode(500);
-         }
+         if (_criteriaService == null)return StatusCode(500);
+
          try {
              var data = await _criteriaService.PutRadioCriterion(id, radio);
              if (data == null)
@@ -409,9 +400,8 @@ public class CriterionsController : ControllerBase
      public async Task<IActionResult> DeleteCriterion(long id)
      {
          _logger.LogInformation(LogEvents.DeleteItem, "Deleting item {Id}", id);
-         if (_criteriaService == null) {
-             return StatusCode(500);
-         }
+         if (_criteriaService == null)return StatusCode(500);
+
          try {
              var data = await _criteriaService.DeleteCriteria(id);
              if (data == null)

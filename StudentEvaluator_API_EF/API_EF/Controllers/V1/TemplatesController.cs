@@ -2,6 +2,7 @@ using API_Dto;
 using Asp.Versioning;
 using EventLogs;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
@@ -39,10 +40,8 @@ public class TemplatesController : ControllerBase
     public async Task<IActionResult> GetTemplatesByUserId(long id, int index = 0, int count = 10)
     {
         _logger.LogInformation(LogEvents.GetItems, "GetTemplatesByUserId");
-        if (_templateService == null)
-        {
-            return StatusCode(500);
-        }
+        if (_templateService == null)return StatusCode(500);
+
         var data = await _templateService.GetTemplatesByUserId(id, index, count);
         if (data == null)
         {
@@ -66,10 +65,8 @@ public class TemplatesController : ControllerBase
     public async Task<IActionResult> GetEmptyTemplatesByUserId(long id, int index = 0, int count = 10)
     {
         _logger.LogInformation(LogEvents.GetItems, "GetEmptyTemplatesByUserId");
-        if (_templateService == null)
-        {
-            return StatusCode(500);
-        }
+        if (_templateService == null)return StatusCode(500);
+
         var data = await _templateService.GetEmptyTemplatesByUserId(id, index, count);
         if (data == null)
         {
@@ -92,15 +89,13 @@ public class TemplatesController : ControllerBase
     public async Task<IActionResult> GetTemplateById(long userId, long id)
     {
         _logger.LogInformation(LogEvents.GetItem, "GetTemplateById");
-        if (_templateService == null)
-        {
-            return StatusCode(500);
-        }
+        if (_templateService == null)return StatusCode(500);
+
         var data = await _templateService.GetTemplateById(userId, id);
         if (data == null)
         {
             _logger.LogInformation(LogEvents.GetItem, "NoContent");
-            return NoContent();
+            return NotFound();
         }
         else
         {
@@ -118,14 +113,12 @@ public class TemplatesController : ControllerBase
     public async Task<IActionResult> PostTemplate(long userId, [FromBody] TemplateDto template)
     {
         _logger.LogInformation(LogEvents.InsertItem, "PostTemplate");
-        if (_templateService == null)
-        {
-            return StatusCode(500);
-        }
+        if (_templateService == null)return StatusCode(500);
+
         var data = await _templateService.PostTemplate(userId, template);
         if (data == null)
         {
-            return StatusCode(500);
+            return BadRequest();
         }
         else
         {
@@ -143,10 +136,8 @@ public class TemplatesController : ControllerBase
     public async Task<IActionResult> PutTemplate(long id, [FromBody] TemplateDto template)
     {
         _logger.LogInformation(LogEvents.UpdateItem, "PutTemplate");
-        if (_templateService == null)
-        {
-            return StatusCode(500);
-        }
+        if (_templateService == null)return StatusCode(500);
+
         var data = await _templateService.PutTemplate(id, template);
         if (data == null)
         {
@@ -167,18 +158,16 @@ public class TemplatesController : ControllerBase
     public async Task<IActionResult> DeleteTemplate(long id)
     {
         _logger.LogInformation(LogEvents.DeleteItem, "DeleteTemplate");
-        if (_templateService == null)
-        {
-            return StatusCode(500);
-        }
+        if (_templateService == null)return StatusCode(500);
+
         var data = await _templateService.DeleteTemplate(id);
         if (data == false)
         {
-            return StatusCode(500);
+            return NotFound();
         }
         else
         {
-            return Ok();
+            return Ok(data);
         }
     }
     

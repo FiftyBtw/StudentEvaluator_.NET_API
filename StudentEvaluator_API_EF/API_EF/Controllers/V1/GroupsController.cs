@@ -35,10 +35,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> GetGroups(int index=0, int count=10)
         {
             _logger.LogInformation(LogEvents.GetItems, "GetGroups");
-            if (_groupService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_groupService == null)return StatusCode(500);
+
             var data = await _groupService.GetGroups(index, count);
             if (data == null)
             {
@@ -59,10 +57,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> GetGroupById(int gyear,int gnumber)
         {
             _logger.LogInformation(LogEvents.GetItem, "GetGroupById");
-            if (_groupService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_groupService == null)return StatusCode(500);
+
             var book = await _groupService.GetGroupByIds(gyear,gnumber);
             if(book == null)
             {
@@ -81,10 +77,8 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> PostGroup([FromBody] GroupDto group)
         {
             _logger.LogInformation(LogEvents.InsertItem, "PostGroup");
-            if (_groupService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_groupService == null)return StatusCode(500);
+
             var studentDto = await _groupService.PostGroup(group);
             if (studentDto == null)
             {
@@ -107,10 +101,7 @@ namespace API_EF.Controllers.V1
         public async Task<IActionResult> DeleteGroup(int gyear, int gnumber)
         {
             _logger.LogInformation(LogEvents.DeleteItem, "DeleteGroup");
-            if (_groupService == null)
-            {
-                return StatusCode(500);
-            }
+            if (_groupService == null)return StatusCode(500);
             else
             {
                 bool b = await _groupService.DeleteGroup(gyear,gnumber);

@@ -294,5 +294,144 @@ public class CriterionsTests
         // Assert
         Assert.IsType<NotFoundResult>(result);
     }
+
+    [Fact]
+    public async void TestGetTextCriteriaById_OkResult()
+    {
+        // Arrange
+        var id = 123;
+        var existingTextCriteriaDto = new TextCriteriaDto
+        {
+            Id = id,
+            Name = "Remarque",
+            ValueEvaluation = 1,
+            Text = "L'éléve à réussi à finir le tp",
+            TemplateId = 1,
+        };
+
+        _mockRepo.Setup(service => service.GetTextCriterionByIds(It.IsAny<long>()))
+            .ReturnsAsync((long id) => existingTextCriteriaDto);
+
+        // Act
+        var result = await _criterionsController.GetTextCriterionById(id);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnedTextCriteriaDto = Assert.IsType<TextCriteriaDto>(okResult.Value);
+        Assert.Equal(existingTextCriteriaDto.Id, returnedTextCriteriaDto.Id);
+        Assert.Equal(existingTextCriteriaDto.Name, returnedTextCriteriaDto.Name);
+        Assert.Equal(existingTextCriteriaDto.ValueEvaluation, returnedTextCriteriaDto.ValueEvaluation);
+        Assert.Equal(existingTextCriteriaDto.Text, returnedTextCriteriaDto.Text);
+        Assert.Equal(existingTextCriteriaDto.TemplateId, returnedTextCriteriaDto.TemplateId);
+    }
+
+
+    [Fact]
+    public async void TesGetTextCriteriaByIdNotFoundResult()
+    {
+        // Arrange
+        _mockRepo.Setup(service => service.GetTextCriterionByIds(It.IsAny<long>()))
+            .ReturnsAsync((long id) => null);
+
+        // Act
+        var result = await _criterionsController.GetCriterionsByTemplateId(123);
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result);
+    }
+
+    [Fact]
+    public async void TestGetRadioCriteriaById_OkResult()
+    {
+        // Arrange
+        var id = 123;
+        var existingRadioCriteriaDto = new RadioCriteriaDto
+        {
+            Id = id,
+            Name = "Qualité du code :",
+            ValueEvaluation = 1,
+            Options = ["satisfaisante", "moyenne", "insufisante"],
+            SelectedOption = "satisfaisante",
+            TemplateId = 1,
+        };
+
+
+        _mockRepo.Setup(service => service.GetRadioCriterionByIds(It.IsAny<long>()))
+            .ReturnsAsync((long id) => existingRadioCriteriaDto);
+
+        // Act
+        var result = await _criterionsController.GetRadioCriterionById(id);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnedRadioCriteriaDto = Assert.IsType<RadioCriteriaDto>(okResult.Value);
+        Assert.Equal(existingRadioCriteriaDto.Id, returnedRadioCriteriaDto.Id);
+        Assert.Equal(existingRadioCriteriaDto.Name, returnedRadioCriteriaDto.Name);
+        Assert.Equal(existingRadioCriteriaDto.ValueEvaluation, returnedRadioCriteriaDto.ValueEvaluation);
+        Assert.Equal(existingRadioCriteriaDto.Options.Count(), returnedRadioCriteriaDto.Options.Count());
+        Assert.Equal(existingRadioCriteriaDto.SelectedOption, returnedRadioCriteriaDto.SelectedOption);
+        Assert.Equal(existingRadioCriteriaDto.TemplateId, returnedRadioCriteriaDto.TemplateId);
+    }
+
+
+    [Fact]
+    public async void TesGetRadioCriteriaByIdNotFoundResult()
+    {
+        // Arrange
+        _mockRepo.Setup(service => service.GetRadioCriterionByIds(It.IsAny<long>()))
+            .ReturnsAsync((long id) => null);
+
+        // Act
+        var result = await _criterionsController.GetRadioCriterionById(123);
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result);
+    }
+
+    [Fact]
+    public async void TestGetSliderCriteriaById_OkResult()
+    {
+        // Arrange
+        var id = 123;
+        var existingSliderCriteriaDto = new SliderCriteriaDto
+        {
+            Id = 1,
+            Name = "Qualité du code :",
+            ValueEvaluation = 1,
+            Value = 1,
+            TemplateId = 1,
+        };
+
+
+        _mockRepo.Setup(service => service.GetSliderCriterionByIds(It.IsAny<long>()))
+            .ReturnsAsync((long id) => existingSliderCriteriaDto);
+
+        // Act
+        var result = await _criterionsController.GetSliderCriterionById(id);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnedSliderCriteriaDto = Assert.IsType<SliderCriteriaDto>(okResult.Value);
+        Assert.Equal(existingSliderCriteriaDto.Id, returnedSliderCriteriaDto.Id);
+        Assert.Equal(existingSliderCriteriaDto.Name, returnedSliderCriteriaDto.Name);
+        Assert.Equal(existingSliderCriteriaDto.ValueEvaluation, returnedSliderCriteriaDto.ValueEvaluation);
+        Assert.Equal(existingSliderCriteriaDto.Value, returnedSliderCriteriaDto.Value);
+        Assert.Equal(existingSliderCriteriaDto.TemplateId, returnedSliderCriteriaDto.TemplateId);
+    }
+
+
+    [Fact]
+    public async void TesGetSliderCriteriaByIdNotFoundResult()
+    {
+        // Arrange
+        _mockRepo.Setup(service => service.GetSliderCriterionByIds(It.IsAny<long>()))
+            .ReturnsAsync((long id) => null);
+
+        // Act
+        var result = await _criterionsController.GetSliderCriterionById(123);
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result);
+    }
 }
 

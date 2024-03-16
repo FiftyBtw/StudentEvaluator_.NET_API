@@ -237,7 +237,7 @@ public class CriterionsController : ControllerBase
              {
                  return BadRequest();
              }
-             return Created();
+             return Ok(data);
          }
          catch (Exception e) {
              return BadRequest(e.Message);
@@ -266,7 +266,7 @@ public class CriterionsController : ControllerBase
                  _logger.LogWarning(LogEvents.InsertItemBadRequest, "Insert({Id}) BAD REQUEST", id);
                  return BadRequest();
              }
-             return Created();
+             return Ok(data);
          }
          catch (Exception e) {
              return BadRequest(e.Message);
@@ -294,7 +294,7 @@ public class CriterionsController : ControllerBase
                  _logger.LogWarning(LogEvents.InsertItemBadRequest, "Insert({Id}) BAD REQUEST", id);
                  return BadRequest();
              }
-             return Created();
+             return Ok(data);
          }
          catch (Exception e) {
              return BadRequest(e.Message);
@@ -321,9 +321,9 @@ public class CriterionsController : ControllerBase
              if (data == null)
              {
                  _logger.LogWarning(LogEvents.UpdateItemBadRequest, "Update({Id}) BAD REQUEST", id);
-                 return BadRequest();
+                 return NotFound();
              }
-             return Created();
+             return Ok(data);
          }
          catch (Exception e) {
              return BadRequest(e.Message);
@@ -350,9 +350,9 @@ public class CriterionsController : ControllerBase
              if (data == null)
              {
                     _logger.LogWarning(LogEvents.UpdateItemBadRequest, "Update({Id}) BAD REQUEST", id);
-                 return BadRequest();
+                 return NotFound();
              }
-             return Created();
+             return Ok(data);
          }
          catch (Exception e) {
              return BadRequest(e.Message);
@@ -379,9 +379,9 @@ public class CriterionsController : ControllerBase
              if (data == null)
              {
                  _logger.LogWarning(LogEvents.UpdateItemBadRequest, "Update({Id}) BAD REQUEST", id);
-                 return BadRequest();
+                 return NotFound();
              }
-             return Created();
+             return Ok(data);
          }
          catch (Exception e) {
              return BadRequest(e.Message);
@@ -404,12 +404,12 @@ public class CriterionsController : ControllerBase
 
          try {
              var data = await _criteriaService.DeleteCriteria(id);
-             if (data == null)
+             if (data == false)
              {
                  _logger.LogWarning(LogEvents.DeleteItemBadRequest, "Delete({Id}) BAD REQUEST", id);
-                 return BadRequest();
+                 return NotFound();
              }
-             return Created();
+             return Ok(data);
          }
          catch (Exception e) {
              return BadRequest(e.Message);

@@ -1,9 +1,8 @@
-﻿using API_Model;
-using Client_Model;
+﻿using Client_Model;
 using EF_Entities;
 using Model2Entities;
 
-namespace EF_Entities2Model;
+namespace Model2Entities;
 
 
 /// <summary>

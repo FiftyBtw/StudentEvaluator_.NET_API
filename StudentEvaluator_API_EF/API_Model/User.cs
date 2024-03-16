@@ -1,23 +1,15 @@
-﻿using Client_Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-
-namespace API_Model
+﻿namespace Client_Model
 {
     public class User
     {
         private readonly long _id;
         public long Id { get { return _id; } }
 
-        public string Username { get; set; }
+        public string Username { get; set; } = "";
 
-        public string Password { get; set; }
+        public string Password { get; set; } = "";
 
-        public string[] Roles { get; set; }
+        public string[] Roles { get; set; } = [];
 
         public User() { }
 

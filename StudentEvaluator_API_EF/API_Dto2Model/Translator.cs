@@ -1,10 +1,7 @@
-
-﻿using API_Dto;
-using API_Model;
+using API_Dto;
 using Client_Model;
-using Dto2Model;
 
-namespace API_Dto2Model
+namespace Dto2Model
 {
     /// <summary>
     /// A static class containing methods to translate between DTOs and models.
@@ -295,9 +292,9 @@ namespace API_Dto2Model
             };
         }
 
-        public static LoginReponse ToModel(this LoginResponseDto loginReponse)
+        public static LoginResponse ToModel(this LoginResponseDto loginReponse)
         {
-            return new LoginReponse(loginReponse.Id,loginReponse.Username,loginReponse.Roles);
+            return new LoginResponse(loginReponse.Id,loginReponse.Username,loginReponse.Roles);
         }
 
         public static IEnumerable<User> ToModels(this IEnumerable<UserDto> dtos)

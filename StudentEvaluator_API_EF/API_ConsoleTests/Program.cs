@@ -1,5 +1,4 @@
-﻿using API_Model;
-using Client_Model;
+﻿using Client_Model;
 using Dto2Model;
 
 HttpClient httpClient = new HttpClient();

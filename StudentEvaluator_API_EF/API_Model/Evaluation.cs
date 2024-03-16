@@ -1,11 +1,4 @@
-﻿using API_Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Client_Model
+﻿namespace Client_Model
 {
     public class Evaluation
     {
@@ -18,7 +11,7 @@ namespace Client_Model
         public string? PairName { get; set; }
         public Teacher Teacher { get; set; }
 
-        public Template? Template { get; set; }
+        public Template Template { get; set; }
 
         public Student Student { get; set; }
 
@@ -39,7 +32,7 @@ namespace Client_Model
             string eval = "Evaluation : " + Id + ", " + CourseName + ", " + Date + ", " + Grade + ", " + PairName+"\n";
             eval += "\tTeacher : " + Teacher.Username + "\n";
             eval += "\tStudent : " + Student.Name + " " + Student.Lastname + "\n";
-            eval += "\tTemplate : " + Template.Name + "\n";
+            eval += "\tTemplate : " + Template?.Name + "\n";
 
             return eval;
         }

@@ -282,6 +282,7 @@ public class EvaluationTests
         var okResult = Assert.IsType<OkObjectResult>(result);
         var returnedPageRepDto = Assert.IsType<PageReponse<EvaluationReponseDto>>(okResult.Value);
         Assert.Equal(pageResponse.nbElement, returnedPageRepDto.nbElement);
+        Assert.Equal(pageResponse.Data.Count(), returnedPageRepDto.Data.Count());
 
     }
 

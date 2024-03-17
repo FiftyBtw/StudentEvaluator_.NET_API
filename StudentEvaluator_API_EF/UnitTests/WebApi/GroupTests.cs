@@ -11,14 +11,13 @@ namespace EF_UnitTests.WebApi;
 
 public class GroupTests
 {
-    private readonly Mock<IGroupService<GroupDto>> _mockRepo;
-    private readonly Mock<ILogger<GroupsController>> _mockLogger;
-
+    private readonly Mock<IGroupService<GroupDto>> _mockRepo = new();
+    private readonly Mock<ILogger<GroupsController>> _mockLogger = new();
+    private readonly GroupsController _groupsController;
 
     public GroupTests()
     {
-        _mockRepo = new Mock<IGroupService<GroupDto>>();
-        _mockLogger = new Mock<ILogger<GroupsController>>();
+       _groupsController= new GroupsController(_mockRepo.Object,_mockLogger.Object);
     }
 
 
@@ -31,10 +30,10 @@ public class GroupTests
         _mockRepo.Setup(service => service.PostGroup(It.IsAny<GroupDto>()))
             .ReturnsAsync(newGroupDto);
 
-        var controller = new GroupsController(_mockRepo.Object, _mockLogger.Object);
+      
 
         // Act
-        var result = await controller.PostGroup(newGroupDto);
+        var result = await _groupsController.PostGroup(newGroupDto);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -50,10 +49,9 @@ public class GroupTests
         _mockRepo.Setup(service => service.PostGroup(It.IsAny<GroupDto>()))
             .ReturnsAsync((GroupDto group) => null);
 
-        var controller = new GroupsController(_mockRepo.Object, _mockLogger.Object);
-
+     
         // Act
-        var result = await controller.PostGroup(new GroupDto());
+        var result = await _groupsController.PostGroup(new GroupDto());
 
         // Assert
         var badRequestResult = Assert.IsType<BadRequestResult>(result);
@@ -68,10 +66,10 @@ public class GroupTests
         _mockRepo.Setup(service => service.DeleteGroup(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(true); 
 
-        var controller = new GroupsController(_mockRepo.Object,_mockLogger.Object );
+  
 
         // Act
-        var result = await controller.DeleteGroup(2024, 1); 
+        var result = await _groupsController.DeleteGroup(2024, 1); 
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -88,10 +86,9 @@ public class GroupTests
         _mockRepo.Setup(service => service.DeleteGroup(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(false); 
 
-        var controller = new GroupsController(_mockRepo.Object, _mockLogger.Object);
 
         // Act
-        var result = await controller.DeleteGroup(2024, 1); 
+        var result = await _groupsController.DeleteGroup(2024, 1); 
 
         // Assert
         var notFoundResult = Assert.IsType<NotFoundResult>(result);
@@ -112,10 +109,8 @@ public class GroupTests
         _mockRepo.Setup(service => service.GetGroups(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(pageResponse);
 
-        var controller = new GroupsController(_mockRepo.Object, _mockLogger.Object);
-
         // Act
-        var result = await controller.GetGroups();
+        var result = await _groupsController.GetGroups();
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -132,10 +127,8 @@ public class GroupTests
         _mockRepo.Setup(service => service.GetGroups(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync((PageReponse<GroupDto>)null);
 
-        var controller = new GroupsController(_mockRepo.Object, _mockLogger.Object);
-
         // Act
-        var result = await controller.GetGroups();
+        var result = await _groupsController.GetGroups();
 
         // Assert
         var noContentResult = Assert.IsType<NoContentResult>(result);
@@ -153,10 +146,8 @@ public class GroupTests
         _mockRepo.Setup(service => service.GetGroupByIds(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(existingGroupDto); 
 
-        var controller = new GroupsController(_mockRepo.Object, _mockLogger.Object);
-
         // Act
-        var result = await controller.GetGroupById(gyear, gnumber);
+        var result = await _groupsController.GetGroupById(gyear, gnumber);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -174,10 +165,9 @@ public class GroupTests
         _mockRepo.Setup(service => service.GetGroupByIds(It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync((GroupDto)null); 
 
-        var controller = new GroupsController(_mockRepo.Object, _mockLogger.Object);
 
         // Act
-        var result = await controller.GetGroupById(gyear, gnumber);
+        var result = await _groupsController.GetGroupById(gyear, gnumber);
 
         // Assert
         var notFoundResult = Assert.IsType<NotFoundResult>(result);

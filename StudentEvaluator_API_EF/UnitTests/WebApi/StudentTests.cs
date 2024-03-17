@@ -9,14 +9,13 @@ namespace EF_UnitTests.WebApi;
 
 public class StudentTests
 {
-    private readonly Mock<IStudentService<StudentDto>> _mockRepo;
-    private readonly Mock<ILogger<StudentsController>> _mockLogger;
+    private readonly Mock<IStudentService<StudentDto>> _mockRepo = new();
+    private readonly Mock<ILogger<StudentsController>> _mockLogger= new();
+    private readonly StudentsController _studentsController;
 
     public StudentTests()
     {
-        _mockRepo = new Mock<IStudentService<StudentDto>>();
-        _mockLogger = new Mock<ILogger<StudentsController>>();
-
+        _studentsController = new StudentsController(_mockRepo.Object,_mockLogger.Object);
     }
 
     [Fact]
@@ -35,10 +34,8 @@ public class StudentTests
         _mockRepo.Setup(x => x.PostStudent(It.IsAny<StudentDto>()))
                           .ReturnsAsync(studentDto);
 
-        var controller = new StudentsController(_mockRepo.Object, _mockLogger.Object);
-
         // Act
-        var result = await controller.PostStudent(studentDto) as OkObjectResult;
+        var result = await _studentsController.PostStudent(studentDto) as OkObjectResult;
 
         // Assert
         Assert.NotNull(result);
@@ -50,16 +47,13 @@ public class StudentTests
     public async void TestAddStudent_BadRequest()
     {
         // Arrange
-
-
         _mockRepo.Setup(x => x.PostStudent(It.IsAny<StudentDto>()))
                           .ReturnsAsync((StudentDto)null);
 
-        var controller = new StudentsController(_mockRepo.Object, _mockLogger.Object);
         var studentDto = new StudentDto(); 
 
         // Act
-        var result = await controller.PostStudent(studentDto) as BadRequestResult;
+        var result = await _studentsController.PostStudent(studentDto) as BadRequestResult;
 
         // Assert
         Assert.NotNull(result);
@@ -76,11 +70,10 @@ public class StudentTests
         _mockRepo.Setup(x => x.DeleteStudent(It.IsAny<long>()))
                           .ReturnsAsync(true);
 
-        var controller = new StudentsController(_mockRepo.Object, _mockLogger.Object);
         long studentIdToDelete = 1; 
 
         // Act
-        var result = await controller.DeleteStudent(studentIdToDelete) as OkObjectResult;
+        var result = await _studentsController.DeleteStudent(studentIdToDelete) as OkObjectResult;
 
         // Assert
         Assert.NotNull(result);
@@ -96,10 +89,8 @@ public class StudentTests
         _mockRepo.Setup(service => service.DeleteStudent(It.IsAny<long>()))
             .ReturnsAsync(false); 
 
-        var controller = new StudentsController(_mockRepo.Object, _mockLogger.Object);
-
         // Act
-        var result = await controller.DeleteStudent(123); 
+        var result = await _studentsController.DeleteStudent(123); 
 
         // Assert
         var notFoundResult = Assert.IsType<NotFoundResult>(result);
@@ -113,10 +104,9 @@ public class StudentTests
         _mockRepo.Setup(service => service.PutStudent(It.IsAny<long>(), It.IsAny<StudentDto>()))
             .ReturnsAsync((long id, StudentDto student) => student);
 
-        var controller = new StudentsController(_mockRepo.Object, _mockLogger.Object);
 
         // Act
-        var result = await controller.PutStudent(123, new StudentDto());
+        var result = await _studentsController.PutStudent(123, new StudentDto());
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -131,10 +121,8 @@ public class StudentTests
         _mockRepo.Setup(service => service.PutStudent(It.IsAny<long>(), It.IsAny<StudentDto>()))
             .ReturnsAsync((long id, StudentDto student) => null); 
 
-        var controller = new StudentsController(_mockRepo.Object, _mockLogger.Object);
-
         // Act
-        var result = await controller.PutStudent(123, new StudentDto());
+        var result = await _studentsController.PutStudent(123, new StudentDto());
 
         // Assert
         var notFoundResult = Assert.IsType<NotFoundResult>(result);
@@ -151,10 +139,9 @@ public class StudentTests
         _mockRepo.Setup(service => service.GetStudentById(It.IsAny<long>()))
             .ReturnsAsync((long id) => id == studentId ? existingStudent : null); 
 
-        var controller = new StudentsController(_mockRepo.Object, _mockLogger.Object);
 
         // Act
-        var result = await controller.GetStudentById(studentId);
+        var result = await _studentsController.GetStudentById(studentId);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -169,10 +156,9 @@ public class StudentTests
         _mockRepo.Setup(service => service.GetStudentById(It.IsAny<long>()))
             .ReturnsAsync((long id) => null); 
 
-        var controller = new StudentsController(_mockRepo.Object, _mockLogger.Object);
 
         // Act
-        var result = await controller.GetStudentById(123); 
+        var result = await _studentsController.GetStudentById(123); 
 
         // Assert
         var notFoundResult = Assert.IsType<NotFoundResult>(result);

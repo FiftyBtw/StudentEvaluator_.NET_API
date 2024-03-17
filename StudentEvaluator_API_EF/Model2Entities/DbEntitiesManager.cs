@@ -10,7 +10,8 @@ namespace Model2Entities
     /// Manages database entities for student and group operations.
     /// </summary>
     public class DbEntitiesManager : IStudentService<Student>, IGroupService<Group>,
-        ILessonService<LessonCreation, Lesson>, IEvaluationService<EvaluationCreation, Evaluation>
+        ILessonService<LessonCreation, Lesson>, IEvaluationService<EvaluationCreation, Evaluation>,
+        IUserService<User, LoginRequest, LoginResponse>, ITemplateService<Template>
     {
         private readonly LibraryContext _libraryContext;
 
@@ -31,18 +32,15 @@ namespace Model2Entities
         /// </summary>
         /// <param name="id">The ID of the student to delete.</param>
         /// <returns>A task that represents the asynchronous operation. The task result indicates whether the deletion was successful.</returns>
-        public Task<bool> DeleteStudent(long id)
+        public async Task<bool> DeleteStudent(long id)
         {
-            var student = _libraryContext.StudentSet.FirstOrDefault(b => b.Id == id);
-            if (student == null) return Task.FromResult(false);
+            var student = await _libraryContext.StudentSet.FirstOrDefaultAsync(b => b.Id == id);
+            if (student == null) return false;
 
-            _libraryContext.StudentSet.Where(b => b.Id == id).ExecuteDelete();
-            _libraryContext.SaveChangesAsync();
+            _libraryContext.StudentSet.Remove(student);
+            await _libraryContext.SaveChangesAsync();
 
-            student = _libraryContext.StudentSet.FirstOrDefault(b => b.Id == id);
-
-            if (student == null) return Task.FromResult(true);
-            return Task.FromResult(false);
+            return true;
         }
 
 
@@ -94,8 +92,15 @@ namespace Model2Entities
         /// <returns>A task that represents the asynchronous operation. The task result contains the updated student.</returns>
         public async Task<Student?> PutStudent(long id, Student student)
         {
-            throw new NotImplementedException();
+            var existingStudent = await _libraryContext.StudentSet.FindAsync(id);
+            if (existingStudent == null) return null;
+
+            _libraryContext.Entry(existingStudent).CurrentValues.SetValues(student);
+
+            await _libraryContext.SaveChangesAsync();
+            return existingStudent.ToModel();
         }
+
 
         //Group
 
@@ -145,26 +150,6 @@ namespace Model2Entities
                 .FirstOrDefault(g => g.GroupYear == group.GroupYear && g.GroupNumber == group.GroupNumber)?.ToModel());
         }
 
-
-        /// <summary>
-        /// Updates a group.
-        /// </summary>
-        /// <param name="gyear">The year of the group to update.</param>
-        /// <param name="gnumber">The number of the group to update.</param>
-        /// <param name="newGroup">The updated group.</param>
-        /// <returns>A task that represents the asynchronous operation. The task result contains the updated group.</returns>
-        public async Task<Group?> PutGroup(int gyear, int gnumber, Group newGroup)
-        {
-            var group = _libraryContext.GroupSet.FirstOrDefault(g => g.GroupYear == gyear && g.GroupNumber == gnumber);
-            if (group == null) return await Task.FromResult<Group?>(null);
-            group.GroupNumber = newGroup.GroupNumber;
-            group.GroupYear = newGroup.GroupYear;
-            //group.Students = newGroup.Students;
-            _libraryContext.SaveChanges();
-            return await Task.FromResult(group.ToModel());
-        }
-
-
         /// <summary>
         /// Deletes a group by its year and number.
         /// </summary>
@@ -173,17 +158,12 @@ namespace Model2Entities
         /// <returns>A task that represents the asynchronous operation. The task result indicates whether the deletion was successful.</returns>
         public async Task<bool> DeleteGroup(int gyear, int gnumber)
         {
-            var group = _libraryContext.GroupSet.FirstOrDefault(g => g.GroupYear == gyear && g.GroupNumber == gnumber);
-            if (group == null) return await Task.FromResult(false);
-
-            _libraryContext.GroupSet.Where(g => g.GroupYear == gyear && g.GroupNumber == gnumber).ExecuteDelete();
-            _libraryContext.SaveChangesAsync();
-
-            group = _libraryContext.GroupSet.FirstOrDefault(g => g.GroupYear == gyear && g.GroupNumber == gnumber);
-
-            if (group == null) return await Task.FromResult(true);
-
-            return await Task.FromResult(false);
+            var group = await _libraryContext.GroupSet
+                .FirstOrDefaultAsync(g => g.GroupYear == gyear && g.GroupNumber == gnumber);
+            if (group == null) return false;
+            _libraryContext.GroupSet.Remove(group);
+            await _libraryContext.SaveChangesAsync();
+            return true;
         }
 
         // Lesson
@@ -194,96 +174,244 @@ namespace Model2Entities
             return await Task.FromResult(new PageReponse<Lesson>(lessons.Count(),
                 lessons.Skip(index * count).Take(count)));
         }
-        
+
         public async Task<Lesson?> GetLessonById(long id)
         {
             var lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id == id)?.ToModel();
             return await Task.FromResult(lesson);
         }
-        
-        public async Task<PageReponse<Lesson>> GetLessonsByTeacherId(long id, int index=0, int count = 10)
+
+        public async Task<PageReponse<Lesson>> GetLessonsByTeacherId(long id, int index = 0, int count = 10)
         {
             var lessons = _libraryContext.LessonSet.Where(l => l.TeacherEntityId == id).ToModels();
             return await Task.FromResult(new PageReponse<Lesson>(lessons.Count(),
                 lessons.Skip(index * count).Take(count)));
         }
-        
+
         public async Task<Lesson?> PostLesson(LessonCreation lesson)
         {
             var lessonEntity = lesson.ToEntity();
-            _libraryContext.LessonSet.AddAsync(lessonEntity);
-            _libraryContext.SaveChanges();
-            return await Task.FromResult(_libraryContext.LessonSet.FirstOrDefault(l => l.Id == lessonEntity.Id)?.ToModel());
+            await _libraryContext.LessonSet.AddAsync(lessonEntity);
+            await _libraryContext.SaveChangesAsync();
+            return await Task.FromResult(_libraryContext.LessonSet.FirstOrDefault(l => l.Id == lessonEntity.Id)
+                ?.ToModel());
         }
-        
+
         public async Task<Lesson?> PutLesson(long id, LessonCreation lesson)
         {
-            var lessonEntity = lesson.ToEntity();
-            lessonEntity.Id = id;
-            _libraryContext.LessonSet.Update(lessonEntity);
-            _libraryContext.SaveChanges();
-            return await Task.FromResult(_libraryContext.LessonSet.FirstOrDefault(l => l.Id == id)?.ToModel());
+            var existingLesson = await _libraryContext.LessonSet.FindAsync(id);
+            if (existingLesson == null) return null;
+            existingLesson.CourseName = lesson.CourseName;
+            await _libraryContext.SaveChangesAsync();
+            return existingLesson.ToModel();
         }
-        
+
+
         public async Task<bool> DeleteLesson(long id)
         {
-            var lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id == id);
-            if (lesson == null) return await Task.FromResult(false);
-            _libraryContext.LessonSet.Where(l => l.Id == id).ExecuteDelete();
-            _libraryContext.SaveChangesAsync();
-            lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id == id);
-            if (lesson == null) return await Task.FromResult(true);
-            return await Task.FromResult(false);
+            var lesson = await _libraryContext.LessonSet.FindAsync(id);
+            if (lesson == null) return false;
+            _libraryContext.LessonSet.Remove(lesson);
+            await _libraryContext.SaveChangesAsync();
+            return true;
         }
-        
+
+
         // Evaluation
-        
+
         public async Task<PageReponse<Evaluation>> GetEvaluations(int index = 0, int count = 10)
         {
             var evaluations = _libraryContext.EvaluationSet.ToModels();
             return await Task.FromResult(new PageReponse<Evaluation>(evaluations.Count(),
                 evaluations.Skip(index * count).Take(count)));
         }
-        
+
         public async Task<Evaluation?> GetEvaluationById(long id)
         {
             var evaluation = _libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == id)?.ToModel();
             return await Task.FromResult(evaluation);
         }
-        
-        public async Task<PageReponse<Evaluation>> GetEvaluationsByTeacherId(long id, int index=0, int count=10)
+
+        public async Task<PageReponse<Evaluation>> GetEvaluationsByTeacherId(long id, int index = 0, int count = 10)
         {
             var evaluations = _libraryContext.EvaluationSet.Where(e => e.TeacherId == id).ToModels();
             return await Task.FromResult(new PageReponse<Evaluation>(evaluations.Count(),
                 evaluations.Skip(index * count).Take(count)));
         }
-        
+
         public async Task<Evaluation?> PostEvaluation(EvaluationCreation evaluation)
         {
             var evaluationEntity = evaluation.ToEntity();
             _libraryContext.EvaluationSet.AddAsync(evaluationEntity);
             _libraryContext.SaveChanges();
-            return await Task.FromResult(_libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == evaluationEntity.Id)?.ToModel());
+            return await Task.FromResult(_libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == evaluationEntity.Id)
+                ?.ToModel());
         }
-        
+
         public async Task<Evaluation?> PutEvaluation(long id, EvaluationCreation evaluation)
         {
-            var evaluationEntity = evaluation.ToEntity();
-            evaluationEntity.Id = id;
-            _libraryContext.EvaluationSet.Update(evaluationEntity);
-            _libraryContext.SaveChanges();
-            return await Task.FromResult(_libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == id)?.ToModel());
+            var existingEvaluation = await _libraryContext.EvaluationSet.FindAsync(id);
+            if (existingEvaluation == null)
+            {
+                return null;
+            }
+
+            existingEvaluation.CourseName = evaluation.CourseName;
+            existingEvaluation.Date = evaluation.Date;
+            existingEvaluation.Grade = evaluation.Grade;
+            existingEvaluation.PairName = evaluation.PairName;
+            existingEvaluation.TeacherId = evaluation.TeacherId;
+            existingEvaluation.TemplateId = evaluation.TemplateId;
+            existingEvaluation.StudentId = evaluation.StudentId;
+            await _libraryContext.SaveChangesAsync();
+            return existingEvaluation.ToModel();
         }
-        
+
+
         public async Task<bool> DeleteEvaluation(long id)
         {
-            var evaluation = _libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == id);
-            if (evaluation == null) return await Task.FromResult(false);
-            _libraryContext.EvaluationSet.Where(e => e.Id == id).ExecuteDelete();
-            _libraryContext.SaveChangesAsync();
-            evaluation = _libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == id);
-            if (evaluation == null) return await Task.FromResult(true);
-            return await Task.FromResult(false);
+            var evaluation = await _libraryContext.EvaluationSet.FindAsync(id);
+            if (evaluation == null)
+            {
+                return false;
+            }
+
+            _libraryContext.EvaluationSet.Remove(evaluation);
+            await _libraryContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        // User 
+
+        public async Task<PageReponse<User>> GetUsers(int index = 0, int count = 10)
+        {
+            var users = _libraryContext.UserSet.ToModels();
+            return await Task.FromResult(new PageReponse<User>(users.Count(),
+                users.Skip(index * count).Take(count)));
+        }
+
+        public async Task<User?> GetUserById(long id)
+        {
+            var user = _libraryContext.UserSet.FirstOrDefault(u => u.Id == id)?.ToModel();
+            return await Task.FromResult(user);
+        }
+
+        public async Task<User?> PostUser(User user)
+        {
+            var userEntity = user.ToEntity();
+            _libraryContext.UserSet.AddAsync(userEntity);
+            _libraryContext.SaveChanges();
+            return await Task.FromResult(_libraryContext.UserSet.FirstOrDefault(u => u.Id == userEntity.Id)
+                ?.ToModel());
+        }
+
+        public async Task<User?> PutUser(long id, User user)
+        {
+            var existingUser = await _libraryContext.UserSet.FindAsync(id);
+            if (existingUser == null)
+            {
+                return null;
+            }
+
+            existingUser.Username = user.Username;
+            existingUser.Password = user.Password;
+
+            await _libraryContext.SaveChangesAsync();
+            return existingUser.ToModel();
+        }
+
+
+        public async Task<bool> DeleteUser(long id)
+        {
+            var userEntity = await _libraryContext.UserSet.FindAsync(id);
+            if (userEntity == null)
+            {
+                return false;
+            }
+
+            _libraryContext.UserSet.Remove(userEntity);
+            await _libraryContext.SaveChangesAsync();
+            return true;
+        }
+
+
+        public async Task<LoginResponse?> Login(LoginRequest loginRequest)
+        {
+            var user = _libraryContext.UserSet.FirstOrDefault(u => u.Username == loginRequest.Username);
+            if (user == null) return await Task.FromResult<LoginResponse?>(null);
+            if (user.Password != loginRequest.Password) return await Task.FromResult<LoginResponse?>(null);
+            return await Task.FromResult(new LoginResponse(user.Id, user.Username, user.Roles));
+        }
+
+        public async Task<User?> PostTeacher(Teacher teacher)
+        {
+            var userEntity = teacher.ToEntity();
+            _libraryContext.TeacherSet.AddAsync(userEntity);
+            _libraryContext.SaveChanges();
+            return await Task.FromResult(_libraryContext.TeacherSet.FirstOrDefault(u => u.Id == userEntity.Id)
+                ?.ToModel());
+        }
+
+        // Template
+
+        public async Task<PageReponse<Template>> GetTemplatesByUserId(long id, int index = 0, int count = 10)
+        {
+            var templates = _libraryContext.TemplateSet.Where(t => t.TeacherId == id).ToModels();
+            return await Task.FromResult(new PageReponse<Template>(templates.Count(),
+                templates.Skip(index * count).Take(count)));
+        }
+
+        public async Task<PageReponse<Template>> GetEmptyTemplatesByUserId(long id, int index = 0, int count = 10)
+        {
+            var templates = _libraryContext.TemplateSet.Where(t => t.TeacherId == id && t.EvaluationId == null)
+                .ToModels();
+            return await Task.FromResult(new PageReponse<Template>(templates.Count(),
+                templates.Skip(index * count).Take(count)));
+        }
+
+
+        public async Task<Template?> GetTemplateById(long userId, long templateId)
+        {
+            var template = _libraryContext.TemplateSet.FirstOrDefault(t => t.Id == templateId && t.TeacherId == userId);
+            return await Task.FromResult(template?.ToModel());
+        }
+
+        public async Task<Template?> PostTemplate(long userId, Template template)
+        {
+            var templateEntity = template.ToEntity();
+            templateEntity.TeacherId = userId;
+            _libraryContext.TemplateSet.AddAsync(templateEntity);
+            _libraryContext.SaveChanges();
+            return await Task.FromResult(_libraryContext.TemplateSet.FirstOrDefault(t => t.Id == templateEntity.Id)
+                ?.ToModel());
+        }
+
+        public async Task<Template?> PutTemplate(long templateId, Template template)
+        {
+            var existingTemplate = await _libraryContext.TemplateSet.FindAsync(templateId);
+            if (existingTemplate == null)
+            {
+                return null;
+            }
+            existingTemplate.Name = template.Name;
+            existingTemplate.Criteria = template.Criterias.Select(CriteriaEntityConverter.ConvertToEntity).ToList();
+            await _libraryContext.SaveChangesAsync();
+            return existingTemplate.ToModel(); 
+        }
+
+
+        public async Task<bool> DeleteTemplate(long templateId)
+        {
+            var templateEntity = await _libraryContext.TemplateSet.FindAsync(templateId);
+            if (templateEntity == null)
+            {
+                return false;
+            }
+
+            _libraryContext.TemplateSet.Remove(templateEntity);
+            await _libraryContext.SaveChangesAsync();
+            return true;
         }
     }
 }

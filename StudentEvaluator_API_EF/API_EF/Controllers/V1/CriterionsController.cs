@@ -23,31 +23,6 @@ public class CriterionsController : ControllerBase
         _logger = logger;
     }
     
-    /*
-    [HttpGet("texts")]
-    [ProducesResponseType(200, Type= typeof(PageReponseDto<TextCriteriaDto>[]))]
-    [ProducesResponseType(204)]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(500)]
-    public async Task<IActionResult> GetTextCriterions(int index = 0, int count = 10)
-    {
-        if (_criteriaService == null) {
-            return StatusCode(500);
-        }
-        try {
-            var data = await _criteriaService.GetTextCriterions(index , count);
-            if (data.nbElement == 0)
-            {
-                return NoContent();
-            }
-            return Ok(data);
-        }
-        catch (Exception e) {
-            return BadRequest(e.Message);
-        }
-    }
-    */
-    
     /// <summary>
     ///  Get a text criteria by its id
     /// </summary>
@@ -77,31 +52,6 @@ public class CriterionsController : ControllerBase
         }
     }
     
-    /*
-    [HttpGet("sliders")]
-    [ProducesResponseType(200, Type= typeof(PageReponseDto<SliderCriteriaDto>[]))]
-    [ProducesResponseType(204)]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(500)]
-    public async Task<IActionResult> GetSliderCriterions(int index = 0, int count = 10)
-    {
-        if (_criteriaService == null) {
-            return StatusCode(500);
-        }
-        try {
-            var data = await _criteriaService.GetSliderCriterions(index, count);
-            if (data.nbElement == 0)
-            {
-                return NoContent();
-            }
-            return Ok(data);
-        }
-        catch (Exception e) {
-            return BadRequest(e.Message);
-        }
-    }
-    */
-    
     /// <summary>
     ///  Get a slider criteria by its id
     /// </summary>
@@ -130,31 +80,6 @@ public class CriterionsController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-    
-    /*
-    [HttpGet("radios")]
-    [ProducesResponseType(200, Type= typeof(PageReponseDto<RadioCriteriaDto>[]))]
-    [ProducesResponseType(204)]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(500)]
-    public async Task<IActionResult> GetRadioCriterions(int index = 0, int count = 10)
-    {
-        if (_criteriaService == null) {
-            return StatusCode(500);
-        }
-        try {
-            var data = await _criteriaService.GetRadioCriterions(index, count);
-            if (data.nbElement == 0)
-            {
-                return NoContent();
-            }
-            return Ok(data);
-        }
-        catch (Exception e) {
-            return BadRequest(e.Message);
-        }
-    }
-    */
     
     /// <summary>
     ///  Get a radio criteria by its id

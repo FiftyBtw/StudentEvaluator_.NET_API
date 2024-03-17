@@ -2,16 +2,7 @@
 using EF_DbContextLib;
 using EF_StubbedContextLib;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using API_Dto;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using EF_Entities;
 using Shared;
-
 namespace Entities2Dto;
 
 /// <summary>

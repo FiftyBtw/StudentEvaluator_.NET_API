@@ -11,10 +11,12 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["API_EF/API_EF.csproj", "API_EF/"]
 COPY ["Dto/API_Dto.csproj", "Dto/"]
+COPY ["EF_Entities/EF_Entities.csproj", "EF_Entities/"]
 COPY ["Entities2Dto/Entities2Dto.csproj", "Entities2Dto/"]
 COPY ["EF_StubbedContextLib/EF_StubbedContextLib.csproj", "EF_StubbedContextLib/"]
 COPY ["DbContextLib/EF_DbContextLib.csproj", "DbContextLib/"]
-COPY ["EF_Entities/EF_Entities.csproj", "EF_Entities/"]
+COPY ["Shared/Shared.csproj", "Shared/"]
+COPY ["EventLogs/EventLogs.csproj", "EventLogs/"]
 RUN dotnet restore "API_EF/API_EF.csproj"
 COPY . .
 WORKDIR "/src/API_EF"

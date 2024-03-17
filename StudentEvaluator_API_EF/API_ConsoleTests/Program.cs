@@ -92,9 +92,6 @@ newGroup= await apiDataManager.PostGroup(newGroup);
 
 Console.WriteLine(newGroup);
 
-//PutGroup
-
-
 //GetGroupById
 
 Console.WriteLine("Test GetGroupById (gyear =1 & gnumber=1) :\n");

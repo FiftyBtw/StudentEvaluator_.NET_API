@@ -75,7 +75,8 @@ namespace Dto2Model
             {
                 return null;
             }
-            return new Group(group.GroupNumber, group.GroupYear, group.Students.ToModels());
+            if (group.Students != null) return new Group(group.GroupYear, group.GroupNumber, group.Students.ToModels());
+            else return new Group(group.GroupYear, group.GroupNumber);
         }
 
         /// <summary>

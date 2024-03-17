@@ -73,5 +73,9 @@ StudentEvaluator_API_EF est une API RESTful conçue pour simplifier la communica
 ### Tests :
 - Tests sur les nouveautés
 
+# Informations complémentaires :
+- Il est impossible de modifier un Groupe.
+- Il est impossible de rajouter des critères à la création d'un Template.
+
 
 

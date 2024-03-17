@@ -125,15 +125,6 @@ namespace Dto2Model
         }
 
         /// <summary>
-        /// Updates an existing group.
-        /// </summary>
-        public async Task<Group?> PutGroup(int gyear, int gnumber, Group group)
-        {
-            var reponse = await _httpClient.PutAsJsonAsync($"{_httpClient.BaseAddress}api/v{_version}/Groups?gyear={group.GroupYear}&gnumber={group.GroupNumber}", group.ToDto());
-            return await Task.FromResult(await reponse.Content.ReadFromJsonAsync<Group>());
-        }
-
-        /// <summary>
         /// Deletes a group by year and number.
         /// </summary>
         public async Task<bool> DeleteGroup(int gyear, int gnumber)

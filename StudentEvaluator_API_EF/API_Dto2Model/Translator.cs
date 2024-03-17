@@ -13,8 +13,12 @@ namespace Dto2Model
         /// <summary>
         /// Converts a StudentDto object to a Student model object.
         /// </summary>
-        public static Student ToModel(this StudentDto student)
+        public static Student? ToModel(this StudentDto student)
         {
+            if (student == null)
+            {
+                return null;
+            }
             return new Student(student.Id, student.Name, student.Lastname, student.UrlPhoto, student.GroupYear, student.GroupNumber);     
         }
 
@@ -65,8 +69,12 @@ namespace Dto2Model
         /// <summary>
         /// Converts a GroupDto object to a Group model object.
         /// </summary>
-        public static Group ToModel(this GroupDto group)
+        public static Group? ToModel(this GroupDto group)
         {
+            if (group == null)
+            {
+                return null;
+            }
             return new Group(group.GroupNumber, group.GroupYear, group.Students.ToModels());
         }
 
@@ -96,8 +104,12 @@ namespace Dto2Model
             return groups;
         }
         //Teacher
-        public static Teacher ToModel(this TeacherDto dto)
+        public static Teacher? ToModel(this TeacherDto dto)
         {
+            if (dto == null)
+            {
+                return null;
+            }
             return new Teacher(dto.Id, dto.Username, dto.Password,dto.roles) ;
         }
 
@@ -219,8 +231,12 @@ namespace Dto2Model
 
         //Evaluation
 
-        public static Evaluation ToModel(this EvaluationReponseDto evalRepDto)
+        public static Evaluation? ToModel(this EvaluationReponseDto evalRepDto)
         {
+            if (evalRepDto == null)
+            {
+                return null;
+            }
             return new Evaluation(evalRepDto.Id,evalRepDto.Date,evalRepDto.CourseName,evalRepDto.Grade,evalRepDto.PairName,evalRepDto.Teacher.ToModel(),evalRepDto.Template?.ToModel(),evalRepDto.Student.ToModel());
         }
 

@@ -1,6 +1,7 @@
 using API_Dto;
 using Asp.Versioning;
 using EventLogs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
@@ -12,6 +13,7 @@ namespace API_EF.Controllers.V1;
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
+[Authorize]
 public class CriterionsController : ControllerBase
 {
     private readonly ICriteriaService<CriteriaDto,TextCriteriaDto,SliderCriteriaDto,RadioCriteriaDto> _criteriaService;

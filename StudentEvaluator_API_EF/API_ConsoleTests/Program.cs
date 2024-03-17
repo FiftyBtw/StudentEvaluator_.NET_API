@@ -1,8 +1,56 @@
-﻿using Client_Model;
+﻿using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using Client_Model;
 using Dto2Model;
 
 HttpClient httpClient = new HttpClient();
 httpClient.BaseAddress = new Uri("https://localhost:7140");
+
+var registerData = new
+{
+    email = "newUser@gmail.com",
+    password = "newUserPassword1234$",
+};
+
+var registerContent = new StringContent(JsonSerializer.Serialize(registerData), Encoding.UTF8, "application/json");
+var registerResponse = await httpClient.PostAsync("/register", registerContent);
+
+if (!registerResponse.IsSuccessStatusCode)
+{
+    Console.WriteLine("Error registering new user. Maybe the user already exists.");
+}
+
+var loginData = new
+{
+    email = "newUser@gmail.com",
+    password = "newUserPassword1234$"
+};
+
+var loginContent = new StringContent(JsonSerializer.Serialize(loginData), Encoding.UTF8, "application/json");
+var loginResponse = await httpClient.PostAsync("/login", loginContent);
+
+if (!loginResponse.IsSuccessStatusCode)
+{
+    Console.WriteLine("Error logging in.");
+    return;
+}
+
+var loginResponseBody = await loginResponse.Content.ReadAsStringAsync();
+var token ="";
+using (var document = JsonDocument.Parse(loginResponseBody))
+{
+    var root = document.RootElement;
+    token = root.GetProperty("accessToken").GetString(); 
+}
+if (string.IsNullOrEmpty(token))
+{
+    Console.WriteLine("Error getting token.");
+    return;
+}
+httpClient.DefaultRequestHeaders.Authorization = 
+    new AuthenticationHeaderValue("Bearer", token);
+
 ApiDataManager apiDataManager = new(httpClient);
 
 

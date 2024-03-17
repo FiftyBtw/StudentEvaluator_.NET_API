@@ -14,6 +14,7 @@ namespace API_EF.Controllers.V1;
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
+[Authorize]
 public class TemplatesController : ControllerBase
 {
     private readonly ITemplateService<TemplateDto> _templateService;

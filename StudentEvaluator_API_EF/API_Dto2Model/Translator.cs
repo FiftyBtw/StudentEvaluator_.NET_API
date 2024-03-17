@@ -67,8 +67,7 @@ namespace Dto2Model
         /// </summary>
         public static Group ToModel(this GroupDto group)
         {
-            if (group.Students != null) return new Group(group.GroupYear, group.GroupNumber, group.Students.ToModels());
-            else return new Group(group.GroupYear, group.GroupNumber);
+            return new Group(group.GroupNumber, group.GroupYear, group.Students.ToModels());
         }
 
         /// <summary>

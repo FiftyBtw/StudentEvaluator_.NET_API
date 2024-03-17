@@ -27,6 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\API_Dto2Model\Dto2Model.csproj" />
       <ProjectReference Include="..\API_EF\API_EF.csproj" />
       <ProjectReference Include="..\API_Model\Client_Model.csproj" />
       <ProjectReference Include="..\DbContextLib\EF_DbContextLib.csproj" />

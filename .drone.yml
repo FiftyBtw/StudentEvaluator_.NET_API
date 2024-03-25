@@ -20,6 +20,9 @@ steps:
       - cd StudentEvaluator_API_EF
       - dotnet restore StudentEvaluator_API_EF.sln
       - dotnet test StudentEvaluator_API_EF.sln --no-restore
+    when:
+      branch:
+        - master
     depends_on: [build]
 
   - name: code-analysis

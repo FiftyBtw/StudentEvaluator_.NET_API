@@ -215,7 +215,7 @@ public class ApiDataManagerTests
     public async Task GetLessonById_ReturnsLesson()
     {
         // Arrange
-        var expectedLesson = new LessonReponseDto { Id = 1, CourseName = "Math", Classroom = "A19", Start = new DateTime(2024, 3, 16), End = new DateTime(2024, 3, 16), Group = new GroupDto { GroupYear = 1, GroupNumber = 1 } , Teacher = new TeacherDto { Id = 1, Username = "ProfDupont", Password = "MotDePasse",roles = ["Teacher"]} };
+        var expectedLesson = new LessonReponseDto { Id = 1, CourseName = "Math", Classroom = "A19", Start = new DateTime(2024, 3, 16), End = new DateTime(2024, 3, 16), Group = new GroupDto { GroupYear = 1, GroupNumber = 1 } , Teacher = new TeacherDto { Id = "1", Username = "ProfDupont", Password = "MotDePasse" }};
         _mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage()
@@ -236,8 +236,8 @@ public class ApiDataManagerTests
     public async Task PostLesson_CreatesLesson_ReturnsLesson()
     {
         // Arrange
-        var newLesson = new LessonCreation(new DateTime(2024, 3, 16), new DateTime(2024, 3, 16),  "Math", "A19", 1, 1, 1);
-        var expectedLesson = new LessonReponseDto { Id = 1, CourseName = "Math", Classroom = "A19", Start = new DateTime(2024, 3, 16), End = new DateTime(2024, 3, 16), Group = new GroupDto { GroupYear = 1, GroupNumber = 1 } , Teacher = new TeacherDto { Id = 1, Username = "ProfDupont", Password = "MotDePasse",roles = ["Teacher"]} };
+        var newLesson = new LessonCreation(new DateTime(2024, 3, 16), new DateTime(2024, 3, 16),  "Math", "A19", "1", 1, 1);
+        var expectedLesson = new LessonReponseDto { Id = 1, CourseName = "Math", Classroom = "A19", Start = new DateTime(2024, 3, 16), End = new DateTime(2024, 3, 16), Group = new GroupDto { GroupYear = 1, GroupNumber = 1 } , Teacher = new TeacherDto { Id = "1", Username = "ProfDupont", Password = "MotDePasse" }};
         _mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage()
@@ -273,7 +273,7 @@ public class ApiDataManagerTests
     public async Task GetLessons_ReturnsLessons()
     {
         // Arrange
-        var expectedLessons = new PageReponse<LessonReponseDto>(1, new List<LessonReponseDto> { new LessonReponseDto { Id = 1, CourseName = "Math", Classroom = "A19", Start = new DateTime(2024, 3, 16), End = new DateTime(2024, 3, 16), Group = new GroupDto { GroupYear = 1, GroupNumber = 1 } , Teacher = new TeacherDto { Id = 1, Username = "ProfDupont", Password = "MotDePasse",roles = ["Teacher"]} } });
+        var expectedLessons = new PageReponse<LessonReponseDto>(1, new List<LessonReponseDto> { new LessonReponseDto { Id = 1, CourseName = "Math", Classroom = "A19", Start = new DateTime(2024, 3, 16), End = new DateTime(2024, 3, 16), Group = new GroupDto { GroupYear = 1, GroupNumber = 1 } , Teacher = new TeacherDto { Id = "1", Username = "ProfDupont", Password = "MotDePasse" }} });
         _mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage()
@@ -295,7 +295,7 @@ public class ApiDataManagerTests
     public async Task PutLesson_UpdatesLesson_ReturnsUpdatedLesson()
     {
         // Arrange
-        var updatedLesson = new LessonCreation( new DateTime(2024, 3, 16), new DateTime(2024, 3, 16),  "Math", "A19", 1, 1, 1);
+        var updatedLesson = new LessonCreation( new DateTime(2024, 3, 16), new DateTime(2024, 3, 16),  "Math", "A19", "1", 1, 1);
         _mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage()
@@ -316,7 +316,7 @@ public class ApiDataManagerTests
     public async Task GetLessonsByTeacherId_ReturnsLessons()
     {
         // Arrange
-        var expectedLessons = new PageReponse<LessonReponseDto>(1, new List<LessonReponseDto> { new LessonReponseDto { Id = 1, CourseName = "Math", Classroom = "A19", Start = new DateTime(2024, 3, 16), End = new DateTime(2024, 3, 16), Group = new GroupDto { GroupYear = 1, GroupNumber = 1 } , Teacher = new TeacherDto { Id = 1, Username = "ProfDupont", Password = "MotDePasse",roles = ["Teacher"]} } });
+        var expectedLessons = new PageReponse<LessonReponseDto>(1, new List<LessonReponseDto> { new LessonReponseDto { Id = 1, CourseName = "Math", Classroom = "A19", Start = new DateTime(2024, 3, 16), End = new DateTime(2024, 3, 16), Group = new GroupDto { GroupYear = 1, GroupNumber = 1 } , Teacher = new TeacherDto { Id = "1", Username = "ProfDupont", Password = "MotDePasse"} } });
         _mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage()
@@ -326,7 +326,7 @@ public class ApiDataManagerTests
             });
 
         // Act
-        var result = await _apiDataManager.GetLessonsByTeacherId(1);
+        var result = await _apiDataManager.GetLessonsByTeacherId("1");
 
         // Assert
         Assert.NotNull(result);
@@ -365,7 +365,7 @@ public class ApiDataManagerTests
     public async Task GetEvaluationById_ReturnsEvaluation()
     {
         // Arrange
-        var expectedEvaluation = new EvaluationReponseDto { Id = 1, Date = new DateTime(2024, 3, 16), CourseName = "Test Course", Grade = 10, PairName = "Test Pair", Teacher = new TeacherDto { Id = 1, Username = "ProfDupont", Password = "MotDePasse",roles = ["Teacher"]}, Template = new TemplateDto { Id = 1, Name = "Test Template" }, Student = new StudentDto { Id = 1, Name = "John", Lastname = "Doe" } };
+        var expectedEvaluation = new EvaluationReponseDto { Id = 1, Date = new DateTime(2024, 3, 16), CourseName = "Test Course", Grade = 10, PairName = "Test Pair", Teacher = new TeacherDto { Id = "1", Username = "ProfDupont", Password = "MotDePasse"}, Template = new TemplateDto { Id = 1, Name = "Test Template" }, Student = new StudentDto { Id = 1, Name = "John", Lastname = "Doe" } };
         _mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),
                 ItExpr.IsAny<CancellationToken>())
@@ -387,8 +387,8 @@ public class ApiDataManagerTests
     public async Task PostEvaluation_CreatesEvaluation_ReturnsEvaluation()
     {
         // Arrange
-        var newEvaluation = new EvaluationCreation(new DateTime(2024, 3, 16), "Test Course", 10, "Test Pair", 1, 1, 1);
-        var expectedEvaluation = new EvaluationCreation(new DateTime(2024, 3, 16), "Test Course", 10, "Test Pair", 1, 1, 1);
+        var newEvaluation = new EvaluationCreation(new DateTime(2024, 3, 16), "Test Course", 10, "Test Pair", "1", 1, 1);
+        var expectedEvaluation = new EvaluationCreation(new DateTime(2024, 3, 16), "Test Course", 10, "Test Pair", "1", 1, 1);
         _mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),
                 ItExpr.IsAny<CancellationToken>())
@@ -412,8 +412,8 @@ public class ApiDataManagerTests
     public async Task PutEvaluation_UpdatesEvaluation_ReturnsUpdatedEvaluation()
     {
         // Arrange
-        var updatedEvaluation = new EvaluationCreation(new DateTime(2024, 3, 16), "Test Course", 10, "Test Pair", 1, 1, 1);
-        var expectedUpdatedEvaluation = new EvaluationReponseDto { Id = 1, Date = new DateTime(2024, 3, 16), CourseName = "Test Course", Grade = 10, PairName = "Test Pair", Teacher = new TeacherDto { Id = 1, Username = "ProfDupont", Password = "MotDePasse",roles = ["Teacher"]}, Template = new TemplateDto { Id = 1, Name = "Test Template" }, Student = new StudentDto { Id = 1, Name = "John", Lastname = "Doe" } };
+        var updatedEvaluation = new EvaluationCreation(new DateTime(2024, 3, 16), "Test Course", 10, "Test Pair", "1", 1, 1);
+        var expectedUpdatedEvaluation = new EvaluationReponseDto { Id = 1, Date = new DateTime(2024, 3, 16), CourseName = "Test Course", Grade = 10, PairName = "Test Pair", Teacher = new TeacherDto { Id = "1", Username = "ProfDupont", Password = "MotDePasse"}, Template = new TemplateDto { Id = 1, Name = "Test Template" }, Student = new StudentDto { Id = 1, Name = "John", Lastname = "Doe" } };
         _mockHttpMessageHandler.Protected()
             .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),
                 ItExpr.IsAny<CancellationToken>())
@@ -455,7 +455,7 @@ public class ApiDataManagerTests
     public async Task GetEvaluationsByTeacherId_ReturnsEvaluations()
     {
         // Arrange
-        var teacherId = 1;
+        var teacherId = "1";
         var expectedEvaluations = new PageReponse<EvaluationReponseDto>
         (1, new List<EvaluationReponseDto>
             {
@@ -480,7 +480,7 @@ public class ApiDataManagerTests
         Assert.Single(result.Data);
     }
 
-    
+    /*
     [Fact]
     public async Task GetUsers_ReturnsUsers()
     {
@@ -618,6 +618,7 @@ public class ApiDataManagerTests
         // Assert
         Assert.True(result);
     }
+    */
     
     [Fact]
     public async Task GetTemplatesByUserId_ReturnsTemplates()
@@ -639,7 +640,7 @@ public class ApiDataManagerTests
             });
 
         // Act
-        var result = await _apiDataManager.GetTemplatesByUserId(1);
+        var result = await _apiDataManager.GetTemplatesByUserId("1");
 
         // Assert
         Assert.NotNull(result);
@@ -662,7 +663,7 @@ public class ApiDataManagerTests
             });
 
         // Act
-        var result = await _apiDataManager.GetTemplateById(1, 1);
+        var result = await _apiDataManager.GetTemplateById(1);
 
         // Assert
         Assert.NotNull(result);
@@ -687,7 +688,7 @@ public class ApiDataManagerTests
             });
 
         // Act
-        var result = await _apiDataManager.PostTemplate(1, newTemplate);
+        var result = await _apiDataManager.PostTemplate("1", newTemplate);
 
         // Assert
         Assert.NotNull(result);

@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Headers;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Text.Json;
 using Client_Model;
@@ -9,12 +10,12 @@ httpClient.BaseAddress = new Uri("https://localhost:7140");
 
 var registerData = new
 {
-    email = "newUser@gmail.com",
+    username = "newUser",
     password = "newUserPassword1234$",
 };
 
 var registerContent = new StringContent(JsonSerializer.Serialize(registerData), Encoding.UTF8, "application/json");
-var registerResponse = await httpClient.PostAsync("/register", registerContent);
+var registerResponse = await httpClient.PostAsync("/api/v1/Account/register", registerContent);
 
 if (!registerResponse.IsSuccessStatusCode)
 {
@@ -23,12 +24,12 @@ if (!registerResponse.IsSuccessStatusCode)
 
 var loginData = new
 {
-    email = "newUser@gmail.com",
+    username = "newUser",
     password = "newUserPassword1234$"
 };
 
 var loginContent = new StringContent(JsonSerializer.Serialize(loginData), Encoding.UTF8, "application/json");
-var loginResponse = await httpClient.PostAsync("/login", loginContent);
+var loginResponse = await httpClient.PostAsync("/api/v1/Account/login", loginContent);
 
 if (!loginResponse.IsSuccessStatusCode)
 {
@@ -37,19 +38,26 @@ if (!loginResponse.IsSuccessStatusCode)
 }
 
 var loginResponseBody = await loginResponse.Content.ReadAsStringAsync();
-var token ="";
+string token;
 using (var document = JsonDocument.Parse(loginResponseBody))
 {
     var root = document.RootElement;
-    token = root.GetProperty("accessToken").GetString(); 
+    token = root.GetProperty("token").GetString(); 
 }
 if (string.IsNullOrEmpty(token))
 {
     Console.WriteLine("Error getting token.");
     return;
 }
+
+var handler = new JwtSecurityTokenHandler();
+var jwtToken = handler.ReadToken(token) as JwtSecurityToken;
+
+var userId = jwtToken?.Claims.FirstOrDefault(claim => claim.Type == "nameid")?.Value;
+
 httpClient.DefaultRequestHeaders.Authorization = 
     new AuthenticationHeaderValue("Bearer", token);
+
 
 ApiDataManager apiDataManager = new(httpClient);
 
@@ -179,7 +187,7 @@ foreach (var lesson in lessons.Data)
 
 Console.WriteLine("Test PostLesson :\n");
 
-var newLesson = new LessonCreation(new DateOnly(2023, 11, 26).ToDateTime(new TimeOnly(15, 0)), new DateOnly(2023, 11, 26).ToDateTime(new TimeOnly(17, 0)), "Apprentissage Automatique", "Amphi A", 1, 1, 5);
+var newLesson = new LessonCreation(new DateOnly(2023, 11, 26).ToDateTime(new TimeOnly(15, 0)), new DateOnly(2023, 11, 26).ToDateTime(new TimeOnly(17, 0)), "Apprentissage Automatique", "Amphi A", "1", 1, 5);
 var lessonReponse = await apiDataManager.PostLesson(newLesson);
 
 Console.WriteLine(lessonReponse);
@@ -201,9 +209,9 @@ Console.WriteLine(lessbyId);
 
 //GetLessonByTeacherId
 
-Console.WriteLine("Test GetLessonByTeacherId (id=1) :\n");
+Console.WriteLine($"Test GetLessonByTeacherId (id={userId}) :\n");
 
-var lessonsByTeacherId=await apiDataManager.GetLessonsByTeacherId(1);
+var lessonsByTeacherId=await apiDataManager.GetLessonsByTeacherId(userId);
 Console.WriteLine($"Nombre d'éléments : {lessonsByTeacherId.nbElement}");
 foreach (var lesson in lessonsByTeacherId.Data)
 {
@@ -241,7 +249,7 @@ foreach (var eval in evals.Data)
 
 Console.WriteLine("Test PostEvaluation :\n");
 
-var newEval = new EvaluationCreation(new DateOnly(2023, 11, 26).ToDateTime(new TimeOnly(15, 0)), "JavaScript", 13, null, 1, 10, 1);
+var newEval = new EvaluationCreation(new DateOnly(2023, 11, 26).ToDateTime(new TimeOnly(15, 0)), "JavaScript", 13, null, userId, 10, 1);
 var evalReponse = await apiDataManager.PostEvaluation(newEval);
 
 Console.WriteLine(evalReponse);
@@ -265,7 +273,7 @@ Console.WriteLine(evalById);
 
 Console.WriteLine("Test GetEvaluationsByTeacherId (id=1) :\n");
 
-var evalsByTeacherId = await apiDataManager.GetEvaluationsByTeacherId(1);
+var evalsByTeacherId = await apiDataManager.GetEvaluationsByTeacherId(userId);
 Console.WriteLine($"Nombre d'éléments : {evalsByTeacherId.nbElement}");
 foreach (var eval in evalsByTeacherId.Data)
 {
@@ -288,6 +296,7 @@ foreach (var eval in evals.Data)
 }
 
 //User
+/*
 //GetUsers
 Console.WriteLine("Test GetUsers :\n");
 
@@ -346,13 +355,13 @@ foreach (var user in users.Data)
 {
     Console.WriteLine(user);
 }
-
+*/
 //Template
 
 //GetTemplateByUserId
 Console.WriteLine("Test GetTemplatesByUserId :\n");
 
-var templates = await apiDataManager.GetTemplatesByUserId(1);
+var templates = await apiDataManager.GetTemplatesByUserId(userId);
 Console.WriteLine($"Nombre d'éléments : {evals.nbElement}");
 foreach (var template in templates.Data)
 {
@@ -362,7 +371,7 @@ foreach (var template in templates.Data)
 //GetEmptyTemplateByUserId
 Console.WriteLine("Test GetEmptyTemplatesByUserId :\n");
 
-var emptyTemplates = await apiDataManager.GetEmptyTemplatesByUserId(1);
+var emptyTemplates = await apiDataManager.GetEmptyTemplatesByUserId(userId);
 Console.WriteLine($"Nombre d'éléments : {emptyTemplates.nbElement}");
 foreach (var template in emptyTemplates.Data)
 {
@@ -373,7 +382,7 @@ foreach (var template in emptyTemplates.Data)
 Console.WriteLine("Test PostTemplate :\n");
 
 var newTemplate = new Template(0, "Exam de Crypto", new List<Criteria>());
-var templateRep = await apiDataManager.PostTemplate(1, newTemplate);
+var templateRep = await apiDataManager.PostTemplate(userId, newTemplate);
 
 Console.WriteLine(templateRep);
 
@@ -388,7 +397,7 @@ Console.WriteLine(templateRep);
 //GetTemplateById
 
 Console.WriteLine("Test GetEvaluationById ( userid=1 ,templateid=1) :\n");
-var templateId = await apiDataManager.GetTemplateById(1, 1);
+var templateId = await apiDataManager.GetTemplateById(1);
 
 Console.WriteLine(templateId);
 
@@ -401,7 +410,7 @@ if (templateRep != null)
     Console.WriteLine(repDelete);
 }
 
-templates = await apiDataManager.GetEmptyTemplatesByUserId(1);
+templates = await apiDataManager.GetEmptyTemplatesByUserId(userId);
 Console.WriteLine($"Nombre d'éléments : {templates.nbElement}");
 foreach (var template in templates.Data)
 {

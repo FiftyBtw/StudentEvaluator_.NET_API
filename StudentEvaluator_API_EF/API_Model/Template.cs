@@ -20,7 +20,7 @@ namespace Client_Model
 
         private List<Criteria> _criterias = [];
 
-        public Template(long id, string name, IEnumerable<Criteria> criterias) {
+        public Template(long id, string name, ICollection<Criteria> criterias) {
             _id = id;
             Name = name;
             Criterias = new ReadOnlyCollection<Criteria>(_criterias);

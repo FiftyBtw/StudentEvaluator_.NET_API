@@ -5,11 +5,11 @@
         public List<Template> Templates { get; set; } = [];
         public Teacher() { }
 
-        public Teacher(long id, string username, string password, string[] roles):base(id, username, password, roles)
+        public Teacher(string id, string username, string password):base(id, username, password)
         {
 
         }
-        public Teacher(long id, string username, string password, string[] roles,List<Template> templates) : base(id, username, password, roles)
+        public Teacher(string id, string username, string password,List<Template> templates) : base(id, username, password)
         {
             Templates = templates;  
         }

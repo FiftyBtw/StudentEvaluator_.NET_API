@@ -12,4 +12,8 @@
     <ProjectReference Include="..\API_Dto2Model\Dto2Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.4.1" />
+  </ItemGroup>
+
 </Project>

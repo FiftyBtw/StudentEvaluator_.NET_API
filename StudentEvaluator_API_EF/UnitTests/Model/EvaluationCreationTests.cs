@@ -10,7 +10,7 @@ public class EvaluationCreationTests
         // Arrange
         var date = new DateTime(2024, 3, 16, 9, 0, 0);
         var courseName = "Mathematics";
-        var teacherId = 1;
+        var teacherId = "1";
         var templateId = 1;
         var studentId = 1;
         var grade = 10;

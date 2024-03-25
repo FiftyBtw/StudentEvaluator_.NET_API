@@ -5,7 +5,7 @@
         string courseName,
         long grade,
         string? pairName,
-        long teacherId,
+        string teacherId,
         long templateId,
         long studentId)
     {
@@ -15,7 +15,7 @@
 
         public long Grade { get; } = grade;
         public string? PairName { get;  } = pairName;
-        public long TeacherId { get;  } = teacherId;
+        public string TeacherId { get;  } = teacherId;
 
         public long TemplateId { get;  } = templateId;
 

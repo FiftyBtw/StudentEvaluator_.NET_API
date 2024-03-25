@@ -17,11 +17,11 @@ namespace API_EF.Controllers.V1;
 [Authorize]
 public class UsersController : ControllerBase
 {
-    private readonly IUserService<UserDto,LoginRequestDto,LoginResponseDto> _userService;
+    private readonly IUserService<UserDto,LoginDto,LoginResponseDto> _userService;
     
     private readonly ILogger<UsersController> _logger;
 
-    public UsersController(IUserService<UserDto, LoginRequestDto, LoginResponseDto> userService, ILogger<UsersController> logger)
+    public UsersController(IUserService<UserDto, LoginDto, LoginResponseDto> userService, ILogger<UsersController> logger)
     {
         _userService = userService;
         _logger = logger;
@@ -141,15 +141,15 @@ public class UsersController : ControllerBase
     /// <summary>
     ///  Login (authenticate a user and send his data if successful, this login is deprecated because it is not secure, use the login with token instead)
     /// </summary>
-    /// <param name="loginRequest"></param>
+    /// <param name="login"></param>
     /// <returns></returns>
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest)
+    public async Task<IActionResult> Login([FromBody] LoginDto login)
     {
         _logger.LogInformation(LogEvents.GetItem, "Login");
         if (_userService == null)return StatusCode(500);
        
-        var loginResponse = await _userService.Login(loginRequest);
+        var loginResponse = await _userService.Login(login);
         if (loginResponse == null)
         {
             return Unauthorized();

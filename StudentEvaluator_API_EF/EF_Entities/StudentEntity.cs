@@ -17,7 +17,7 @@ namespace EF_Entities
 
         public GroupEntity Group { get; set; }
         
-        public IEnumerable<EvaluationEntity> Evaluations { get; set; } = new List<EvaluationEntity>();
+        public ICollection<EvaluationEntity> Evaluations { get; set; } = new List<EvaluationEntity>();
 
     }
 }

@@ -83,8 +83,8 @@ public class TranslatorDto2ModelTests
         // Arrange
         var teacherDtos = new List<TeacherDto>
         {
-            new TeacherDto { Id = 1, Username = "ProfDupont", Password = "MotDePasseTresSecure", roles = ["Teacher"] },
-            new TeacherDto { Id = 2, Username = "ProfDurand", Password = "MotDePasseTresSecure", roles = ["Teacher"] }
+            new TeacherDto { Id = "1", Username = "ProfDupont", Password = "MotDePasseTresSecure" },
+            new TeacherDto { Id = "2", Username = "ProfDurand", Password = "MotDePasseTresSecure" }
         };
 
         // Act
@@ -101,7 +101,7 @@ public class TranslatorDto2ModelTests
     public void TeacherModelsToDto_ConvertsCorrectly()
     {
         // Arrange
-        var teacher = new Teacher(1, "ProfDupont", "MotDePasseTresSecure", [ "Teacher" ]);
+        var teacher = new Teacher("1", "ProfDupont", "MotDePasseTresSecure");
         
         // Act
         var teacherDtos = teacher.ToDto();
@@ -109,7 +109,6 @@ public class TranslatorDto2ModelTests
         // Assert
         Assert.Equal(teacher.Id, teacherDtos.Id);
         Assert.Equal(teacher.Username, teacherDtos.Username);
-        Assert.Equal(teacher.Roles, teacherDtos.roles);
         Assert.Equal(teacher.Password, teacherDtos.Password);
     }
     
@@ -121,8 +120,8 @@ public class TranslatorDto2ModelTests
         // Arrange
         var lessonDtos = new List<LessonReponseDto>
         {
-            new LessonReponseDto() { Id = 1, Start = DateTime.Now, End = DateTime.Now, CourseName = "Math", Classroom = "A1", Teacher = new TeacherDto { Id = 1, Username = "ProfDupont", Password = "MotDePasseTresSecure", roles = ["Teacher"] }, Group = new GroupDto { GroupYear = 1, GroupNumber = 1, Students = new List<StudentDto> { new StudentDto { Id = 1, Name = "John", Lastname = "Doe" } } } },
-            new LessonReponseDto { Id = 2, Start = DateTime.Now, End = DateTime.Now, CourseName = "Math", Classroom = "A1", Teacher = new TeacherDto { Id = 1, Username = "ProfDupont", Password = "MotDePasseTresSecure", roles = ["Teacher"] }, Group = new GroupDto { GroupYear = 1, GroupNumber = 1, Students = new List<StudentDto> { new StudentDto { Id = 1, Name = "John", Lastname = "Doe" } } } }
+            new LessonReponseDto() { Id = 1, Start = DateTime.Now, End = DateTime.Now, CourseName = "Math", Classroom = "A1", Teacher = new TeacherDto { Id = "1", Username = "ProfDupont", Password = "MotDePasseTresSecure" }, Group = new GroupDto { GroupYear = 1, GroupNumber = 1, Students = new List<StudentDto> { new StudentDto { Id = 1, Name = "John", Lastname = "Doe" } } } },
+            new LessonReponseDto { Id = 2, Start = DateTime.Now, End = DateTime.Now, CourseName = "Math", Classroom = "A1", Teacher = new TeacherDto { Id = "1", Username = "ProfDupont", Password = "MotDePasseTresSecure" }, Group = new GroupDto { GroupYear = 1, GroupNumber = 1, Students = new List<StudentDto> { new StudentDto { Id = 1, Name = "John", Lastname = "Doe" } } } }
         };
 
         // Act
@@ -139,7 +138,7 @@ public class TranslatorDto2ModelTests
     public void LessonCreationModelToDto_ConvertsCorrectly()
     {
         // Arrange
-        var lesson = new LessonCreation(DateTime.Now, DateTime.Now, "Math", "A1",  1, 1, 1);
+        var lesson = new LessonCreation(DateTime.Now, DateTime.Now, "Math", "A1",  "1", 1, 1);
         
         // Act
         var lessonDtos = lesson.ToDto();
@@ -159,7 +158,7 @@ public class TranslatorDto2ModelTests
     {
         // Arrange
         var lesson = new Lesson(1, DateTime.Now, DateTime.Now, "Math", "A1",
-            new Teacher(1, "ProfDupont", "MotDePasseTresSecure", ["Teacher"]),
+            new Teacher("1", "ProfDupont", "MotDePasseTresSecure"),
             new Group(1, 1, new List<Student> { new Student(1, "John", "Doe", "http://example.com/photo.jpg", 1, 1) }));
 
         // Act
@@ -218,8 +217,8 @@ public class TranslatorDto2ModelTests
         // Arrange
         var evaluationDtos = new List<EvaluationReponseDto>
         {
-            new() { Id = 1, Date = DateTime.Now, CourseName = "Math", Teacher = new TeacherDto { Id = 1, Username = "ProfDupont", Password = "MotDePasseTresSecure", roles = ["Teacher"] }, PairName = "toto", Grade = 2, Student = new StudentDto() { Id = 1, Name = "John", Lastname = "Doe" }, Template = new TemplateDto() { Id = 1, Name = "Math", Criterias = [] }},
-            new() { Id = 2, Date = DateTime.Now, CourseName = "Math", Teacher = new TeacherDto { Id = 1, Username = "ProfDupont", Password = "MotDePasseTresSecure", roles = ["Teacher"] }, PairName = "toto", Grade = 2, Student = new StudentDto() { Id = 1, Name = "John", Lastname = "Doe" }, Template = new TemplateDto() { Id = 2, Name = "Math", Criterias = [] }}
+            new() { Id = 1, Date = DateTime.Now, CourseName = "Math", Teacher = new TeacherDto { Id = "1", Username = "ProfDupont", Password = "MotDePasseTresSecure"}, PairName = "toto", Grade = 2, Student = new StudentDto() { Id = 1, Name = "John", Lastname = "Doe" }, Template = new TemplateDto() { Id = 1, Name = "Math", Criterias = [] }},
+            new() { Id = 2, Date = DateTime.Now, CourseName = "Math", Teacher = new TeacherDto { Id = "1", Username = "ProfDupont", Password = "MotDePasseTresSecure" }, PairName = "toto", Grade = 2, Student = new StudentDto() { Id = 1, Name = "John", Lastname = "Doe" }, Template = new TemplateDto() { Id = 2, Name = "Math", Criterias = [] }}
         };
 
         // Act
@@ -236,7 +235,7 @@ public class TranslatorDto2ModelTests
     public void EvaluationCreationModelToDto_ConvertsCorrectly()
     {
         // Arrange
-        var evaluation = new EvaluationCreation(DateTime.Now, "Math", 1, "toto", 2, 1, 1);
+        var evaluation = new EvaluationCreation(DateTime.Now, "Math", 1, "toto", "2", 1, 1);
         
         // Act
         var evaluationDtos = evaluation.ToDto();
@@ -255,7 +254,7 @@ public class TranslatorDto2ModelTests
     public void EvaluationModelToEvaluationResponseDto_ConvertsCorrectly()
     {
         // Arrange
-        var evaluation = new Evaluation(1, DateTime.Now, "Math", 1,"toto", new Teacher(1, "ProfDupont", "MotDePasseTresSecure", ["Teacher"]), new Template(1, "Math", new List<Criteria>()), new Student(1, "John", "Doe", "http://example.com/photo.jpg", 1, 1));
+        var evaluation = new Evaluation(1, DateTime.Now, "Math", 1,"toto", new Teacher("1", "ProfDupont", "MotDePasseTresSecure"), new Template(1, "Math", new List<Criteria>()), new Student(1, "John", "Doe", "http://example.com/photo.jpg", 1, 1));
         
         // Act
         var evaluationDtos = evaluation.ToReponseDto();
@@ -275,69 +274,38 @@ public class TranslatorDto2ModelTests
     // User 
     
     [Fact]
-    public void UserDtoToModels_ConvertsCorrectly()
+    public void TeacherDtoToModels_ConvertsCorrectly()
     {
         // Arrange
-        var userDtos = new List<UserDto>
+        var teacherDtos = new List<TeacherDto>
         {
-            new() { Id = 1, Username = "ProfDupont", Password = "MotDePasseTresSecure", roles = ["Teacher"] },
-            new() { Id = 2, Username = "ProfDurand", Password = "MotDePasseTresSecure", roles = ["Teacher"] }
+            new() { Id = "1", Username = "ProfDupont", Password = "MotDePasseTresSecure" },
+            new() { Id = "2", Username = "ProfDurand", Password = "MotDePasseTresSecure" }
         };
 
         // Act
-        var userModels = userDtos.ToModels();
+        var userModels = teacherDtos.ToModels();
 
         // Assert
         var enumerable = userModels as User[] ?? userModels.ToArray();
-        Assert.Equal(userDtos.Count, enumerable.Length);
-        Assert.Equal(userDtos[0].Id, enumerable.ElementAt(0).Id);
-        Assert.Equal(userDtos[1].Username, enumerable.ElementAt(1).Username);
+        Assert.Equal(teacherDtos.Count, enumerable.Length);
+        Assert.Equal(teacherDtos[0].Id, enumerable.ElementAt(0).Id);
+        Assert.Equal(teacherDtos[1].Username, enumerable.ElementAt(1).Username);
     }
     
     [Fact]
-    public void UserModelToDto_ConvertsCorrectly()
+    public void TeacherModelToDto_ConvertsCorrectly()
     {
         // Arrange
-        var user = new User(1, "ProfDupont", "MotDePasseTresSecure", ["Teacher"]);
+        var teacher = new Teacher("1", "ProfDupont", "MotDePasseTresSecure");
         
         // Act
-        var userDtos = user.ToDto();
+        var userDtos = teacher.ToDto();
         
         // Assert
-        Assert.Equal(user.Id, userDtos.Id);
-        Assert.Equal(user.Username, userDtos.Username);
-        Assert.Equal(user.Roles, userDtos.roles);
-        Assert.Equal(user.Password, userDtos.Password);
+        Assert.Equal(teacher.Id, userDtos.Id);
+        Assert.Equal(teacher.Username, userDtos.Username);
+        Assert.Equal(teacher.Password, userDtos.Password);
     }
-    
-    [Fact]
-    public void LoginRequestModelToDto_ConvertsCorrectly()
-    {
-        // Arrange
-        var loginRequest = new LoginRequest("ProfDupont", "MotDePasseTresSecure");
-        
-        // Act
-        var loginRequestDtos = loginRequest.ToDto();
-        
-        // Assert
-        Assert.Equal(loginRequest.Username, loginRequestDtos.Username);
-        Assert.Equal(loginRequest.Password, loginRequestDtos.Password);
-    }
-    
-    [Fact]
-    public void LoginResponseDtoToModel_ConvertsCorrectly()
-    {
-        // Arrange
-        var loginResponseDto = new LoginResponseDto { Id = 1, Username = "ProfDupont", Roles = ["Teacher"] };
-        
-        // Act
-        var loginResponse = loginResponseDto.ToModel();
-        
-        // Assert
-        Assert.Equal(loginResponseDto.Id, loginResponse.Id);
-        Assert.Equal(loginResponseDto.Username, loginResponse.Username);
-        Assert.Equal(loginResponseDto.Roles, loginResponse.Roles);
-    }
-    
     
 }

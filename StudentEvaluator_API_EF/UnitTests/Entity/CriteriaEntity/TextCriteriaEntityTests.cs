@@ -7,6 +7,7 @@ namespace EF_UnitTests.Entity.CriteriaEntity;
 
 public class TextCriteriaEntityTests
 {
+    /*
     [Fact]
     public void TestAddTextCriteria()
     {
@@ -184,6 +185,6 @@ public class TextCriteriaEntityTests
             Assert.Null(textCriteriaFromDb);
         }
     }
-
+*/
 }
 

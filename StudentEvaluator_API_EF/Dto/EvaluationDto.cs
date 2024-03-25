@@ -19,7 +19,7 @@ namespace API_Dto
 
         public long Grade { get; set; }
         public string? PairName { get; set; }
-        public long TeacherId { get; set; }
+        public string TeacherId { get; set; }
 
         public long TemplateId { get; set; }
 

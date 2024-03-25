@@ -29,7 +29,7 @@ public class LessonTests
             End = DateTime.Now.AddHours(1),
             CourseName = "Math",
             Classroom = "A101",
-            TeacherId = 1,
+            TeacherId = "1",
             GroupNumber = 1,
             GroupYear = 2024
         };
@@ -127,7 +127,7 @@ public class LessonTests
         var lessonId = 1;
         var newLessonDto = new LessonDto
         {
-            TeacherId = 1,
+            TeacherId = "1",
             GroupNumber=1,
             GroupYear=1,
         };
@@ -197,7 +197,7 @@ public class LessonTests
                 Classroom = "A11",
                 Teacher = new TeacherDto
                 {
-                    Id= 1,
+                    Id= "1",
                 },
                 Group = new GroupDto
                 {
@@ -214,7 +214,7 @@ public class LessonTests
                 Classroom = "B12",
                 Teacher = new TeacherDto
                 {
-                    Id= 2,
+                    Id= "2",
                 },
                 Group = new GroupDto
                 {
@@ -267,7 +267,7 @@ public class LessonTests
             Classroom = "A11",
             Teacher = new TeacherDto
             {
-                Id= 1,
+                Id= "1",
             },
             Group = new GroupDto
             {
@@ -316,7 +316,7 @@ public class LessonTests
 
         // Arrange
 
-        var teacherid = 1;
+        var teacherid = "1";
         var lessons = new List<LessonReponseDto>
         {
             new LessonReponseDto{
@@ -356,11 +356,11 @@ public class LessonTests
         };
         var pageResponse = new PageReponse<LessonReponseDto>(lessons.Count, lessons);
 
-        _mockRepo.Setup(service => service.GetLessonsByTeacherId(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<int>()))
+        _mockRepo.Setup(service => service.GetLessonsByTeacherId(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(pageResponse);
 
         // Act
-        var result = await _lessonsController.GetLessonsByTeacherId(teacherid);
+        var result = await _lessonsController.GetLessonsByTeacher();
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -373,11 +373,11 @@ public class LessonTests
     public async void TestGetLessonByTeacherId_NotFoundResult()
     {
         // Arrange
-        _mockRepo.Setup(service => service.GetLessonsByTeacherId(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<int>()))
+        _mockRepo.Setup(service => service.GetLessonsByTeacherId(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync((PageReponse<LessonReponseDto>)null);
 
         // Act
-        var result = await _lessonsController.GetLessonsByTeacherId(1);
+        var result = await _lessonsController.GetLessonsByTeacher();
 
         // Assert
         var noContentResult = Assert.IsType<NoContentResult>(result);

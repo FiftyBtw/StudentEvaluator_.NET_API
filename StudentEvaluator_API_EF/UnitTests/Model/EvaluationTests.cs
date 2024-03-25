@@ -13,7 +13,7 @@ public class EvaluationTests
         var course = "Mathematics";
         var grade = 10;
         var pairName = "toto";
-        var teacher = new Teacher {Username = "ProfSmith", Password = "password", Roles = ["Teacher"]};
+        var teacher = new Teacher {Username = "ProfSmith", Password = "password"};
         var student = new Student (1,"John", "Doeeeee", "https:::/www.google.com",  1, 1);
         var template = new Template(1, "Template1", new List<Criteria>());        
         
@@ -37,7 +37,7 @@ public class EvaluationTests
         var course = "Mathematics";
         var grade = 10;
         var pairName = "toto";
-        var teacher = new Teacher {Username = "ProfSmith", Password = "password", Roles = ["Teacher"]};
+        var teacher = new Teacher {Username = "ProfSmith", Password = "password"};
         var student = new Student (1,"John", "Doeeeee", "https:::/www.google.com",  1, 1);
         var template = new Template(1, "Template1", new List<Criteria>());
         var evaluation = new Evaluation(1,date, course , grade, pairName, teacher, template, student);

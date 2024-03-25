@@ -105,9 +105,9 @@ namespace Entities2Dto
         /// </summary>
         /// <param name="dtos">The IEnumerable of student DTOs to be converted.</param>
         /// <returns>The corresponding IEnumerable of student entities.</returns>
-        public static IEnumerable<StudentEntity> ToEntities(this IEnumerable<StudentDto> dtos)
+        public static ICollection<StudentEntity> ToEntities(this IEnumerable<StudentDto> dtos)
         {
-            IEnumerable<StudentEntity> students = new List<StudentEntity>();
+            ICollection<StudentEntity> students = new List<StudentEntity>();
             foreach (var dto in dtos)
             {
                 (students as List<StudentEntity>).Add(dto.ToEntity());
@@ -467,9 +467,9 @@ namespace Entities2Dto
         /// </summary>
         /// <param name="dtos">The IEnumerable of template DTOs to be converted.</param>
         /// <returns>The corresponding IEnumerable of template entities.</returns>
-        public static IEnumerable<TemplateEntity> ToEntities(this IEnumerable<TemplateDto> dtos)
+        public static ICollection<TemplateEntity> ToEntities(this IEnumerable<TemplateDto> dtos)
         {
-            IEnumerable<TemplateEntity> templates = new List<TemplateEntity>();
+            ICollection<TemplateEntity> templates = new List<TemplateEntity>();
             foreach (var dto in dtos)
             {
                 (templates as List<TemplateEntity>).Add(dto.ToEntity());
@@ -488,14 +488,9 @@ namespace Entities2Dto
             return templateDto;
         }
         
-        public static  IEnumerable<TemplateDto> ToDtos(this IEnumerable<TemplateEntity> entities)
+        public static IEnumerable<TemplateDto> ToDtos(this IEnumerable<TemplateEntity> entities)
         {
-            IEnumerable<TemplateDto> templates = new List<TemplateDto>();
-            foreach (var entity in entities)
-            {
-                (templates as List<TemplateDto>).Add(entity.ToDto());
-            }
-            return templates;
+            return entities.Select(entity => entity.ToDto()).ToList();
         }
         
         //Teacher
@@ -512,11 +507,9 @@ namespace Entities2Dto
             {
                 teacherDto = new TeacherDto
                 {
-                    Id = teacher.Id,
-                    Username = teacher.Username,
-                    Password = teacher.Password,
+                    Username = teacher.UserName,
+                    Password = teacher.PasswordHash,
                     Templates = teacher.Templates?.ToDtos(),
-                    roles = teacher.Roles,
                 };
                 TeacherMapper.Set(teacher, teacherDto);
             }
@@ -536,11 +529,9 @@ namespace Entities2Dto
             {
                 teacherEntity = new TeacherEntity
                 {
-                    Id = teacher.Id,
-                    Username = teacher.Username,
-                    Password = teacher.Password,
+                    UserName = teacher.Username,
+                    PasswordHash = teacher.Password,
                     Templates = teacher.Templates?.ToEntities(),
-                    Roles = teacher.roles,
                 };
                 TeacherMapper.Set(teacherEntity, teacher);
             }
@@ -691,7 +682,7 @@ namespace Entities2Dto
             }
             return lessons;
         }
-
+/*
         /// <summary>
         /// Extension method to convert UserEntity to UserDto.
         /// </summary>
@@ -753,7 +744,7 @@ namespace Entities2Dto
             }
             return users;
         }
-
+*/
 
         /// <summary>
         /// Extension method to convert EvaluationEntity to EvaluationDto.

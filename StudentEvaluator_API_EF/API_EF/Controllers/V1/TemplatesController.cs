@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using API_Dto;
 using Asp.Versioning;
 using EventLogs;
@@ -34,16 +35,23 @@ public class TemplatesController : ControllerBase
     /// <param name="index"></param>
     /// <param name="count"></param>
     /// <returns></returns>
-    [HttpGet("user/{id}")]
+    [HttpGet("teacher")]
     [ProducesResponseType(200, Type = typeof(PageReponse<TemplateDto>))]
     [ProducesResponseType(204)]
     [ProducesResponseType(500)]
-    public async Task<IActionResult> GetTemplatesByUserId(long id, int index = 0, int count = 10)
+    public async Task<IActionResult> GetTemplatesByUserId(int index = 0, int count = 10)
     {
         _logger.LogInformation(LogEvents.GetItems, "GetTemplatesByUserId");
         if (_templateService == null)return StatusCode(500);
+        
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        var data = await _templateService.GetTemplatesByUserId(id, index, count);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized("User ID is missing in the token");
+        }
+
+        var data = await _templateService.GetTemplatesByUserId(userId, index, count);
         if (data == null)
         {
             _logger.LogInformation(LogEvents.GetItems, "NoContent");
@@ -62,13 +70,20 @@ public class TemplatesController : ControllerBase
     /// <param name="index"></param>
     /// <param name="count"></param>
     /// <returns></returns>
-    [HttpGet("user/{id}/models")]
-    public async Task<IActionResult> GetEmptyTemplatesByUserId(long id, int index = 0, int count = 10)
+    [HttpGet("teacher/models")]
+    public async Task<IActionResult> GetEmptyTemplatesByUserId(int index = 0, int count = 10)
     {
         _logger.LogInformation(LogEvents.GetItems, "GetEmptyTemplatesByUserId");
         if (_templateService == null)return StatusCode(500);
+        
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        var data = await _templateService.GetEmptyTemplatesByUserId(id, index, count);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized("User ID is missing in the token");
+        }
+
+        var data = await _templateService.GetEmptyTemplatesByUserId(userId, index, count);
         if (data == null)
         {
             _logger.LogInformation(LogEvents.GetItems, "NoContent");
@@ -86,13 +101,20 @@ public class TemplatesController : ControllerBase
     /// <param name="userId"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    [HttpGet("{id}/user/{userId}")]
-    public async Task<IActionResult> GetTemplateById(long userId, long id)
+    [HttpGet("{id}/teacher")]
+    public async Task<IActionResult> GetTemplateById(long id)
     {
         _logger.LogInformation(LogEvents.GetItem, "GetTemplateById");
         if (_templateService == null)return StatusCode(500);
+        
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        var data = await _templateService.GetTemplateById(userId, id);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized("User ID is missing in the token");
+        }
+
+        var data = await _templateService.GetTemplateById( id);
         if (data == null)
         {
             _logger.LogInformation(LogEvents.GetItem, "NoContent");
@@ -111,11 +133,17 @@ public class TemplatesController : ControllerBase
     /// <param name="template"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<IActionResult> PostTemplate(long userId, [FromBody] TemplateDto template)
+    public async Task<IActionResult> PostTemplate([FromBody] TemplateDto template)
     {
         _logger.LogInformation(LogEvents.InsertItem, "PostTemplate");
         if (_templateService == null)return StatusCode(500);
+        
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized("User ID is missing in the token");
+        }
         var data = await _templateService.PostTemplate(userId, template);
         if (data == null)
         {

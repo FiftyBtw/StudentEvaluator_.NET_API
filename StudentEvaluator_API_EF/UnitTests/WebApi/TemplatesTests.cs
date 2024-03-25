@@ -37,11 +37,11 @@ public class TemplatesTests
 
         };
 
-        _mockRepo.Setup(service => service.PostTemplate(It.IsAny<long>(), It.IsAny<TemplateDto>()))
+        _mockRepo.Setup(service => service.PostTemplate(It.IsAny<string>(), It.IsAny<TemplateDto>()))
              .ReturnsAsync(newTemplateDto);
 
         // Act
-        var result = await _templateController.PostTemplate(1, newTemplateDto);
+        var result = await _templateController.PostTemplate(newTemplateDto);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -54,11 +54,11 @@ public class TemplatesTests
     [Fact]
     public async void TestAddTemplate_BadRequest()
     {
-        _mockRepo.Setup(service => service.PostTemplate(It.IsAny<long>(), It.IsAny<TemplateDto>()))
+        _mockRepo.Setup(service => service.PostTemplate(It.IsAny<string>(), It.IsAny<TemplateDto>()))
          .ReturnsAsync((long id, TemplateDto template) => null);
 
         // Act
-        var result = await _templateController.PostTemplate(1, new TemplateDto());
+        var result = await _templateController.PostTemplate(new TemplateDto());
 
         // Assert
         Assert.IsType<BadRequestResult>(result);
@@ -124,7 +124,7 @@ public class TemplatesTests
          };
         var pageResponse = new PageReponse<TemplateDto>(templates.Count, templates);
 
-        _mockRepo.Setup(service => service.GetTemplatesByUserId(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<int>()))
+        _mockRepo.Setup(service => service.GetTemplatesByUserId(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(pageResponse);
 
         // Act
@@ -140,7 +140,7 @@ public class TemplatesTests
     public async void TestGetTemplatesByUserId_NotContent()
     {
         // Arrange
-        _mockRepo.Setup(service => service.GetTemplatesByUserId(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<int>()))
+        _mockRepo.Setup(service => service.GetTemplatesByUserId(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync((PageReponse<TemplateDto>)null);
 
         // Act
@@ -167,11 +167,11 @@ public class TemplatesTests
 
         };
 
-        _mockRepo.Setup(service => service.GetTemplateById(It.IsAny<long>(), It.IsAny<long>()))
+        _mockRepo.Setup(service => service.GetTemplateById( It.IsAny<long>()))
             .ReturnsAsync(existingTemplateDto);
 
         // Act
-        var result = await _templateController.GetTemplateById(userid, templateid);
+        var result = await _templateController.GetTemplateById(templateid);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -185,11 +185,11 @@ public class TemplatesTests
     public async void TestGetTemplateById_NotFound()
     {
         // Arrange
-        _mockRepo.Setup(service => service.GetTemplateById(It.IsAny<long>(), It.IsAny<long>()))
+        _mockRepo.Setup(service => service.GetTemplateById(It.IsAny<long>()))
             .ReturnsAsync((TemplateDto)null);
 
         // Act
-        var result = await _templateController.GetTemplateById(1, 1);
+        var result = await _templateController.GetTemplateById(1);
 
         // Assert
         Assert.IsType<NotFoundResult>(result);
@@ -218,7 +218,7 @@ public class TemplatesTests
          };
         var pageResponse = new PageReponse<TemplateDto>(templates.Count, templates);
 
-        _mockRepo.Setup(service => service.GetEmptyTemplatesByUserId(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<int>()))
+        _mockRepo.Setup(service => service.GetEmptyTemplatesByUserId(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(pageResponse);
 
         // Act
@@ -235,7 +235,7 @@ public class TemplatesTests
     public async void TestGetEmptyTemplateByUserId_NotFound()
     {
         // Arrange
-        _mockRepo.Setup(service => service.GetEmptyTemplatesByUserId(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<int>()))
+        _mockRepo.Setup(service => service.GetEmptyTemplatesByUserId(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync((PageReponse<TemplateDto>)null);
 
         // Act

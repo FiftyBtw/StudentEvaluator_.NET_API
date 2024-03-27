@@ -57,10 +57,12 @@ steps:
       - name: docs
         path: /docs
     commands:
+      -  cd Documentation/doxygen
+      - doxygen Doxyfile
       - /entrypoint.sh
-    when:
-      branch:
-        - master
+#    when:
+#      branch:
+#        - master
     depends_on: [ build ]
 
   - name: docker-build-and-push

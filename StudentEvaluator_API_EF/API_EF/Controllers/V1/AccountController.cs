@@ -2,6 +2,7 @@ using API_Dto;
 using API_EF.Token;
 using Asp.Versioning;
 using EF_Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -73,5 +74,21 @@ public class AccountController : ControllerBase
         }
         var token = _tokenService.CreateToken(user);
         return Ok(new { token });
+    }
+    
+    [Authorize]
+    [HttpGet("info")]
+    public async Task<IActionResult> GetUserInfo()
+    {
+        var user = await _userManager.FindByNameAsync(User.Identity.Name);
+        if (user == null)
+        {
+            return Unauthorized();
+        }
+        return Ok(new UserInfoDto
+        {
+            Id = user.Id,
+            Username = user.UserName
+        });
     }
 }

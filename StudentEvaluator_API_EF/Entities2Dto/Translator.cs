@@ -17,7 +17,7 @@ namespace Entities2Dto
         public static Mapper<TemplateEntity, TemplateDto> TemplateMapper { get; set; } = new Mapper<TemplateEntity, TemplateDto>();
  
         public static Mapper<TeacherEntity, TeacherDto> TeacherMapper { get; set; } = new Mapper<TeacherEntity, TeacherDto>();
-        public static Mapper<UserEntity, UserDto> UserMapper { get; set; } = new Mapper<UserEntity, UserDto>();
+        //public static Mapper<UserEntity, UserDto> UserMapper { get; set; } = new Mapper<UserEntity, UserDto>();
         public static Mapper<LessonEntity,LessonDto> LessonMapper { get; set; } = new Mapper<LessonEntity, LessonDto>();
         public static Mapper<LessonEntity, LessonReponseDto> LessonReponseMapper { get; set; } = new Mapper<LessonEntity, LessonReponseDto>();
         public static Mapper<EvaluationEntity, EvaluationDto> EvaluationMapper { get; set; } = new Mapper<EvaluationEntity, EvaluationDto>();

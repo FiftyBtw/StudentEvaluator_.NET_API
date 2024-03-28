@@ -10,11 +10,12 @@ namespace EF_UnitTests.WebApi;
 
 public class UserTests
 {
+    /*
     private readonly Mock<IUserService<UserDto,LoginDto,LoginResponseDto>> _mockRepo=new();
     private readonly Mock<ILogger<UsersController>> _mockLogger=new();
     private readonly UsersController _usersController;
 
-    /*
+    
     public UserTests()
     {     
         _usersController= new UsersController(_mockRepo.Object,_mockLogger.Object);

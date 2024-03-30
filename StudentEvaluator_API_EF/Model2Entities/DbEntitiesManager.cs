@@ -11,7 +11,7 @@ namespace Model2Entities
     /// </summary>
     public class DbEntitiesManager : IStudentService<Student>, IGroupService<Group>,
         ILessonService<LessonCreation, Lesson>, IEvaluationService<EvaluationCreation, Evaluation>,
-        IUserService<User, LoginRequest, LoginResponse>, ITemplateService<Template>
+        /*IUserService<User, LoginRequest, LoginResponse>, */ITemplateService<Template>
     {
         private readonly LibraryContext _libraryContext;
 
@@ -181,7 +181,7 @@ namespace Model2Entities
             return await Task.FromResult(lesson);
         }
 
-        public async Task<PageReponse<Lesson>> GetLessonsByTeacherId(long id, int index = 0, int count = 10)
+        public async Task<PageReponse<Lesson>> GetLessonsByTeacherId(string id, int index = 0, int count = 10)
         {
             var lessons = _libraryContext.LessonSet.Where(l => l.TeacherEntityId == id).ToModels();
             return await Task.FromResult(new PageReponse<Lesson>(lessons.Count(),
@@ -232,7 +232,7 @@ namespace Model2Entities
             return await Task.FromResult(evaluation);
         }
 
-        public async Task<PageReponse<Evaluation>> GetEvaluationsByTeacherId(long id, int index = 0, int count = 10)
+        public async Task<PageReponse<Evaluation>> GetEvaluationsByTeacherId(string id, int index = 0, int count = 10)
         {
             var evaluations = _libraryContext.EvaluationSet.Where(e => e.TeacherId == id).ToModels();
             return await Task.FromResult(new PageReponse<Evaluation>(evaluations.Count(),
@@ -281,7 +281,7 @@ namespace Model2Entities
 
             return true;
         }
-
+    /*
         // User 
 
         public async Task<PageReponse<User>> GetUsers(int index = 0, int count = 10)
@@ -352,17 +352,17 @@ namespace Model2Entities
             return await Task.FromResult(_libraryContext.TeacherSet.FirstOrDefault(u => u.Id == userEntity.Id)
                 ?.ToModel());
         }
-
+        */
         // Template
 
-        public async Task<PageReponse<Template>> GetTemplatesByUserId(long id, int index = 0, int count = 10)
+        public async Task<PageReponse<Template>> GetTemplatesByUserId(string id, int index = 0, int count = 10)
         {
             var templates = _libraryContext.TemplateSet.Where(t => t.TeacherId == id).ToModels();
             return await Task.FromResult(new PageReponse<Template>(templates.Count(),
                 templates.Skip(index * count).Take(count)));
         }
 
-        public async Task<PageReponse<Template>> GetEmptyTemplatesByUserId(long id, int index = 0, int count = 10)
+        public async Task<PageReponse<Template>> GetEmptyTemplatesByUserId(string id, int index = 0, int count = 10)
         {
             var templates = _libraryContext.TemplateSet.Where(t => t.TeacherId == id && t.EvaluationId == null)
                 .ToModels();
@@ -371,13 +371,13 @@ namespace Model2Entities
         }
 
 
-        public async Task<Template?> GetTemplateById(long userId, long templateId)
+        public async Task<Template?> GetTemplateById(long templateId)
         {
-            var template = _libraryContext.TemplateSet.FirstOrDefault(t => t.Id == templateId && t.TeacherId == userId);
+            var template = _libraryContext.TemplateSet.FirstOrDefault(t => t.Id == templateId);
             return await Task.FromResult(template?.ToModel());
         }
 
-        public async Task<Template?> PostTemplate(long userId, Template template)
+        public async Task<Template?> PostTemplate(string userId, Template template)
         {
             var templateEntity = template.ToEntity();
             templateEntity.TeacherId = userId;

@@ -18,17 +18,13 @@ public class TeacherTests
     [Fact]
     public void ConstructorWithParams()
     {
-        // Arrange
-        var roles = new[] { "Teacher" };
-
         // Act
-        var teacher = new Teacher(1, "teacher1", "pass", roles);
+        var teacher = new Teacher("1", "teacher1", "pass");
 
         // Assert
-        Assert.Equal(1, teacher.Id);
+        Assert.Equal("1", teacher.Id);
         Assert.Equal("teacher1", teacher.Username);
         Assert.Equal("pass", teacher.Password);
-        Assert.Equal(roles, teacher.Roles);
         Assert.Empty(teacher.Templates);
     }
 
@@ -40,13 +36,12 @@ public class TeacherTests
         var templates = new List<Template> { new Template(1, "template1", []), new Template(2, "template2", []) };
 
         // Act
-        var teacher = new Teacher(1, "teacher2", "pass", roles, templates);
+        var teacher = new Teacher("1", "teacher2", "pass", templates);
 
         // Assert
-        Assert.Equal(1, teacher.Id);
+        Assert.Equal("1", teacher.Id);
         Assert.Equal("teacher2", teacher.Username);
         Assert.Equal("pass", teacher.Password);
-        Assert.Equal(roles, teacher.Roles);
         Assert.Equal(templates, teacher.Templates);
         Assert.NotEmpty(teacher.Templates);
         Assert.Equal(2, teacher.Templates.Count);

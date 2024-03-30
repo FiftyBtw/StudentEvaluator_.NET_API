@@ -13,7 +13,7 @@ public class LessonTests
         var end = new DateTime(2024, 3, 16, 11, 0, 0);
         var courseName = "Mathematics";
         var classroom = "A19";
-        var teacher = new Teacher(1, "ProfSmith", "password", ["Teacher"]);
+        var teacher = new Teacher("1", "ProfSmith", "password");
         var group = new Group(1, 1, new List<Student>());
 
         // Act
@@ -53,7 +53,7 @@ public class LessonTests
             new DateTime(2024, 3, 16,12, 0, 0),
             "Mathematics",
             "A19",
-            new Teacher(2, "ProfJohnson", "secure", new string[] {"Teacher"}),
+            new Teacher("2", "ProfJohnson", "secure"),
             new Group(2, 1, new List<Student>())
         );
         var expectedFormat = $"Lesson : 2, Mathematics,A19, {new DateTime(2024, 3, 16, 10, 0, 0)}-{new DateTime(2024, 3, 16, 12, 0, 0)}\n" +

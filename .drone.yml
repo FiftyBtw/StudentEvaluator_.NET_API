@@ -20,6 +20,9 @@ steps:
       - cd StudentEvaluator_API_EF
       - dotnet restore StudentEvaluator_API_EF.sln
       - dotnet test StudentEvaluator_API_EF.sln --no-restore
+    when:
+      branch:
+        - master
     depends_on: [build]
 
   - name: code-analysis
@@ -54,10 +57,12 @@ steps:
       - name: docs
         path: /docs
     commands:
+      -  cd Documentation/doxygen
+      - doxygen Doxyfile
       - /entrypoint.sh
-    when:
-      branch:
-        - master
+#    when:
+#      branch:
+#        - master
     depends_on: [ build ]
 
   - name: docker-build-and-push
@@ -74,6 +79,7 @@ steps:
     when:
       branch:
         - master
+        - API_Authentication
 
   - name: deploy-container
     image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest

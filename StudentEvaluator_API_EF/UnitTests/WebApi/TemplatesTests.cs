@@ -1,4 +1,5 @@
-﻿using API_Dto;
+﻿using System.Security.Claims;
+using API_Dto;
 using Moq;
 using Shared;
 using API_EF;
@@ -6,6 +7,7 @@ using API_EF.Controllers.V1;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using API_EF.Controllers;
+using Microsoft.AspNetCore.Http;
 
 namespace EF_UnitTests.WebApi;
 
@@ -23,25 +25,34 @@ public class TemplatesTests
 
 
     [Fact]
-    public async void TestAddTemplate_OkResult()
+    public async Task TestAddTemplate_OkResult()
     {
         // Arrange
         var newTemplateDto = new TemplateDto
         {
             Id = 1,
             Name = "Exam SQL",
-            Criterias = new List<CriteriaDto>{
+            Criterias = new List<CriteriaDto>
+            {
                 new TextCriteriaDto(),
                 new RadioCriteriaDto()
-                }
-
+            }
         };
 
-        _mockRepo.Setup(service => service.PostTemplate(It.IsAny<long>(), It.IsAny<TemplateDto>()))
-             .ReturnsAsync(newTemplateDto);
+        _mockRepo.Setup(service => service.PostTemplate(It.IsAny<string>(), It.IsAny<TemplateDto>()))
+            .ReturnsAsync(newTemplateDto);
+
+        var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, "testUserId"),
+        }, "TestAuthentication"));
+        _templateController.ControllerContext = new ControllerContext()
+        {
+            HttpContext = new DefaultHttpContext() { User = user }
+        };
 
         // Act
-        var result = await _templateController.PostTemplate(1, newTemplateDto);
+        var result = await _templateController.PostTemplate(newTemplateDto);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -51,18 +62,27 @@ public class TemplatesTests
         Assert.Equal(newTemplateDto.Criterias.Count, returnedTemplateDto.Criterias.Count);
     }
 
+
     [Fact]
-    public async void TestAddTemplate_BadRequest()
+    public async Task TestAddTemplate_BadRequest()
     {
-        _mockRepo.Setup(service => service.PostTemplate(It.IsAny<long>(), It.IsAny<TemplateDto>()))
-         .ReturnsAsync((long id, TemplateDto template) => null);
+        _mockRepo.Setup(service => service.PostTemplate(It.IsAny<string>(), It.IsAny<TemplateDto>()))
+            .ReturnsAsync((string userId, TemplateDto template) => null);
 
-        // Act
-        var result = await _templateController.PostTemplate(1, new TemplateDto());
+        var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, "someUserId"),
+        }, "TestAuthentication"));
+        _templateController.ControllerContext = new ControllerContext()
+        {
+            HttpContext = new DefaultHttpContext() { User = user }
+        };
 
-        // Assert
+        var result = await _templateController.PostTemplate(new TemplateDto());
+
         Assert.IsType<BadRequestResult>(result);
     }
+
 
 
     [Fact]
@@ -99,36 +119,45 @@ public class TemplatesTests
 
 
     [Fact]
-    public async void TestGetTemplatesByUserId_OkResult()
+    public async Task TestGetTemplatesByUserId_OkResult()
     {
         // Arrange
         var templates = new List<TemplateDto>
         {
             new TemplateDto {
-                 Id = 1,
-                 Name = "Exam SQL",
-                 Criterias = new List<CriteriaDto>{
+                Id = 1,
+                Name = "Exam SQL",
+                Criterias = new List<CriteriaDto>{
                     new TextCriteriaDto(),
                     new RadioCriteriaDto()
                 }
-             },
-
+            },
             new TemplateDto {
-                 Id = 2,
-                 Name = "Exam Réseaux",
-                 Criterias = new List<CriteriaDto>{
+                Id = 2,
+                Name = "Exam Réseaux",
+                Criterias = new List<CriteriaDto>{
                     new TextCriteriaDto(),
                     new RadioCriteriaDto()
                 }
-             },
-         };
+            },
+        };
         var pageResponse = new PageReponse<TemplateDto>(templates.Count, templates);
 
-        _mockRepo.Setup(service => service.GetTemplatesByUserId(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<int>()))
+        _mockRepo.Setup(service => service.GetTemplatesByUserId(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(pageResponse);
 
+        // Simulate an authenticated user, if necessary
+        var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, "userId"),
+        }, "TestAuthentication"));
+        _templateController.ControllerContext = new ControllerContext()
+        {
+            HttpContext = new DefaultHttpContext() { User = user }
+        };
+
         // Act
-        var result = await _templateController.GetTemplatesByUserId(1);
+        var result = await _templateController.GetTemplatesByUserId(1); // Adjust this line if the method does not take a parameter
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -136,12 +165,22 @@ public class TemplatesTests
         Assert.Equal(templates.Count, returnedPageResponse.Data.Count());
     }
 
+
     [Fact]
     public async void TestGetTemplatesByUserId_NotContent()
     {
         // Arrange
-        _mockRepo.Setup(service => service.GetTemplatesByUserId(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<int>()))
+        _mockRepo.Setup(service => service.GetTemplatesByUserId(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync((PageReponse<TemplateDto>)null);
+        
+        var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, "userId"),
+        }, "TestAuthentication"));
+        _templateController.ControllerContext = new ControllerContext()
+        {
+            HttpContext = new DefaultHttpContext() { User = user }
+        };
 
         // Act
         var result = await _templateController.GetTemplatesByUserId(1);
@@ -166,12 +205,22 @@ public class TemplatesTests
                 }
 
         };
+        
 
-        _mockRepo.Setup(service => service.GetTemplateById(It.IsAny<long>(), It.IsAny<long>()))
+        _mockRepo.Setup(service => service.GetTemplateById( It.IsAny<long>()))
             .ReturnsAsync(existingTemplateDto);
+        
+        var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, "userId"),
+        }, "TestAuthentication"));
+        _templateController.ControllerContext = new ControllerContext()
+        {
+            HttpContext = new DefaultHttpContext() { User = user }
+        };
 
         // Act
-        var result = await _templateController.GetTemplateById(userid, templateid);
+        var result = await _templateController.GetTemplateById(templateid);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -185,11 +234,20 @@ public class TemplatesTests
     public async void TestGetTemplateById_NotFound()
     {
         // Arrange
-        _mockRepo.Setup(service => service.GetTemplateById(It.IsAny<long>(), It.IsAny<long>()))
+        _mockRepo.Setup(service => service.GetTemplateById(It.IsAny<long>()))
             .ReturnsAsync((TemplateDto)null);
+        
+        var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, "userId"),
+        }, "TestAuthentication"));
+        _templateController.ControllerContext = new ControllerContext()
+        {
+            HttpContext = new DefaultHttpContext() { User = user }
+        };
 
         // Act
-        var result = await _templateController.GetTemplateById(1, 1);
+        var result = await _templateController.GetTemplateById(1);
 
         // Assert
         Assert.IsType<NotFoundResult>(result);
@@ -197,52 +255,66 @@ public class TemplatesTests
 
 
     [Fact]
-    public async void TestGetEmptyTemplateByUserId_OkResult()
+    public async Task TestGetEmptyTemplateByUserId_OkResult()
     {
         // Arrange
-
-        var id = 1;
         var templates = new List<TemplateDto>
         {
-           new TemplateDto {
-                 Id = 1,
-                 Name = "Exam SQL",
-                 Criterias = new List<CriteriaDto>()
-             },
-
             new TemplateDto {
-                 Id = 2,
-                 Name = "Exam Réseaux",
-                 Criterias = new List<CriteriaDto>()
-             },
-         };
+                Id = 1,
+                Name = "Exam SQL",
+                Criterias = new List<CriteriaDto>()
+            },
+            new TemplateDto {
+                Id = 2,
+                Name = "Exam Réseaux",
+                Criterias = new List<CriteriaDto>()
+            },
+        };
         var pageResponse = new PageReponse<TemplateDto>(templates.Count, templates);
 
-        _mockRepo.Setup(service => service.GetEmptyTemplatesByUserId(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<int>()))
+        _mockRepo.Setup(service => service.GetEmptyTemplatesByUserId(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(pageResponse);
 
-        // Act
-        var result = await _templateController.GetEmptyTemplatesByUserId(id);
+        var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, "userId"),
+        }, "TestAuthentication"));
+        _templateController.ControllerContext = new ControllerContext()
+        {
+            HttpContext = new DefaultHttpContext() { User = user }
+        };
+        
+        var result = await _templateController.GetEmptyTemplatesByUserId();
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
-        var returnedPageRepDto = Assert.IsType<PageReponse<TemplateDto>>(okResult.Value);
-        Assert.Equal(pageResponse.nbElement, returnedPageRepDto.nbElement);
-
+        var returnedPageResponse = Assert.IsType<PageReponse<TemplateDto>>(okResult.Value);
+        Assert.Equal(pageResponse.nbElement, returnedPageResponse.nbElement);
     }
 
+
     [Fact]
-    public async void TestGetEmptyTemplateByUserId_NotFound()
+    public async Task TestGetEmptyTemplateByUserId_NoContent()
     {
         // Arrange
-        _mockRepo.Setup(service => service.GetEmptyTemplatesByUserId(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<int>()))
+        _mockRepo.Setup(service => service.GetEmptyTemplatesByUserId(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync((PageReponse<TemplateDto>)null);
+
+        var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, "userId"),
+        }, "TestAuthentication"));
+        _templateController.ControllerContext = new ControllerContext()
+        {
+            HttpContext = new DefaultHttpContext() { User = user }
+        };
 
         // Act
         var result = await _templateController.GetEmptyTemplatesByUserId(1, 1);
 
         // Assert
-        var noContentResult = Assert.IsType<NoContentResult>(result);
+        Assert.IsType<NoContentResult>(result);
     }
 
     [Fact]

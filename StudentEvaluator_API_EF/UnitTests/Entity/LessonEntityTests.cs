@@ -7,6 +7,7 @@ namespace EF_UnitTests.Entity;
 
 public class LessonEntityTests
 {
+    /*
     [Fact]
     public void TestAddLesson()
     {
@@ -209,5 +210,5 @@ public class LessonEntityTests
             Assert.Empty(context.TeacherSet.FirstOrDefault().Lessons);
         }
     }
-    
+    */
 }

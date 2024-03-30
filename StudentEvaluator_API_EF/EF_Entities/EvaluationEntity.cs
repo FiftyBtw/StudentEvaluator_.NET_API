@@ -15,7 +15,7 @@ public class EvaluationEntity
 
     public string? PairName { get; set; }
 
-    public long TeacherId { get; set; }
+    public string TeacherId { get; set; }
     public TeacherEntity Teacher { get; set; }
     
     public long TemplateId { get; set; }

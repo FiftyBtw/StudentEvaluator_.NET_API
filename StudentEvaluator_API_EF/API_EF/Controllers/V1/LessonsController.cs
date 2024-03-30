@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using API_Dto;
 using Asp.Versioning;
 using EventLogs;
@@ -77,20 +78,29 @@ namespace API_EF.Controllers.V1
         /// <param name="count"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("teacher/{id}")]
-        public async Task<IActionResult> GetLessonsByTeacherId(long id,int index = 0, int count = 10)
+        [Route("teacher")]
+        public async Task<IActionResult> GetLessonsByTeacher(int index = 0, int count = 10)
         {
             _logger.LogInformation(LogEvents.GetItems, "GetLessonsByTeacherId");
-            if (_lessonService == null)return StatusCode(500);
+            if (_lessonService == null) return StatusCode(500);
 
-            var data = await _lessonService.GetLessonsByTeacherId(id,index,count);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User ID is missing in the token");
+            }
+
+            var data = await _lessonService.GetLessonsByTeacherId(userId, index, count);
             if (data == null)
             {
                 _logger.LogInformation(LogEvents.GetItemsNoContent, "GetLessonsByTeacherId");
                 return NoContent();
             }
-            else return Ok(data);
+
+            return Ok(data);
         }
+
 
         /// <summary>
         ///  Add a lesson

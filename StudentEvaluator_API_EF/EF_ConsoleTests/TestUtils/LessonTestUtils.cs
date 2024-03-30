@@ -5,7 +5,7 @@ namespace EF_ConsoleTests.TestUtils;
 
 public static class LessonTestUtils
 {
-    public static void AddLesson(LibraryContext context, string courseName, DateTime start, DateTime end, long teacherId, string classroom, int groupYear, int groupNumber)
+    public static void AddLesson(LibraryContext context, string courseName, DateTime start, DateTime end, string teacherId, string classroom, int groupYear, int groupNumber)
     {
         var lessonToAdd = new LessonEntity
         {
@@ -22,7 +22,7 @@ public static class LessonTestUtils
         context.SaveChanges();
     }
     
-    public  static void UpdateLesson(LibraryContext context, long id, string courseName, DateTime start, DateTime end, long teacherId, string classroom, int groupYear, int groupNumber)
+    public  static void UpdateLesson(LibraryContext context, long id, string courseName, DateTime start, DateTime end, string teacherId, string classroom, int groupYear, int groupNumber)
     {
         var lesson = context.LessonSet.FirstOrDefault(l => l.Id == id);
         if (lesson != null)

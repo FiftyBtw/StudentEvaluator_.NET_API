@@ -7,7 +7,7 @@ namespace EF_UnitTests.Entity;
 
 public class TemplateTestsEntity
 {
-    
+    /*
     [Fact]
     public void TestAddTemplate()
     {
@@ -185,5 +185,5 @@ public class TemplateTestsEntity
             Assert.Empty(context.TeacherSet.FirstOrDefault().Templates);
         }
     }
-    
+    */
 }

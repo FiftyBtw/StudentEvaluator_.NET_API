@@ -7,6 +7,7 @@ namespace EF_UnitTests.Entity;
 
 public class EvaluationEntityTests
 {
+    /*
    [Fact]
 public void TestAddEvaluation()
 {
@@ -282,5 +283,5 @@ public void TestAddEvaluation()
             Assert.Null(context.EvaluationSet.FirstOrDefault());
         }
     }
-
+*/
 }

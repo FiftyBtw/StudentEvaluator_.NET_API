@@ -12,7 +12,7 @@ public class LessonEntity
     public string CourseName { get; set; }
     public string Classroom { get; set; }
     
-    public long TeacherEntityId { get; set; }
+    public string TeacherEntityId { get; set; }
     public TeacherEntity Teacher { get; set; } 
     
     public int GroupYear { get; set; }

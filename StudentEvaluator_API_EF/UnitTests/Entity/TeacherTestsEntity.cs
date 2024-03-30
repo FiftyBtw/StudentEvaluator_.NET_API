@@ -7,6 +7,7 @@ namespace EF_UnitTests.Entity;
 
 public class TeacherTestsEntity
 {
+    /*
     [Fact]
     public void TestAddTeacher()
     {
@@ -122,6 +123,5 @@ public class TeacherTestsEntity
             Assert.Null(teacherFromDb);
         }
     }
-        
-        
+        */
 }

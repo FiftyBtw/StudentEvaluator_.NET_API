@@ -10,7 +10,7 @@ namespace Entities2Dto;
 /// Implements various service interfaces for managing students, groups, criteria, users, templates, lessons, and evaluations.
 /// </summary>
 public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto>, ICriteriaService<CriteriaDto,TextCriteriaDto,SliderCriteriaDto,RadioCriteriaDto>,
-    IUserService<UserDto,LoginRequestDto, LoginResponseDto>, ITemplateService<TemplateDto>, ILessonService<LessonDto,LessonReponseDto>, IEvaluationService<EvaluationDto,EvaluationReponseDto>
+    /*IUserService<UserDto,LoginDto, LoginResponseDto>,*/ ITemplateService<TemplateDto>, ILessonService<LessonDto,LessonReponseDto>, IEvaluationService<EvaluationDto,EvaluationReponseDto>
 {
     private readonly LibraryContext _libraryContext;
 
@@ -19,7 +19,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// Initializes a new instance of the <see cref="DbDataManager"/> class with the provided database context.
     /// </summary>
     /// <param name="context">The database context.</param>
-    public DbDataManager(StubbedContext context)
+    public DbDataManager(LibraryContext context)
     {
         _libraryContext = context;
     }
@@ -364,7 +364,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     }
 
     // User
-
+/*
 
     /// <summary>
     /// Retrieves a page of users.
@@ -422,13 +422,13 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <summary>
     /// Logs in a user.
     /// </summary>
-    /// <param name="loginRequest">The login request DTO containing username and password.</param>
+    /// <param name="login">The login request DTO containing username and password.</param>
     /// <returns>A task representing the asynchronous operation, returning the login response DTO if login is successful, otherwise null.</returns>
-    public Task<LoginResponseDto?> Login(LoginRequestDto loginRequest)
+    public Task<LoginResponseDto?> Login(LoginDto login)
     {
-        var user = _libraryContext.UserSet.FirstOrDefault(u => u.Username == loginRequest.Username);
+        var user = _libraryContext.UserSet.FirstOrDefault(u => u.Username == login.Username);
         if (user == null) return Task.FromResult<LoginResponseDto?>(null);
-        if (BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
+        if (BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
         {
             return Task.FromResult(new LoginResponseDto
             {
@@ -476,7 +476,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
         return !await _libraryContext.UserSet.AnyAsync(u => u.Id == id);
     }
 
-
+*/
 
     // Template
 
@@ -488,7 +488,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <param name="index">The index of the page.</param>
     /// <param name="count">The number of templates per page.</param>
     /// <returns>A task representing the asynchronous operation, returning a page response containing the templates.</returns>
-    public Task<PageReponse<TemplateDto>> GetTemplatesByUserId(long userId, int index, int count)
+    public Task<PageReponse<TemplateDto>> GetTemplatesByUserId(string userId, int index, int count)
     {
         var templates = _libraryContext.TemplateSet.Include(c => c.Criteria).Where(t => t.TeacherId == userId).ToDtos();
         Translator.TemplateMapper.Reset();
@@ -503,7 +503,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <param name="index">The index of the page.</param>
     /// <param name="count">The number of empty templates per page.</param>
     /// <returns>A task representing the asynchronous operation, returning a page response containing the empty templates.</returns>
-    public Task<PageReponse<TemplateDto>> GetEmptyTemplatesByUserId(long userId, int index, int count)
+    public Task<PageReponse<TemplateDto>> GetEmptyTemplatesByUserId(string userId, int index, int count)
     {
         var templates = _libraryContext.TemplateSet
             .Include(c => c.Criteria)
@@ -522,7 +522,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <param name="userId">The ID of the user who owns the template.</param>
     /// <param name="templateId">The ID of the template to retrieve.</param>
     /// <returns>A task representing the asynchronous operation, returning the template DTO if found, otherwise null.</returns>
-    public Task<TemplateDto?> GetTemplateById(long userId, long templateId)
+    public Task<TemplateDto?> GetTemplateById(long templateId)
     {
         var template = _libraryContext.TemplateSet.Include(t => t.Criteria).FirstOrDefault(t => t.Id == templateId);
         if (template == null) return Task.FromResult<TemplateDto?>(null);
@@ -537,7 +537,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <param name="userId">The ID of the user who owns the template.</param>
     /// <param name="template">The template DTO to add.</param>
     /// <returns>A task representing the asynchronous operation, returning the added template DTO.</returns>
-    public Task<TemplateDto?> PostTemplate(long userId, TemplateDto template)
+    public Task<TemplateDto?> PostTemplate(string userId, TemplateDto template)
     {
         var templateEntity = template.ToEntity();
         templateEntity.TeacherId = userId;
@@ -680,9 +680,9 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <param name="index">The index of the page.</param>
     /// <param name="count">The number of lessons per page.</param>
     /// <returns>A task representing the asynchronous operation, returning a page response containing the lessons.</returns>
-    public Task<PageReponse<LessonReponseDto>> GetLessonsByTeacherId(long id, int index, int count)
+    public Task<PageReponse<LessonReponseDto>> GetLessonsByTeacherId(string userId, int index, int count)
     {
-        var lessons = _libraryContext.LessonSet.Include(l => l.Teacher).Include(l => l.Group).Where(l => l.TeacherEntityId == id).ToReponseDtos();
+        var lessons = _libraryContext.LessonSet.Include(l => l.Teacher).Include(l => l.Group).Where(l => l.TeacherEntityId == userId).ToReponseDtos();
         Translator.LessonMapper.Reset();
         return Task.FromResult(new PageReponse<LessonReponseDto>(lessons.Count(),lessons.Skip(count*index).Take(count)));
     }
@@ -725,9 +725,9 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <param name="index">The index of the page.</param>
     /// <param name="count">The number of evaluations per page.</param>
     /// <returns>A task representing the asynchronous operation, returning a page response containing the evaluations.</returns>
-    public Task<PageReponse<EvaluationReponseDto>> GetEvaluationsByTeacherId(long id, int index, int count)
+    public Task<PageReponse<EvaluationReponseDto>> GetEvaluationsByTeacherId(string userId, int index, int count)
     {
-        var evals = _libraryContext.EvaluationSet.Include(e => e.Template).Include(e => e.Student).Include(e => e.Teacher).Where(e => e.TeacherId == id).ToReponseDtos();
+        var evals = _libraryContext.EvaluationSet.Include(e => e.Template).Include(e => e.Student).Include(e => e.Teacher).Where(e => e.TeacherId == userId).ToReponseDtos();
         Translator.EvaluationMapper.Reset();
         return Task.FromResult(new PageReponse<EvaluationReponseDto>(evals.Count(), evals.Skip(count * index).Take(count)));
     }

@@ -15,7 +15,7 @@ namespace Shared;
     {
         public Task<PageReponse<TReponse>> GetLessons(int index, int count);
         public Task<TReponse?> GetLessonById(long id);
-        public Task<PageReponse<TReponse>> GetLessonsByTeacherId(long id, int index,int count);
+        public Task<PageReponse<TReponse>> GetLessonsByTeacherId(string userId, int index,int count);
         public Task<TReponse?> PostLesson(T lesson);
         public Task<TReponse?> PutLesson(long id, T lesson);
         public Task<bool> DeleteLesson(long id);

@@ -5,7 +5,7 @@ namespace EF_ConsoleTests.TestUtils;
 
 public static class EvaluationTestUtils
 {
-    public static void AddEvaluation(LibraryContext context, long templateId, long teacherId, long studentId, DateTime date, string courseName, string pairName, int grade)
+    public static void AddEvaluation(LibraryContext context, long templateId, string teacherId, long studentId, DateTime date, string courseName, string pairName, int grade)
     {
         var evaluationToAdd = new EvaluationEntity
         {

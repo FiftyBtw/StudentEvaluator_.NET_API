@@ -1,6 +1,10 @@
 ﻿using EF_DbContextLib;
 using Microsoft.EntityFrameworkCore;
 using EF_ConsoleTests.TestUtils;
+using EF_Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EF_ConsoleTests;
 
@@ -9,18 +13,33 @@ namespace EF_ConsoleTests;
 /// </summary>
 internal static class Program
 {
-
-    /// <summary>
-    /// The entry point of the program.
-    /// </summary>
-    /// <param name="args">The command-line arguments.</param>
-    static async Task Main(string[] args)
+    private static async Task Main(string[] args)
     {
-        var options = new DbContextOptionsBuilder<LibraryContext>()
-            .UseSqlite("Data Source=StudentEvaluator_API_EF_Tests.db")
-            .Options;
-        var context = new LibraryContext(options);
-        
+        var services = new ServiceCollection();
+
+        services.AddDbContext<LibraryContext>(options =>
+            options.UseSqlite("Data Source=StudentEvaluator_API_EF_Tests.db"));
+
+        services.AddScoped<IUserStore<TeacherEntity>>(provider => 
+            new UserStore<TeacherEntity, IdentityRole, LibraryContext>(
+                provider.GetRequiredService<LibraryContext>()));
+        services.AddScoped<IRoleStore<IdentityRole>>(provider => 
+            new RoleStore<IdentityRole, LibraryContext>(
+                provider.GetRequiredService<LibraryContext>()));
+
+        services.AddIdentityCore<TeacherEntity>()
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<LibraryContext>();
+
+        services.AddScoped<IPasswordHasher<TeacherEntity>, PasswordHasher<TeacherEntity>>();
+
+        var serviceProvider = services.BuildServiceProvider();
+
+        var userManager = serviceProvider.GetRequiredService<UserManager<TeacherEntity>>();
+
+
+        var context = serviceProvider.GetRequiredService<LibraryContext>();
+
         await context.Database.EnsureDeletedAsync();
         await context.Database.EnsureCreatedAsync();
         
@@ -72,34 +91,34 @@ internal static class Program
             Console.WriteLine("\n--------  Teacher  --------\n");
             
             // AddTeacher
-            TeacherTestUtils.AddTeacher(context, "John", "Doe", ["Teacher"]);
-            TeacherTestUtils.AddTeacher(context, "Bob", "Dylan", ["Teacher"]);
-            TeacherTestUtils.AddTeacher(context, "Alice", "Cooper", ["Teacher"]);
+            var teacherId1 = await TeacherTestUtils.AddTeacherAsync(userManager, "John", "JohnDoe1234$");
+            var teacherId2 = await TeacherTestUtils.AddTeacherAsync(userManager, "Bob", "BobDylan123$");
+            var teacherId3 = await TeacherTestUtils.AddTeacherAsync(userManager, "Alice", "AliceCooper1$");
             
             // DisplayAllTeachers
-            TeacherTestUtils.DisplayAllTeachers(context);
+            TeacherTestUtils.DisplayAllTeachers(userManager);
             
             // UpdateTeacher
-            TeacherTestUtils.UpdateTeacher(context, 1, "John", "Doe");
+            TeacherTestUtils.UpdateTeacherAsync(userManager, teacherId1, "NewJohn");
             
             // DisplayAllTeachers
-            TeacherTestUtils.DisplayAllTeachers(context);
+            TeacherTestUtils.DisplayAllTeachers(userManager);
             
             // DeleteTeacher
-            TeacherTestUtils.DeleteTeacher(context, 2);
+            TeacherTestUtils.DeleteTeacherAsync(userManager, teacherId2);
             
             // DisplayAllTeachers
-            TeacherTestUtils.DisplayAllTeachers(context);
+            TeacherTestUtils.DisplayAllTeachers(userManager);
             
             
             Console.WriteLine("\n--------  Template  --------\n");
             
             
             // AddTemplate
-            TemplateTestUtils.AddTemplate(context, "Template1", 1);
-            TemplateTestUtils.AddTemplate(context, "Template2", 1);
-            TemplateTestUtils.AddTemplate(context, "Template3", 3);
-            TemplateTestUtils.AddTemplate(context, "Template4", 3);
+            TemplateTestUtils.AddTemplate(context, "Template1", teacherId1);
+            TemplateTestUtils.AddTemplate(context, "Template2", teacherId1);
+            TemplateTestUtils.AddTemplate(context, "Template3", teacherId3);
+            TemplateTestUtils.AddTemplate(context, "Template4", teacherId3);
             
             // DisplayAllTemplates
             TemplateTestUtils.DisplayAllTemplates(context);
@@ -111,7 +130,7 @@ internal static class Program
             TemplateTestUtils.DisplayAllTemplates(context);
             
             // DisplayAllTeachers
-            TeacherTestUtils.DisplayAllTeachers(context);
+            TeacherTestUtils.DisplayAllTeachers(userManager);
             
             
             Console.WriteLine("\n--------  Criteria  --------\n");
@@ -180,21 +199,21 @@ internal static class Program
             TemplateTestUtils.DisplayAllTemplates(context);
             
             // DisplayAllTeachers
-            TeacherTestUtils.DisplayAllTeachers(context);
+            TeacherTestUtils.DisplayAllTeachers(userManager);
             
             
             Console.WriteLine("\n--------  Lesson  --------\n");
             
             // AddLesson
-            LessonTestUtils.AddLesson(context, "Course1", DateTime.Now, DateTime.Now, 1, "Classroom1", 1, 1);
-            LessonTestUtils.AddLesson(context, "Course2", DateTime.Now, DateTime.Now, 1, "Classroom2", 1, 1);
-            LessonTestUtils.AddLesson(context, "Course3", DateTime.Now, DateTime.Now, 3, "Classroom3", 2, 2);
+            LessonTestUtils.AddLesson(context, "Course1", DateTime.Now, DateTime.Now, teacherId1, "Classroom1", 1, 1);
+            LessonTestUtils.AddLesson(context, "Course2", DateTime.Now, DateTime.Now, teacherId1, "Classroom2", 1, 1);
+            LessonTestUtils.AddLesson(context, "Course3", DateTime.Now, DateTime.Now, teacherId3, "Classroom3", 2, 2);
             
             // DisplayAllLessons
             LessonTestUtils.DisplayAllLessons(context);
             
             // UpdateLesson
-            LessonTestUtils.UpdateLesson(context, 1, "NewCourse1", DateTime.Now, DateTime.Now, 1, "NewClassroom1", 1, 1);
+            LessonTestUtils.UpdateLesson(context, 1, "NewCourse1", DateTime.Now, DateTime.Now, teacherId1, "NewClassroom1", 1, 1);
             
             // DisplayAllLessons
             LessonTestUtils.DisplayAllLessons(context);
@@ -206,14 +225,14 @@ internal static class Program
             LessonTestUtils.DisplayAllLessons(context);
             
             // DisplayAllTeachers
-            TeacherTestUtils.DisplayAllTeachers(context);
+            TeacherTestUtils.DisplayAllTeachers(userManager);
             
             Console.WriteLine("\n--------  Evaluation  --------\n");
             
             // AddEvaluation
-            EvaluationTestUtils.AddEvaluation(context, 1, 1, 1, DateTime.Now, "Course1", "Pair1", 1);
-            EvaluationTestUtils.AddEvaluation(context, 4, 1, 1, DateTime.Now, "Course2", "Pair2", 2);
-            EvaluationTestUtils.AddEvaluation(context, 3, 3, 3, DateTime.Now, "Course3", "Pair3", 3);
+            EvaluationTestUtils.AddEvaluation(context, 1, teacherId1, 1, DateTime.Now, "Course1", "Pair1", 1);
+            EvaluationTestUtils.AddEvaluation(context, 4, teacherId1, 1, DateTime.Now, "Course2", "Pair2", 2);
+            EvaluationTestUtils.AddEvaluation(context, 3, teacherId3, 3, DateTime.Now, "Course3", "Pair3", 3);
             
             // DisplayAllEvaluations
             EvaluationTestUtils.DisplayAllEvaluations(context);
@@ -234,7 +253,7 @@ internal static class Program
             StudentTestUtils.DisplayAllStudents(context);
             
             // DisplayAllTeachers
-            TeacherTestUtils.DisplayAllTeachers(context);
+            TeacherTestUtils.DisplayAllTeachers(userManager);
             
             // DisplayAllTemplates
             TemplateTestUtils.DisplayAllTemplates(context);

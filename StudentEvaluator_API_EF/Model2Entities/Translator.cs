@@ -63,9 +63,9 @@ public static class Translator
     /// </summary>
     /// <param name="models">The collection of student models to convert.</param>
     /// <returns>The converted collection of student entities.</returns>
-    public static IEnumerable<StudentEntity> ToEntities(this IEnumerable<Student> models)
+    public static ICollection<StudentEntity> ToEntities(this IEnumerable<Student> models)
     {
-        IEnumerable<StudentEntity> students = new List<StudentEntity>();
+        ICollection<StudentEntity> students = new List<StudentEntity>();
         foreach (var model in models)
         {
             (students as List<StudentEntity>).Add(model.ToEntity());
@@ -145,7 +145,7 @@ public static class Translator
     /// <returns>The converted teacher model.</returns>
     public static Teacher ToModel(this TeacherEntity teacher)
     {
-        return new Teacher(teacher.Id, teacher.Username, teacher.Password, teacher.Roles);
+        return new Teacher(teacher.Id, teacher.UserName, teacher.PasswordHash);
     }
     
     /// <summary>
@@ -158,9 +158,8 @@ public static class Translator
         return new TeacherEntity
         {
             Id = teacher.Id,
-            Username = teacher.Username,
-            Password = teacher.Password,
-            Roles = teacher.Roles
+            UserName = teacher.Username,
+            PasswordHash = teacher.Password,
         };
     }
     
@@ -259,7 +258,7 @@ public static class Translator
     
     public static Template ToModel(this TemplateEntity template)
     {
-        return new Template(template.Id, template.Name, template.Criteria.Select(CriteriaEntityConverter.ConvertToModel));
+        return new Template(template.Id, template.Name, template.Criteria.Select(CriteriaEntityConverter.ConvertToModel).ToList());
     }
     
    public static TemplateEntity ToEntity(this Template template)
@@ -268,7 +267,7 @@ public static class Translator
         {
             Id = template.Id,
             Name = template.Name,
-            Criteria = template.Criterias.Select(CriteriaEntityConverter.ConvertToEntity),
+            Criteria = template.Criterias.Select(CriteriaEntityConverter.ConvertToEntity).ToList()
         };
     }
    
@@ -333,6 +332,7 @@ public static class Translator
         return evaluations;
     }
     
+    /*
     // User
     
     public static User ToModel(this UserEntity user)
@@ -370,6 +370,6 @@ public static class Translator
         }
         return users;
     }
-    
+    */
     
 }

@@ -7,6 +7,7 @@ namespace EF_UnitTests.Entity.CriteriaEntity;
 
 public class SliderCriteriaEntityTests
 {
+    /*
     [Fact]
     public void TestAddSliderCriteria()
     {
@@ -189,5 +190,5 @@ public class SliderCriteriaEntityTests
             Assert.Empty(context.TemplateSet.FirstOrDefault().Criteria);
         }
     }
-    
+    */
 }

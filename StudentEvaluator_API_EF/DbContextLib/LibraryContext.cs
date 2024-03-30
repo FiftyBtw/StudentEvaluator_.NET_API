@@ -1,6 +1,7 @@
 ﻿using EF_Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 
 namespace EF_DbContextLib
@@ -8,30 +9,26 @@ namespace EF_DbContextLib
     /// <summary>
     /// Represents the database context for the library.
     /// </summary>
-    public class LibraryContext : DbContext
+    public class LibraryContext : IdentityDbContext<TeacherEntity>
     {
         // Propriété DbSet pour représenter l'ensemble de students dans la base de données
-        public DbSet<StudentEntity> StudentSet { get; set; }
+        public DbSet<StudentEntity> StudentSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble de groupes dans la base de données
-        public DbSet<GroupEntity> GroupSet { get; set; }
-        // Propriété DbSet pour représenter l'ensemble de users dans la base de données
-        public DbSet<UserEntity> UserSet { get; set; }
-        // Propriété DbSet pour représenter l'ensemble de teachers dans la base de données
-        public DbSet<TeacherEntity> TeacherSet { get; set; }
+        public DbSet<GroupEntity> GroupSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble de templates dans la base de données
-        public DbSet<TemplateEntity> TemplateSet { get; set; }
+        public DbSet<TemplateEntity> TemplateSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble de criteria dans la base de données
-        public DbSet<CriteriaEntity> CriteriaSet { get; set; }
+        public DbSet<CriteriaEntity> CriteriaSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble de sliderCriteria dans la base de données
-        public DbSet<SliderCriteriaEntity> SliderCriteriaSet { get; set; }
+        public DbSet<SliderCriteriaEntity> SliderCriteriaSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble de textCriteria dans la base de données
-        public DbSet<TextCriteriaEntity> TextCriteriaSet { get; set; }
+        public DbSet<TextCriteriaEntity> TextCriteriaSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble de radioCriteria dans la base de données
-        public DbSet<RadioCriteriaEntity> RadioCriteriaSet { get; set; }
+        public DbSet<RadioCriteriaEntity> RadioCriteriaSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble des evaluations dans la base de données
-        public DbSet<EvaluationEntity> EvaluationSet { get; set; }
+        public DbSet<EvaluationEntity> EvaluationSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble des cours dans la base de données
-        public DbSet<LessonEntity> LessonSet { get; set; }
+        public DbSet<LessonEntity> LessonSet { get; init; } = null!;
         
         public LibraryContext() { }
         
@@ -63,53 +60,55 @@ namespace EF_DbContextLib
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-    
+
             // Clé primaire composite pour GroupEntity
             modelBuilder.Entity<GroupEntity>()
                 .HasKey(g => new { g.GroupYear, g.GroupNumber });
-    
+
             // Héritage pour CriteriaEntity et UserEntity
             modelBuilder.Entity<CriteriaEntity>()
                 .HasDiscriminator<string>("criteria_type")
                 .HasValue<SliderCriteriaEntity>("slider")
                 .HasValue<TextCriteriaEntity>("text")
                 .HasValue<RadioCriteriaEntity>("radio");
-    
+
+            /*
             modelBuilder.Entity<UserEntity>()
                 .HasDiscriminator<string>("user_type")
-                .HasValue<TeacherEntity>("teacher");    
-    
+                .HasValue<TeacherEntity>("teacher");
+            */
+
             // Relation entre StudentEntity et GroupEntity
             modelBuilder.Entity<StudentEntity>()
                 .HasOne(s => s.Group)
                 .WithMany(g => g.Students)
                 .HasForeignKey(s => new { s.GroupYear, s.GroupNumber });
-    
+
             // Relation entre TeacherEntity et TemplateEntity
             modelBuilder.Entity<TeacherEntity>()
                 .HasMany(t => t.Templates)
                 .WithOne(te => te.Teacher)
                 .HasForeignKey(te => te.TeacherId);
-    
+
             // Relation entre TemplateEntity et CriteriaEntity
             modelBuilder.Entity<TemplateEntity>()
                 .HasMany(t => t.Criteria)
                 .WithOne(c => c.Template)
                 .HasForeignKey(c => c.TemplateId);
-    
+
             // Relation un-à-un entre EvaluationEntity et TemplateEntity
             modelBuilder.Entity<TemplateEntity>()
                 .HasOne(t => t.Evaluation)
                 .WithOne(e => e.Template)
                 .HasForeignKey<TemplateEntity>(t => t.EvaluationId);
 
-            
+
             modelBuilder.Entity<EvaluationEntity>()
                 .HasOne(e => e.Template)
                 .WithOne(t => t.Evaluation)
                 .HasForeignKey<EvaluationEntity>(e => e.TemplateId);
 
-            
+
             // Relation entre EvaluationEntity et TeacherEntity
             modelBuilder.Entity<EvaluationEntity>()
                 .HasOne(e => e.Teacher)
@@ -127,12 +126,30 @@ namespace EF_DbContextLib
                 .HasOne(l => l.Group)
                 .WithMany(g => g.Lessons)
                 .HasForeignKey(l => new { l.GroupYear, l.GroupNumber });
-            
+
             // Relation entre LessonEntity et TeacherEntity
             modelBuilder.Entity<LessonEntity>()
                 .HasOne(l => l.Teacher)
                 .WithMany(t => t.Lessons)
                 .HasForeignKey(l => l.TeacherEntityId);
+
+            List<IdentityRole> roles =
+            [
+                new IdentityRole
+                {
+                    Name = "Admin",
+                    NormalizedName = "ADMIN"
+                },
+
+                new IdentityRole
+                {
+                    Name = "Teacher",
+                    NormalizedName = "TEACHER"
+                }
+            ];
+
+            modelBuilder.Entity<IdentityRole>().HasData(roles);
+            
         }
     }
 

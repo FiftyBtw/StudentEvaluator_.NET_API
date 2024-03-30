@@ -1,28 +1,25 @@
 using System.Reflection;
+using System.Text;
 using API_Dto;
+using API_EF.Token;
 using Asp.Versioning;
 using EF_StubbedContextLib;
 using Entities2Dto;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Shared;
-using TP_ConsoDev.Data;
 using API_EF.Swagger;
 using EF_DbContextLib;
+using EF_Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthorization();
-
-builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseInMemoryDatabase("AppDb"));
-
-builder.Services.AddIdentityApiEndpoints<IdentityUser>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -48,10 +45,12 @@ builder.Services.AddSwaggerGen(swaggerGenOptions =>
             
     swaggerGenOptions.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-        Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
     });
     swaggerGenOptions.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -60,31 +59,63 @@ builder.Services.AddSwaggerGen(swaggerGenOptions =>
             {
                 Reference = new OpenApiReference
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                },
-                Scheme = "oauth2",
-                Name = "Bearer",
-                In = ParameterLocation.Header,
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
             },
-            new List<string>()
+            new string[]{}
         }
     });
 });
 
-builder.Services.AddScoped<DbDataManager>(provider => new DbDataManager(new StubbedContext()));
+builder.Services.AddScoped<DbDataManager>(provider => new DbDataManager(new LibraryContext()));
 builder.Services.AddScoped<IStudentService<StudentDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<IGroupService<GroupDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<ICriteriaService<CriteriaDto,TextCriteriaDto,SliderCriteriaDto,RadioCriteriaDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<ILessonService<LessonDto, LessonReponseDto>>(x => x.GetRequiredService<DbDataManager>());
-builder.Services.AddScoped<IUserService<UserDto,LoginRequestDto,LoginResponseDto>>(x => x.GetRequiredService<DbDataManager>());
+//builder.Services.AddScoped<IUserService<UserDto,LoginDto,LoginResponseDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<ITemplateService<TemplateDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<IEvaluationService<EvaluationDto,EvaluationReponseDto>>(x => x.GetRequiredService<DbDataManager>());
 
-builder.Services.AddDbContext<StubbedContext>(options =>
+builder.Services.AddScoped<ITokenService, TokenService>();
+
+builder.Services.AddDbContext<LibraryContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddIdentity<TeacherEntity, IdentityRole>(options =>
+    {
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireNonAlphanumeric = true;
+        options.Password.RequiredLength = 12;
+    })
+    .AddEntityFrameworkStores<LibraryContext>();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme =
+    options.DefaultChallengeScheme =
+    options.DefaultForbidScheme =
+    options.DefaultScheme =
+    options.DefaultSignInScheme =
+    options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["JWT:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["JWT:Audience"],
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"]))
+        };
+    }
+);
 
 builder.Services
     .AddApiVersioning(options =>
@@ -128,32 +159,26 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseAuthorization();
-        
-app.MapIdentityApi<IdentityUser>();
-app.MapSwagger().RequireAuthorization();
-
-app.MapPost("/logout", async (SignInManager<IdentityUser> signInManager,
-        [FromBody]object empty) =>
-    {
-        if (empty != null)
-        {
-            await signInManager.SignOutAsync();
-            return Results.Ok();
-        }
-        return Results.Unauthorized();
-    })
-    .WithOpenApi()
-    .RequireAuthorization();
-
-
 var scope = app.Services.CreateScope();
-var context = scope.ServiceProvider.GetRequiredService<StubbedContext>();
+var services = scope.ServiceProvider;
+var context = services.GetRequiredService<LibraryContext>();
 context.Database.EnsureCreated();
+
+try
+{
+    await SeedData.InitializeAsync(services);
+}
+catch (Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "An error occurred seeding the DB.");
+}
+
 
 app.Logger.LogInformation("Starting the app");
 app.Run();

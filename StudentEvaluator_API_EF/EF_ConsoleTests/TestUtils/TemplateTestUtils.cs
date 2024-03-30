@@ -5,7 +5,7 @@ namespace EF_ConsoleTests.TestUtils;
 
 public static class TemplateTestUtils
 {
-    public static void AddTemplate(LibraryContext context, string name, long teacherId)
+    public static void AddTemplate(LibraryContext context, string name, string teacherId)
     {
         var templateToAdd = new TemplateEntity
         {

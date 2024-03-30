@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using EF_DbContextLib;
 using Microsoft.EntityFrameworkCore;
 
-namespace API_EF;
+namespace Repository;
 
 public class GenericRepository <TEntity> where TEntity  :  class
 {

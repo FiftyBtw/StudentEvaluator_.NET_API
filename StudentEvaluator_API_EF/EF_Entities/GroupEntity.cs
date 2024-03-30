@@ -14,9 +14,9 @@ namespace EF_Entities
         public int GroupYear { get; set; }
         public int GroupNumber { get; set; }
         
-        public IEnumerable<StudentEntity> Students { get; set; }
+        public ICollection<StudentEntity> Students { get; set; }
 
-        public IEnumerable<LessonEntity> Lessons { get; set; } = new List<LessonEntity>();
+        public ICollection<LessonEntity> Lessons { get; set; } = new List<LessonEntity>();
         
     }
 }

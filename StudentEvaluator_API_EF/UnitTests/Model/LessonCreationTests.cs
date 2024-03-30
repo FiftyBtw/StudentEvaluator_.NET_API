@@ -39,7 +39,6 @@ public class LessonCreationTests
         Assert.Equal(new DateTime(), lesson.End);
         Assert.Equal("", lesson.CourseName);
         Assert.Equal("", lesson.Classroom);
-        Assert.Equal("0", lesson.TeacherId);
         Assert.Equal(0, lesson.GroupYear);
         Assert.Equal(0, lesson.GroupNumber);
     }

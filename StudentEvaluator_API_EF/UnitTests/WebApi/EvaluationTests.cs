@@ -1,4 +1,5 @@
-﻿using API_Dto;
+﻿using System.Security.Claims;
+using API_Dto;
 using Moq;
 using Shared;
 using API_EF;
@@ -6,6 +7,7 @@ using API_EF.Controllers.V1;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using API_EF.Controllers;
+using Microsoft.AspNetCore.Http;
 
 namespace EF_UnitTests.WebApi;
 
@@ -274,6 +276,15 @@ public class EvaluationTests
 
         _mockRepo.Setup(service => service.GetEvaluationsByTeacherId(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync(pageResponse);
+        
+        var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, "userId"),
+        }, "TestAuthentication"));
+        _evalController.ControllerContext = new ControllerContext()
+        {
+            HttpContext = new DefaultHttpContext() { User = user }
+        };
 
         // Act
         var result = await _evalController.GetEvaluationsByTeacherId();
@@ -292,9 +303,18 @@ public class EvaluationTests
         // Arrange
         _mockRepo.Setup(service => service.GetEvaluationsByTeacherId(It.IsAny<string>(),It.IsAny<int>(), It.IsAny<int>()))
             .ReturnsAsync((PageReponse<EvaluationReponseDto>)null);
+        
+        var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, "userId"),
+        }, "TestAuthentication"));
+        _evalController.ControllerContext = new ControllerContext()
+        {
+            HttpContext = new DefaultHttpContext() { User = user }
+        };
 
         // Act
-        var result = await _evalController.GetEvaluationsByTeacherId(1);
+        var result = await _evalController.GetEvaluationsByTeacherId();
 
         // Assert
         var noContentResult = Assert.IsType<NoContentResult>(result);

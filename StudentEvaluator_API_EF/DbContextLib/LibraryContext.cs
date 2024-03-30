@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 
 namespace EF_DbContextLib
@@ -13,23 +12,23 @@ namespace EF_DbContextLib
     public class LibraryContext : IdentityDbContext<TeacherEntity>
     {
         // Propriété DbSet pour représenter l'ensemble de students dans la base de données
-        public DbSet<StudentEntity> StudentSet { get; set; }
+        public DbSet<StudentEntity> StudentSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble de groupes dans la base de données
-        public DbSet<GroupEntity> GroupSet { get; set; }
+        public DbSet<GroupEntity> GroupSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble de templates dans la base de données
-        public DbSet<TemplateEntity> TemplateSet { get; set; }
+        public DbSet<TemplateEntity> TemplateSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble de criteria dans la base de données
-        public DbSet<CriteriaEntity> CriteriaSet { get; set; }
+        public DbSet<CriteriaEntity> CriteriaSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble de sliderCriteria dans la base de données
-        public DbSet<SliderCriteriaEntity> SliderCriteriaSet { get; set; }
+        public DbSet<SliderCriteriaEntity> SliderCriteriaSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble de textCriteria dans la base de données
-        public DbSet<TextCriteriaEntity> TextCriteriaSet { get; set; }
+        public DbSet<TextCriteriaEntity> TextCriteriaSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble de radioCriteria dans la base de données
-        public DbSet<RadioCriteriaEntity> RadioCriteriaSet { get; set; }
+        public DbSet<RadioCriteriaEntity> RadioCriteriaSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble des evaluations dans la base de données
-        public DbSet<EvaluationEntity> EvaluationSet { get; set; }
+        public DbSet<EvaluationEntity> EvaluationSet { get; init; } = null!;
         // Propriété DbSet pour représenter l'ensemble des cours dans la base de données
-        public DbSet<LessonEntity> LessonSet { get; set; }
+        public DbSet<LessonEntity> LessonSet { get; init; } = null!;
         
         public LibraryContext() { }
         
@@ -134,19 +133,20 @@ namespace EF_DbContextLib
                 .WithMany(t => t.Lessons)
                 .HasForeignKey(l => l.TeacherEntityId);
 
-            List<IdentityRole> roles = new List<IdentityRole>
-            {
-                new()
+            List<IdentityRole> roles =
+            [
+                new IdentityRole
                 {
                     Name = "Admin",
                     NormalizedName = "ADMIN"
                 },
-                new()
+
+                new IdentityRole
                 {
                     Name = "Teacher",
                     NormalizedName = "TEACHER"
                 }
-            };
+            ];
 
             modelBuilder.Entity<IdentityRole>().HasData(roles);
             

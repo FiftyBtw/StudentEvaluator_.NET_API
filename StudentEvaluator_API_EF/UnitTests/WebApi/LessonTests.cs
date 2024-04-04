@@ -239,7 +239,7 @@ public class LessonTests
         var okResult = Assert.IsType<OkObjectResult>(result);
         var returnedPageResponse = Assert.IsType<PageReponse<LessonReponseDto>>(okResult.Value);
         Assert.Equal(lessons.Count(), returnedPageResponse.Data.Count());
-        Assert.Equal(pageResponse.nbElement, returnedPageResponse.nbElement);
+        Assert.Equal(pageResponse.NbElement, returnedPageResponse.NbElement);
     }
 
     [Fact]
@@ -377,7 +377,7 @@ public class LessonTests
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
         var returnedPageRepDto = Assert.IsType<PageReponse<LessonReponseDto>>(okResult.Value);
-        Assert.Equal(pageResponse.nbElement, returnedPageRepDto.nbElement);
+        Assert.Equal(pageResponse.NbElement, returnedPageRepDto.NbElement);
         Assert.Equal(pageResponse.Data.Count(), returnedPageRepDto.Data.Count());
     }
 

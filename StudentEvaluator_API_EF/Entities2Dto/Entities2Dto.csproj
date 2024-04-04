@@ -10,6 +10,7 @@
     <ProjectReference Include="..\Dto\API_Dto.csproj" />
     <ProjectReference Include="..\EF_StubbedContextLib\EF_StubbedContextLib.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\UnitOfWork\UnitOfWork.csproj" />
   </ItemGroup>
 
   <ItemGroup>

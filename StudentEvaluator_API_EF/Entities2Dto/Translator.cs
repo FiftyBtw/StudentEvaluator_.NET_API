@@ -14,6 +14,7 @@ namespace Entities2Dto
         public static Mapper<CriteriaEntity, CriteriaDto> CriteriaMapper { get; set; } = new Mapper<CriteriaEntity, CriteriaDto>();
         public static Mapper<TextCriteriaEntity, TextCriteriaDto> TextCriteriaMapper { get; set; } = new Mapper<TextCriteriaEntity, TextCriteriaDto>();
         public static Mapper<SliderCriteriaEntity, SliderCriteriaDto> SliderCriteriaMapper { get; set; } = new Mapper<SliderCriteriaEntity, SliderCriteriaDto>();
+        public static Mapper<RadioCriteriaEntity, RadioCriteriaDto> RadioCriteriaMapper { get; set; } = new Mapper<RadioCriteriaEntity, RadioCriteriaDto>();
         public static Mapper<TemplateEntity, TemplateDto> TemplateMapper { get; set; } = new Mapper<TemplateEntity, TemplateDto>();
  
         public static Mapper<TeacherEntity, TeacherDto> TeacherMapper { get; set; } = new Mapper<TeacherEntity, TeacherDto>();
@@ -374,15 +375,23 @@ namespace Entities2Dto
         /// <returns>The corresponding radio criteria DTO object.</returns>
         public static RadioCriteriaDto ToDto(this RadioCriteriaEntity radioCriteria)
         {
-            return new RadioCriteriaDto
+            var radioCriteriaDto = RadioCriteriaMapper.GetDto(radioCriteria);
+            if (radioCriteriaDto == null)
             {
-                Id = radioCriteria.Id,
-                Name = radioCriteria.Name,
-                ValueEvaluation = radioCriteria.ValueEvaluation,
-                TemplateId = radioCriteria.TemplateId,
-                Options = radioCriteria.Options,
-                SelectedOption = radioCriteria.SelectedOption
-            };
+                radioCriteriaDto = new RadioCriteriaDto
+                {
+                    Id = radioCriteria.Id,
+                    Name = radioCriteria.Name,
+                    ValueEvaluation = radioCriteria.ValueEvaluation,
+                    TemplateId = radioCriteria.TemplateId,
+                    Options = radioCriteria.Options,
+                    SelectedOption = radioCriteria.SelectedOption
+                };
+                RadioCriteriaMapper.Set(radioCriteria, radioCriteriaDto);
+                return radioCriteriaDto;
+            }
+
+            return radioCriteriaDto;
         }
 
 
@@ -393,15 +402,21 @@ namespace Entities2Dto
         /// <returns>The corresponding radio criteria entity object.</returns>
         public static RadioCriteriaEntity ToEntity(this RadioCriteriaDto radioCriteria)
         {
-            return new RadioCriteriaEntity
+            var radioCriteriaEntity = RadioCriteriaMapper.GetEntity(radioCriteria);
+            if (radioCriteriaEntity == null)
             {
-                Id = radioCriteria.Id,
-                Name = radioCriteria.Name,
-                ValueEvaluation = radioCriteria.ValueEvaluation,
-                TemplateId = radioCriteria.TemplateId,
-                Options = radioCriteria.Options,
-                SelectedOption = radioCriteria.SelectedOption
-            };
+                return new RadioCriteriaEntity
+                {
+                    Id = radioCriteria.Id,
+                    Name = radioCriteria.Name,
+                    ValueEvaluation = radioCriteria.ValueEvaluation,
+                    TemplateId = radioCriteria.TemplateId,
+                    Options = radioCriteria.Options,
+                    SelectedOption = radioCriteria.SelectedOption
+                };
+            }
+
+            return radioCriteriaEntity;
         }
 
 

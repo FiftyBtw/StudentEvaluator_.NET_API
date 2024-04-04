@@ -12,7 +12,7 @@ namespace Shared;
     /// <typeparam name="TStudent">The type representing a student.</typeparam>
     public interface IStudentService<TStudent> where TStudent : class
     {
-        public Task<PageReponse<TStudent>> GetStudents(int index, int count);
+        public Task<PageReponse<TStudent>> GetStudents(int index = 0, int count = 10);
         public Task<TStudent?> GetStudentById(long id);
         public Task<TStudent?> PostStudent(TStudent student);
 

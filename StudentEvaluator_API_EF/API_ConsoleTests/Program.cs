@@ -68,7 +68,7 @@ ApiDataManager apiDataManager = new(httpClient);
 Console.WriteLine("Test GetStudents :");
 
 var students = await apiDataManager.GetStudents();
-Console.WriteLine($"Nombre d'éléments : {students.nbElement}");
+Console.WriteLine($"Nombre d'éléments : {students.NbElement}");
 foreach (var student in students.Data)
 {
     Console.WriteLine(student);
@@ -120,7 +120,7 @@ if (newStudent != null)
 }
 
 students = await apiDataManager.GetStudents();
-Console.WriteLine($"Nombre d'éléments : {students.nbElement}");
+Console.WriteLine($"Nombre d'éléments : {students.NbElement}");
 foreach (var student in students.Data)
 {
     Console.WriteLine(student);
@@ -133,7 +133,7 @@ foreach (var student in students.Data)
 Console.WriteLine("Test GetGroups :\n");
 
 var groups = await apiDataManager.GetGroups();
-Console.WriteLine($"Nombre d'éléments : {groups.nbElement}");
+Console.WriteLine($"Nombre d'éléments : {groups.NbElement}");
 foreach (var group in groups.Data)
 {
     Console.WriteLine(group);
@@ -164,7 +164,7 @@ if (newGroup != null)
 }
 
 groups = await apiDataManager.GetGroups();
-Console.WriteLine($"Nombre d'éléments : {groups.nbElement}");
+Console.WriteLine($"Nombre d'éléments : {groups.NbElement}");
 foreach (var group in groups.Data)
 {
     Console.WriteLine(group);
@@ -177,7 +177,7 @@ foreach (var group in groups.Data)
 Console.WriteLine("Test GetLessons :\n");
 
 var lessons = await apiDataManager.GetLessons();
-Console.WriteLine($"Nombre d'éléments : {lessons.nbElement}");
+Console.WriteLine($"Nombre d'éléments : {lessons.NbElement}");
 foreach (var lesson in lessons.Data)
 {
     Console.WriteLine(lesson);
@@ -212,7 +212,7 @@ Console.WriteLine(lessbyId);
 Console.WriteLine($"Test GetLessonByTeacherId (id={userId}) :\n");
 
 var lessonsByTeacherId=await apiDataManager.GetLessonsByTeacherId(userId);
-Console.WriteLine($"Nombre d'éléments : {lessonsByTeacherId.nbElement}");
+Console.WriteLine($"Nombre d'éléments : {lessonsByTeacherId.NbElement}");
 foreach (var lesson in lessonsByTeacherId.Data)
 {
     Console.WriteLine(lesson);
@@ -227,7 +227,7 @@ if (lessonReponse != null)
 }
 
 lessons = await apiDataManager.GetLessons();
-Console.WriteLine($"Nombre d'éléments : {lessons.nbElement}");
+Console.WriteLine($"Nombre d'éléments : {lessons.NbElement}");
 foreach (var lesson in lessons.Data)
 {
     Console.WriteLine(lesson);
@@ -239,7 +239,7 @@ foreach (var lesson in lessons.Data)
 Console.WriteLine("Test GetEvaluations :\n");
 
 var evals = await apiDataManager.GetEvaluations();
-Console.WriteLine($"Nombre d'éléments : {evals.nbElement}");
+Console.WriteLine($"Nombre d'éléments : {evals.NbElement}");
 foreach (var eval in evals.Data)
 {
     Console.WriteLine(eval);
@@ -274,7 +274,7 @@ Console.WriteLine(evalById);
 Console.WriteLine("Test GetEvaluationsByTeacherId (id=1) :\n");
 
 var evalsByTeacherId = await apiDataManager.GetEvaluationsByTeacherId(userId);
-Console.WriteLine($"Nombre d'éléments : {evalsByTeacherId.nbElement}");
+Console.WriteLine($"Nombre d'éléments : {evalsByTeacherId.NbElement}");
 foreach (var eval in evalsByTeacherId.Data)
 {
     Console.WriteLine(eval);
@@ -289,7 +289,7 @@ if (evalReponse != null)
 }
 
 evals = await apiDataManager.GetEvaluations();
-Console.WriteLine($"Nombre d'éléments : {evals.nbElement}");
+Console.WriteLine($"Nombre d'éléments : {evals.NbElement}");
 foreach (var eval in evals.Data)
 {
     Console.WriteLine(eval);
@@ -362,7 +362,7 @@ foreach (var user in users.Data)
 Console.WriteLine("Test GetTemplatesByUserId :\n");
 
 var templates = await apiDataManager.GetTemplatesByUserId(userId);
-Console.WriteLine($"Nombre d'éléments : {evals.nbElement}");
+Console.WriteLine($"Nombre d'éléments : {evals.NbElement}");
 foreach (var template in templates.Data)
 {
     Console.WriteLine(template);
@@ -372,7 +372,7 @@ foreach (var template in templates.Data)
 Console.WriteLine("Test GetEmptyTemplatesByUserId :\n");
 
 var emptyTemplates = await apiDataManager.GetEmptyTemplatesByUserId(userId);
-Console.WriteLine($"Nombre d'éléments : {emptyTemplates.nbElement}");
+Console.WriteLine($"Nombre d'éléments : {emptyTemplates.NbElement}");
 foreach (var template in emptyTemplates.Data)
 {
     Console.WriteLine(template);
@@ -411,7 +411,7 @@ if (templateRep != null)
 }
 
 templates = await apiDataManager.GetEmptyTemplatesByUserId(userId);
-Console.WriteLine($"Nombre d'éléments : {templates.nbElement}");
+Console.WriteLine($"Nombre d'éléments : {templates.NbElement}");
 foreach (var template in templates.Data)
 {
     Console.WriteLine(template);

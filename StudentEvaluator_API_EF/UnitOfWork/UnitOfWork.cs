@@ -26,19 +26,19 @@ public class UnitOfWork : IDisposable
 
     private LibraryContext Context { get; }
     
-    public GenericRepository<GroupEntity> GroupsRepository
+    public GroupRepository GroupsRepository
     {
         get
         {
             if(_groupsRepository == null)
             {
-                _groupsRepository = new GenericRepository<GroupEntity>(Context);
+                _groupsRepository = new GroupRepository(Context);
             }
             return _groupsRepository;
         }
     }
 
-    private GenericRepository<GroupEntity>? _groupsRepository;
+    private GroupRepository? _groupsRepository;
     
     public GenericRepository<StudentEntity> StudentsRepository
     {
@@ -110,7 +110,22 @@ public class UnitOfWork : IDisposable
     
     private GenericRepository<LessonEntity>? _lessonsRepository;
     
-    public void RejectChanges()
+    public GenericRepository<CriteriaEntity> CriteriasRepository
+    {
+        get
+        {
+            if(_criteriasRepository == null)
+            {
+                _criteriasRepository = new GenericRepository<CriteriaEntity>(Context);
+            }
+            return _criteriasRepository;
+        }
+    }
+    
+    private GenericRepository<CriteriaEntity>? _criteriasRepository;
+
+    
+    private async Task RejectChangesAsync()
     {
         foreach (var entry in Context.ChangeTracker.Entries()
                      .Where(e => e.State != EntityState.Unchanged))
@@ -122,22 +137,22 @@ public class UnitOfWork : IDisposable
                     break;
                 case EntityState.Modified:
                 case EntityState.Deleted:
-                    entry.Reload();
+                    await entry.ReloadAsync();
                     break;
             }
         }
     }
 
-    public int SaveChanges()
+    public async Task<int> SaveChangesAsync()
     {
         int result = 0;
         try
         {
-            result = Context.SaveChanges();
+            result = await Context.SaveChangesAsync();
         }
         catch
         {
-            RejectChanges();
+            await RejectChangesAsync();
             return -1;
         }
         foreach (var entity in Context.ChangeTracker.Entries()
@@ -150,11 +165,11 @@ public class UnitOfWork : IDisposable
 
     private bool _disposed = false;
 
-    protected virtual void Dispose(bool disposing)
+    protected virtual async Task Dispose(bool disposing)
     {
         if (!_disposed && disposing)
         {
-            Context.Dispose();
+            await Context.DisposeAsync();
         }
         _disposed = true;
     }

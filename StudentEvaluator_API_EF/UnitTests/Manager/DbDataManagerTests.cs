@@ -18,7 +18,7 @@ public class DbDataManagerTests
             .Options;
     
         var context = new StubbedContext(options);
-        return new DbDataManager(context);
+        return new DbDataManager(context, new UnitOfWork.UnitOfWork(context));
     }
 
     [Fact]
@@ -90,7 +90,7 @@ public class DbDataManagerTests
 
         // Assert
         Assert.NotNull(students);
-        Assert.Equal(2, students.nbElement);
+        Assert.Equal(2, students.NbElement);
     }
     
     [Fact]
@@ -202,171 +202,8 @@ public class DbDataManagerTests
 
         // Assert
         Assert.NotNull(groups);
-        Assert.Equal(2, groups.nbElement);
+        Assert.Equal(2, groups.NbElement);
     }
-    
-    /*
-    [Fact]
-    public async Task AddUser_AddsUserCorrectly()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-        var userDto = new TeacherDto() { Id = "1", Username = "John", Password = "Doe", };
-
-        // Act
-        var addedUser = await manager.PostUser(userDto);
-
-        // Assert
-        Assert.NotNull(addedUser);
-        Assert.Equal(1, addedUser.Id);
-        Assert.Equal("John", addedUser.Username);
-        Assert.True(BCrypt.Net.BCrypt.Verify("Doe", addedUser.Password));
-        Assert.Equal(["Teacher"], addedUser.roles);
-    }
-    
-    [Fact]
-    public async Task GetUserById_ReturnsCorrectUser()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-        var userDto = new UserDto { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] };
-        await manager.PostUser(userDto);
-
-        // Act
-        var retrievedUser = await manager.GetUserById(1);
-
-        // Assert
-        Assert.NotNull(retrievedUser);
-        Assert.Equal(1, retrievedUser.Id);
-        Assert.Equal("John", retrievedUser.Username);
-        Assert.True(BCrypt.Net.BCrypt.Verify("Doe", retrievedUser.Password));
-        Assert.Equal(["Teacher"], retrievedUser.roles);
-    }
-    
-    [Fact]
-    public async Task DeleteUser_DeletesUserCorrectly()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-        var userDto = new UserDto { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] };
-        await manager.PostUser(userDto);
-
-        // Act
-        var result = await manager.DeleteUser(1);
-
-        // Assert
-        Assert.True(result);
-    }
-    
-    [Fact]
-    public async Task DeleteUser_WhenUserDoesNotExist_ReturnsFalse()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-
-        // Act
-        var result = await manager.DeleteUser(1);
-
-        // Assert
-        Assert.False(result);
-    }
-    
-    [Fact]
-    public async Task GetUsers_WhenUsersExist_ReturnsListOfUserDtos()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-        await manager.PostUser(new UserDto { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] });
-        await manager.PostUser(new UserDto { Id = 2, Username = "Jane", Password = "Doe", roles = ["Teacher"] });
-
-        // Act
-        var users = await manager.GetUsers(0, 10);
-
-        // Assert
-        Assert.NotNull(users);
-        Assert.Equal(2, users.nbElement);
-    }
-    
-    [Fact]
-    public async Task PutUser_WhenUserExists_ReturnsTrue()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-        await manager.PostUser(new UserDto { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] });
-        var userDto = new UserDto { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] };
-
-        // Act
-        var result = await manager.PutUser(1, userDto);
-
-        // Assert 
-        Assert.NotNull(result);
-        Assert.Equal(1, result.Id);
-        Assert.Equal("John", result.Username);
-        Assert.True(BCrypt.Net.BCrypt.Verify("Doe", result.Password));
-        Assert.Equal(["Teacher"], result.roles);
-    }
-    
-    [Fact]
-    public async Task PutUser_WhenUserDoesNotExist_ReturnsNull()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-        var userDto = new UserDto { Id = 1, Username = "Jane", Password = "Doe", roles = ["Teacher"] };
-
-        // Act
-        var result = await manager.PutUser(1, userDto);
-
-        // Assert
-        Assert.Null(result);
-    }
-    
-    [Fact]
-    public async void Login_WhenUserExists_ReturnsUserDto()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-        var userDto = new UserDto { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] };
-        await manager.PostUser(userDto);
-
-        // Act
-        var user = await manager.Login(new LoginDto() { Username = "John", Password = "Doe" });
-
-        // Assert
-        Assert.NotNull(user);
-        Assert.Equal(1, user.Id);
-        Assert.Equal("John", user.Username);
-        Assert.Equal(["Teacher"], user.Roles);
-    }
-    
-    [Fact]
-    public async Task Login_WhenUserDoesNotExist_ReturnsNull()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-
-        // Act
-        var user = await manager.Login(new LoginDto(){ Username = "John", Password = "Doe" });
-        
-        // Assert
-        Assert.Null(user);
-    }
-    
-    [Fact]
-    public async Task Login_WhenPasswordIsIncorrect_ReturnsNull()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-        var userDto = new UserDto { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] };
-        await manager.PostUser(userDto);
-
-        // Act
-        var user = await manager.Login(new LoginDto(){ Username = "John", Password = "Doe2" });
-        
-        // Assert
-        Assert.Null(user);
-    }
-    
-    */
     
     [Fact]
     public async Task AddTemplate_AddsTemplateCorrectly()
@@ -490,7 +327,7 @@ public class DbDataManagerTests
 
         // Assert
         Assert.NotNull(templates);
-        Assert.Equal(2, templates.nbElement);
+        Assert.Equal(2, templates.NbElement);
     }
 
     
@@ -510,7 +347,7 @@ public class DbDataManagerTests
 
         // Assert
         Assert.NotNull(templates);
-        Assert.Equal(1,  templates.nbElement);
+        Assert.Equal(1,  templates.NbElement);
     }
     
     // Lesson
@@ -644,43 +481,7 @@ public class DbDataManagerTests
         // Assert
         Assert.Null(result);
     }
-    /*
-    [Fact]
-    public async Task GetLessonsByTeacherId_WhenLessonsExist_ReturnsListOfLessonDtos()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-        await manager.PostTeacher(new TeacherDto() { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] });
-        await manager.PostGroup(new GroupDto { GroupYear = 1, GroupNumber = 1 });
-        await manager.PostLesson(new LessonDto { CourseName = "Entity Framework", Start = DateTime.Now, End = DateTime.Now, GroupYear = 1, GroupNumber = 1, Classroom = "Classroom 1", TeacherId = 1 });
-        await manager.PostLesson(new LessonDto { CourseName = "Entity Framework", Start = DateTime.Now, End = DateTime.Now, GroupYear = 1, GroupNumber = 1, Classroom = "Classroom 1", TeacherId = 1 });
-
-        // Act
-        var lessons = await manager.GetLessonsByTeacherId(1, 0, 10);
-
-        // Assert
-        Assert.NotNull(lessons);
-        Assert.Equal(2, lessons.nbElement);
-    }
     
-    [Fact]
-    public async Task GetLessons_WhenLessonsExist_ReturnsListOfLessonDtos()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-        await manager.PostTeacher(new TeacherDto() { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] });
-        await manager.PostGroup(new GroupDto { GroupYear = 1, GroupNumber = 1 });
-        await manager.PostLesson(new LessonDto { CourseName = "Entity Framework", Start = DateTime.Now, End = DateTime.Now, GroupYear = 1, GroupNumber = 1, Classroom = "Classroom 1", TeacherId = 1 });
-        await manager.PostLesson(new LessonDto { CourseName = "Entity Framework", Start = DateTime.Now, End = DateTime.Now, GroupYear = 1, GroupNumber = 1, Classroom = "Classroom 1", TeacherId = 1 });
-
-        // Act
-        var lessons = await manager.GetLessons(0, 10);
-
-        // Assert
-        Assert.NotNull(lessons);
-        Assert.Equal(2, lessons.nbElement);
-    }
-    */
     [Fact]
     public async Task AddCriterion_AddsCriterionCorrectly()
     {
@@ -926,7 +727,7 @@ public class DbDataManagerTests
 
         // Assert
         Assert.NotNull(criterions);
-        Assert.Equal(3, criterions.nbElement);
+        Assert.Equal(3, criterions.NbElement);
     }
     
     // Evaluation
@@ -991,25 +792,6 @@ public class DbDataManagerTests
         Assert.Null(retrievedEvaluation);
     }
     
-    /*
-    [Fact]
-    public async Task DeleteEvaluation_DeletesEvaluationCorrectly()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-        var evaluationDto = new EvaluationDto { StudentId = 1, TemplateId = 1, TeacherId = 1, CourseName = "Entity Framework", Date = DateTime.Now, PairName = "toto", Grade = 2 };
-        await manager.PostStudent(new StudentDto { Id = 1, Name = "Jane", Lastname = "Doe", UrlPhoto = "http://example.com/photo.jpg", GroupNumber = 1, GroupYear = 1 });
-        await manager.PostTemplate(1, new TemplateDto { Id = 1, Name = "Template 1", Criterias = [] });
-        await manager.PostTeacher(new TeacherDto { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] });
-        await manager.PostEvaluation(evaluationDto);
-
-        // Act
-        var result = await manager.DeleteEvaluation(1);
-
-        // Assert
-        Assert.True(result);
-    }
-    */
     [Fact]
     public async Task DeleteEvaluation_WhenEvaluationDoesNotExist_ReturnsFalse()
     {
@@ -1022,33 +804,6 @@ public class DbDataManagerTests
         // Assert
         Assert.False(result);
     }
-    /*
-    [Fact]
-    public async Task PutEvaluation_WhenEvaluationExists_ReturnsTrue()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-        var evaluationDto = new EvaluationDto { StudentId = 1, TemplateId = 1, TeacherId = 1, CourseName = "Entity Framework", Date = DateTime.Now, PairName = "toto", Grade = 2 };
-        await manager.PostStudent(new StudentDto { Id = 1, Name = "Jane", Lastname = "Doe", UrlPhoto = "http://example.com/photo.jpg", GroupNumber = 1, GroupYear = 1 });
-        await manager.PostTemplate(1, new TemplateDto { Id = 1, Name = "Template 1", Criterias = [] });
-        await manager.PostTeacher(new TeacherDto { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] });
-        await manager.PostEvaluation(evaluationDto);
-        var evaluation = new EvaluationDto { Id = 1, StudentId = 1, TemplateId = 1, TeacherId = 1, CourseName = "Entity Framework", Date = DateTime.Now, PairName = "toto", Grade = 2 };
-
-        // Act
-        var result = await manager.PutEvaluation(1, evaluation);
-
-        // Assert 
-        Assert.NotNull(result);
-        Assert.Equal(1, result.Id);
-        Assert.Equal(1, result.Student.Id);
-        Assert.NotNull(result.Template);
-        Assert.Equal(1, result.Template.Id);
-        Assert.Equal(1, result.Teacher.Id);
-        Assert.Equal("Entity Framework", result.CourseName);
-        Assert.Equal(2, result.Grade);
-    }
-    */
     
     [Fact]
     public async Task PutEvaluation_WhenEvaluationDoesNotExist_ReturnsNull()
@@ -1064,43 +819,4 @@ public class DbDataManagerTests
         Assert.Null(result);
     }
     
-    /*
-    [Fact]
-    public async Task GetEvaluationsByTeacherId_WhenEvaluationsExist_ReturnsListOfEvaluationDtos()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-        var evaluationDto = new EvaluationDto { StudentId = 1, TemplateId = 1, TeacherId = 1, CourseName = "Entity Framework", Date = DateTime.Now, PairName = "toto", Grade = 2 };
-        await manager.PostStudent(new StudentDto { Id = 1, Name = "Jane", Lastname = "Doe", UrlPhoto = "http://example.com/photo.jpg", GroupNumber = 1, GroupYear = 1 });
-        await manager.PostTemplate(1, new TemplateDto { Id = 1, Name = "Template 1", Criterias = [] });
-        await manager.PostTeacher(new TeacherDto { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] });
-        await manager.PostEvaluation(evaluationDto);
-
-        // Act
-        var evaluations = await manager.GetEvaluationsByTeacherId(1, 0, 10);
-
-        // Assert
-        Assert.NotNull(evaluations);
-        Assert.Equal(1, evaluations.nbElement);
-    }
-    
-    [Fact]
-    public async Task GetEvaluations_WhenEvaluationsExist_ReturnsListOfEvaluationDtos()
-    {
-        // Arrange
-        var manager = CreateManagerWithInMemoryDb();
-        var evaluationDto = new EvaluationDto { StudentId = 1, TemplateId = 1, TeacherId = 1, CourseName = "Entity Framework", Date = DateTime.Now, PairName = "toto", Grade = 2 };
-        await manager.PostStudent(new StudentDto { Id = 1, Name = "Jane", Lastname = "Doe", UrlPhoto = "http://example.com/photo.jpg", GroupNumber = 1, GroupYear = 1 });
-        await manager.PostTemplate(1, new TemplateDto { Id = 1, Name = "Template 1", Criterias = [] });
-        await manager.PostTeacher(new TeacherDto { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] });
-        await manager.PostEvaluation(evaluationDto);
-
-        // Act
-        var evaluations = await manager.GetEvaluations(0, 10);
-
-        // Assert
-        Assert.NotNull(evaluations);
-        Assert.Equal(1, evaluations.nbElement);
-    }
-    */
 }

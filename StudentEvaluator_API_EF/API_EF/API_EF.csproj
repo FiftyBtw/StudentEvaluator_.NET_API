@@ -26,6 +26,7 @@
     <ProjectReference Include="..\Entities2Dto\Entities2Dto.csproj" />
     <ProjectReference Include="..\EventLogs\EventLogs.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
+    <ProjectReference Include="..\UnitOfWork\UnitOfWork.csproj" />
   </ItemGroup>
   
 <ItemGroup>

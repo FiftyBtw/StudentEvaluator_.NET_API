@@ -809,9 +809,9 @@ namespace Entities2Dto
                     PairName = eval.PairName,
                     Date = eval.Date,
 
-                    Student = eval.Student?.ToDto(),
+                    Student = eval.Student.ToDto(),
                     Template = eval.Template?.ToDto(),
-                    Teacher = eval.Teacher?.ToDto(),
+                    Teacher = eval.Teacher.ToDto(),
 
                 };
                 EvaluationReponseMapper.Set(eval, evalDto);

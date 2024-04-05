@@ -654,6 +654,20 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     {
         var evalEntity = eval.ToEntity();
         await _unitOfWork.EvaluationsRepository.Insert(evalEntity);
+        var student = await _unitOfWork.StudentsRepository.GetByIdAsync(eval.StudentId, entity => entity.Evaluations);
+        if(student == null) throw new KeyNotFoundException("Student not found, insert failed.");
+        student?.Evaluations.Add(evalEntity);
+        
+        var template = await _unitOfWork.TemplatesRepository.GetByIdAsync(eval.TemplateId, entity => entity.Evaluation);
+        if(template == null) throw new KeyNotFoundException("Template not found, insert failed.");
+        template.Evaluation = evalEntity;
+        
+        eval.TeacherId = evalEntity.TeacherId = template.TeacherId;
+        
+        var teacher = await _unitOfWork.TeachersRepository.GetByIdAsync(evalEntity.TeacherId, entity => entity.Evaluations);
+        if(teacher == null) throw new KeyNotFoundException("Teacher not found, insert failed.");
+        teacher?.Evaluations.Add(evalEntity);
+        
         await _unitOfWork.SaveChangesAsync();
         Translator.EvaluationMapper.Reset();
         return evalEntity.ToReponseDto();
@@ -676,11 +690,24 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
         eval.Date = newEval.Date;
         eval.StudentId= newEval.StudentId;
         eval.TemplateId=newEval.TemplateId;
-        eval.TeacherId = newEval.TeacherId;
+        
+        var student = await _unitOfWork.StudentsRepository.GetByIdAsync(newEval.StudentId, entity => entity.Evaluations);
+        if(student == null) throw new KeyNotFoundException("Student not found, update failed.");
+        student?.Evaluations.Add(eval);
+        
+        var template = await _unitOfWork.TemplatesRepository.GetByIdAsync(newEval.TemplateId, entity => entity.Evaluation);
+        if(template == null) throw new KeyNotFoundException("Template not found, update failed.");
+        if(template.Evaluation != null && template.Evaluation.Id != id) throw new InvalidOperationException("Template already has an evaluation, update failed.");
+        template.Evaluation = eval;
+        eval.TeacherId = template.TeacherId;
+        
+        var teacher = await _unitOfWork.TeachersRepository.GetByIdAsync(eval.TeacherId, entity => entity.Evaluations);
+        if(teacher == null) throw new KeyNotFoundException("Teacher not found, update failed.");
+        teacher?.Evaluations.Add(eval);
+        
 
         await _unitOfWork.SaveChangesAsync();
         Translator.EvaluationMapper.Reset();
-        eval = _unitOfWork.EvaluationsRepository.GetByIdAsync(id, e => e.Template, e => e.Student, e => e.Teacher).Result;
         return eval!.ToReponseDto();
     }
 

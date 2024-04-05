@@ -86,4 +86,9 @@ public class GenericRepository <TEntity> where TEntity  :  class
         Context.Entry(entityToUpdate).State = EntityState.Modified;
         return Task.CompletedTask;
     }
+
+    public IQueryable<TEntity> Query()
+    {
+        return Set;
+    }
 }

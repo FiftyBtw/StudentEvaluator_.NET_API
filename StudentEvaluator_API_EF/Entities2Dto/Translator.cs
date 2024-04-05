@@ -522,6 +522,7 @@ namespace Entities2Dto
             {
                 teacherDto = new TeacherDto
                 {
+                    Id = teacher.Id,
                     Username = teacher.UserName,
                     Password = teacher.PasswordHash,
                     Templates = teacher.Templates?.ToDtos(),
@@ -660,7 +661,7 @@ namespace Entities2Dto
                     End = lessonDto.End,
                     TeacherEntityId = lessonDto.TeacherId,
                     GroupNumber = lessonDto.GroupNumber,
-                    GroupYear= lessonDto.GroupYear,
+                    GroupYear= lessonDto.GroupYear, 
                 };
                 LessonMapper.Set(lessonEntity, lessonDto);
             }

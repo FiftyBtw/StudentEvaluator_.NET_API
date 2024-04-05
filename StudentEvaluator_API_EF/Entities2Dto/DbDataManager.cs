@@ -525,6 +525,14 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
         lesson.TeacherEntityId = newLesson.TeacherId;
         lesson.GroupNumber = newLesson.GroupNumber;
         lesson.GroupYear= newLesson.GroupYear;
+        var teacher = await _unitOfWork.TeachersRepository.GetByIdAsync(newLesson.TeacherId, entity => entity.Lessons);
+        if(teacher == null) throw new KeyNotFoundException("Teacher not found, update failed.");
+        teacher?.Lessons.Add(lesson);
+        var includesGroup = new List<Expression<Func<GroupEntity, object>>>(1);
+        includesGroup.Add(g => g.Lessons);
+        var group = await _unitOfWork.GroupsRepository.GetById(includesGroup, newLesson.GroupYear, newLesson.GroupNumber);
+        if(group == null) throw new KeyNotFoundException("Group not found, update failed.");
+        group?.Lessons.Add(lesson);
         await _unitOfWork.SaveChangesAsync();
         Translator.LessonMapper.Reset();
         return lesson.ToReponseDto();
@@ -544,6 +552,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
             return false;
         }
         await _unitOfWork.LessonsRepository.Delete(lesson);
+        await _unitOfWork.SaveChangesAsync();
         return await _unitOfWork.LessonsRepository.GetByIdAsync(id) == null;
     }
 
@@ -558,6 +567,14 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     {
         var lessonEntity = lesson.ToEntity();
         await _unitOfWork.LessonsRepository.Insert(lessonEntity);
+        var teacher = await _unitOfWork.TeachersRepository.GetByIdAsync(lesson.TeacherId, entity => entity.Lessons);
+        if(teacher == null) throw new KeyNotFoundException("Teacher not found, insert failed.");
+        teacher?.Lessons.Add(lessonEntity);
+        var includesGroup = new List<Expression<Func<GroupEntity, object>>>(1);
+        includesGroup.Add(g => g.Lessons);
+        var group = await _unitOfWork.GroupsRepository.GetById(includesGroup,lesson.GroupYear, lesson.GroupNumber);
+        if (group == null) throw new KeyNotFoundException("Group not found, insert failed.");
+        group?.Lessons.Add(lessonEntity);
         await _unitOfWork.SaveChangesAsync();
         Translator.LessonMapper.Reset();
         return lessonEntity.ToReponseDto();

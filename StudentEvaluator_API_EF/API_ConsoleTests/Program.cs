@@ -62,6 +62,49 @@ httpClient.DefaultRequestHeaders.Authorization =
 ApiDataManager apiDataManager = new(httpClient);
 
 
+//Group 
+
+//GetGroups
+Console.WriteLine("Test GetGroups :\n");
+
+var groups = await apiDataManager.GetGroups();
+Console.WriteLine($"Nombre d'éléments : {groups.NbElement}");
+foreach (var group in groups.Data)
+{
+    Console.WriteLine(group);
+}
+
+//PostGroup
+
+Console.WriteLine("Test PostGroup :\n");
+
+var newGroup = new Group(3, 9, new List<Student>());
+newGroup= await apiDataManager.PostGroup(newGroup);
+
+Console.WriteLine(newGroup);
+
+//GetGroupById
+
+Console.WriteLine("Test GetGroupById (gyear =1 & gnumber=1) :\n");
+var groupById = await apiDataManager.GetGroupByIds(1, 1);
+Console.WriteLine(groupById);
+
+//DeleteGroup
+
+Console.WriteLine("Test DeleteGroup :\n");
+if (newGroup != null)
+{
+    var repDelete = await apiDataManager.DeleteGroup(newGroup.GroupYear, newGroup.GroupNumber);
+    Console.WriteLine(repDelete);
+}
+
+groups = await apiDataManager.GetGroups();
+Console.WriteLine($"Nombre d'éléments : {groups.NbElement}");
+foreach (var group in groups.Data)
+{
+    Console.WriteLine(group);
+}
+
 //Students :
 
 //GetStudents :
@@ -124,50 +167,6 @@ Console.WriteLine($"Nombre d'éléments : {students.NbElement}");
 foreach (var student in students.Data)
 {
     Console.WriteLine(student);
-}
-
-
-//Group 
-
-//GetGroups
-Console.WriteLine("Test GetGroups :\n");
-
-var groups = await apiDataManager.GetGroups();
-Console.WriteLine($"Nombre d'éléments : {groups.NbElement}");
-foreach (var group in groups.Data)
-{
-    Console.WriteLine(group);
-}
-
-//PostGroup
-
-Console.WriteLine("Test PostGroup :\n");
-
-var newGroup = new Group(3, 9, new List<Student>());
-newGroup= await apiDataManager.PostGroup(newGroup);
-
-Console.WriteLine(newGroup);
-
-//GetGroupById
-
-Console.WriteLine("Test GetGroupById (gyear =1 & gnumber=1) :\n");
-var groupById = await apiDataManager.GetGroupByIds(1, 1);
-Console.WriteLine(groupById);
-
-//DeleteGroup
-
-Console.WriteLine("Test DeleteGroup :\n");
-if (newGroup != null)
-{
-    var repDelete = await apiDataManager.DeleteGroup(newGroup.GroupYear, newGroup.GroupNumber);
-    Console.WriteLine(repDelete);
-}
-
-groups = await apiDataManager.GetGroups();
-Console.WriteLine($"Nombre d'éléments : {groups.NbElement}");
-foreach (var group in groups.Data)
-{
-    Console.WriteLine(group);
 }
 
 //Lesson
@@ -279,7 +278,7 @@ foreach (var eval in evalsByTeacherId.Data)
 {
     Console.WriteLine(eval);
 }
-//DeleteEvalation
+//DeleteEvaluation
 
 Console.WriteLine("Test DeleteEvaluation :\n");
 if (evalReponse != null)
@@ -295,67 +294,6 @@ foreach (var eval in evals.Data)
     Console.WriteLine(eval);
 }
 
-//User
-/*
-//GetUsers
-Console.WriteLine("Test GetUsers :\n");
-
-var users = await apiDataManager.GetUsers();
-Console.WriteLine($"Nombre d'éléments : {users.nbElement}");
-foreach (var user in users.Data)
-{
-    Console.WriteLine(user);
-}
-
-//PostUser
-
-Console.WriteLine("Test PostUser :\n");
-var newUser = new User(0, "ProfDupuit", "test", []);
-var userRep = await apiDataManager.PostUser(newUser);
-
-Console.WriteLine(userRep);
-
-//PutUser
-
-Console.WriteLine("Test PutUser :\n");
-newUser.Username = "ProfMarc";
-if (userRep != null)
-{
-    userRep = await apiDataManager.PutUser(userRep.Id, newUser);
-}
-Console.WriteLine(userRep);
-//GetUserById
-
-Console.WriteLine("Test GetUserById (id=1) :\n");
-var userById = await apiDataManager.GetUserById(1);
-
-Console.WriteLine(userById);
-
-//Login
-
-Console.WriteLine("Test Login () :\n");
-
-var loginRequest = new LoginRequest("ProfMarc","test");
-var loginReponse = await apiDataManager.Login(loginRequest);
-
-Console.WriteLine(loginReponse);
-
-//DeleteUser
-
-Console.WriteLine("Test DeleteUser :\n");
-if (userRep != null)
-{
-    var repDelete = await apiDataManager.DeleteUser(userRep.Id);
-    Console.WriteLine(repDelete);
-}
-
-users = await apiDataManager.GetUsers();
-Console.WriteLine($"Nombre d'éléments : {users.nbElement}");
-foreach (var user in users.Data)
-{
-    Console.WriteLine(user);
-}
-*/
 //Template
 
 //GetTemplateByUserId
@@ -377,6 +315,7 @@ foreach (var template in emptyTemplates.Data)
 {
     Console.WriteLine(template);
 }
+
 //PostTemplate
 
 Console.WriteLine("Test PostTemplate :\n");

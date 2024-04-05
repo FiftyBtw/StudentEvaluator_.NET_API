@@ -150,7 +150,7 @@ namespace Dto2Model
 
         public async Task<Lesson?> GetLessonById(long id)
         {
-            var lessonById = await _httpClient.GetFromJsonAsync<LessonReponseDto>($"{_httpClient.BaseAddress}api/v{_version}/Lessons/id/{id}");
+            var lessonById = await _httpClient.GetFromJsonAsync<LessonReponseDto>($"{_httpClient.BaseAddress}api/v{_version}/Lessons/{id}");
             return await Task.FromResult(lessonById?.ToModel());
         }
 
@@ -223,7 +223,7 @@ namespace Dto2Model
 
         public async Task<PageReponse<Evaluation>> GetEvaluationsByTeacherId(string id, int index=0, int count=10)
         {
-            var evalsByTeacherId = await _httpClient.GetFromJsonAsync<PageReponse<EvaluationReponseDto>>($"{_httpClient.BaseAddress}api/v{_version}/Evaluations/teacher/?index={index}&count={count}");
+            var evalsByTeacherId = await _httpClient.GetFromJsonAsync<PageReponse<EvaluationReponseDto>>($"{_httpClient.BaseAddress}api/v{_version}/Evaluations/teacher?index={index}&count={count}");
             if (evalsByTeacherId != null)
             {
                 return await Task.FromResult(new PageReponse<Evaluation>(evalsByTeacherId.NbElement, evalsByTeacherId.Data.ToModels()));
@@ -363,7 +363,7 @@ namespace Dto2Model
 
         public async Task<Template?> GetTemplateById(long templateId)
         {
-            var templateById = await _httpClient.GetFromJsonAsync<TemplateDto>($"{_httpClient.BaseAddress}api/v{_version}/Templates/{templateId}/teacher/");
+            var templateById = await _httpClient.GetFromJsonAsync<TemplateDto>($"{_httpClient.BaseAddress}api/v{_version}/Templates/{templateId}");
             return await Task.FromResult(templateById?.ToModel());
         }
 

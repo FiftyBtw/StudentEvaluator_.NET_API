@@ -16,6 +16,8 @@
 
         private int _groupnumber;
         public int GroupNumber { get { return _groupnumber; } set { _groupnumber = value; } }
+        
+        public Student() { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Student"/> class with the specified properties.

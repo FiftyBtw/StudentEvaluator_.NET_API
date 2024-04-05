@@ -83,10 +83,13 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <returns>A task representing the asynchronous operation with a nullable <see cref="StudentDto"/>.</returns>
     public async Task<StudentDto?> PostStudent(StudentDto student)
     {
-        await _unitOfWork.StudentsRepository.Insert(student.ToEntity());
+        var studentEntity = student.ToEntity();
+        await _unitOfWork.StudentsRepository.Insert(studentEntity);
+        var group = await _unitOfWork.GroupsRepository.GetById([],student.GroupYear, student.GroupNumber);
+        if(group == null) throw new KeyNotFoundException("Group not found, insert failed.");
         await _unitOfWork.SaveChangesAsync();
         Translator.StudentMapper.Reset();
-        return student;
+        return studentEntity.ToDto();
     }
 
 
@@ -100,13 +103,15 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     {
         var oldStudent = await _unitOfWork.StudentsRepository.GetByIdAsync(id);
         if (oldStudent == null) return null;
+        var group = await _unitOfWork.GroupsRepository.GetById([],student.GroupYear, student.GroupNumber);
+        if(group == null) throw new KeyNotFoundException("Group not found, update failed.");
         oldStudent.Name = student.Name;
         oldStudent.Lastname = student.Lastname;
         oldStudent.UrlPhoto = student.UrlPhoto;
         oldStudent.GroupYear = student.GroupYear;
         oldStudent.GroupNumber = student.GroupNumber;
         await _unitOfWork.SaveChangesAsync();
-        return student;
+        return oldStudent.ToDto();
     }
 
     //Group

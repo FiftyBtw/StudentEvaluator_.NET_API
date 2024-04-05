@@ -653,6 +653,7 @@ namespace Entities2Dto
             {
                 lessonEntity = new LessonEntity
                 {
+                    Id = 0,
                     Classroom = lessonDto.Classroom,
                     CourseName = lessonDto.CourseName,
                     Start = lessonDto.Start,

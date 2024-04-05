@@ -60,9 +60,9 @@ steps:
       -  cd Documentation/doxygen
       - doxygen Doxyfile
       - /entrypoint.sh
-#    when:
-#      branch:
-#        - master
+    when:
+      branch:
+        - master
     depends_on: [ build ]
 
   - name: docker-build-and-push
@@ -79,7 +79,6 @@ steps:
     when:
       branch:
         - master
-        - API_Authentication
 
   - name: deploy-container
     image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest

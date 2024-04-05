@@ -14,6 +14,7 @@ namespace Entities2Dto
         public static Mapper<CriteriaEntity, CriteriaDto> CriteriaMapper { get; set; } = new Mapper<CriteriaEntity, CriteriaDto>();
         public static Mapper<TextCriteriaEntity, TextCriteriaDto> TextCriteriaMapper { get; set; } = new Mapper<TextCriteriaEntity, TextCriteriaDto>();
         public static Mapper<SliderCriteriaEntity, SliderCriteriaDto> SliderCriteriaMapper { get; set; } = new Mapper<SliderCriteriaEntity, SliderCriteriaDto>();
+        public static Mapper<RadioCriteriaEntity, RadioCriteriaDto> RadioCriteriaMapper { get; set; } = new Mapper<RadioCriteriaEntity, RadioCriteriaDto>();
         public static Mapper<TemplateEntity, TemplateDto> TemplateMapper { get; set; } = new Mapper<TemplateEntity, TemplateDto>();
  
         public static Mapper<TeacherEntity, TeacherDto> TeacherMapper { get; set; } = new Mapper<TeacherEntity, TeacherDto>();
@@ -374,15 +375,23 @@ namespace Entities2Dto
         /// <returns>The corresponding radio criteria DTO object.</returns>
         public static RadioCriteriaDto ToDto(this RadioCriteriaEntity radioCriteria)
         {
-            return new RadioCriteriaDto
+            var radioCriteriaDto = RadioCriteriaMapper.GetDto(radioCriteria);
+            if (radioCriteriaDto == null)
             {
-                Id = radioCriteria.Id,
-                Name = radioCriteria.Name,
-                ValueEvaluation = radioCriteria.ValueEvaluation,
-                TemplateId = radioCriteria.TemplateId,
-                Options = radioCriteria.Options,
-                SelectedOption = radioCriteria.SelectedOption
-            };
+                radioCriteriaDto = new RadioCriteriaDto
+                {
+                    Id = radioCriteria.Id,
+                    Name = radioCriteria.Name,
+                    ValueEvaluation = radioCriteria.ValueEvaluation,
+                    TemplateId = radioCriteria.TemplateId,
+                    Options = radioCriteria.Options,
+                    SelectedOption = radioCriteria.SelectedOption
+                };
+                RadioCriteriaMapper.Set(radioCriteria, radioCriteriaDto);
+                return radioCriteriaDto;
+            }
+
+            return radioCriteriaDto;
         }
 
 
@@ -393,15 +402,21 @@ namespace Entities2Dto
         /// <returns>The corresponding radio criteria entity object.</returns>
         public static RadioCriteriaEntity ToEntity(this RadioCriteriaDto radioCriteria)
         {
-            return new RadioCriteriaEntity
+            var radioCriteriaEntity = RadioCriteriaMapper.GetEntity(radioCriteria);
+            if (radioCriteriaEntity == null)
             {
-                Id = radioCriteria.Id,
-                Name = radioCriteria.Name,
-                ValueEvaluation = radioCriteria.ValueEvaluation,
-                TemplateId = radioCriteria.TemplateId,
-                Options = radioCriteria.Options,
-                SelectedOption = radioCriteria.SelectedOption
-            };
+                return new RadioCriteriaEntity
+                {
+                    Id = radioCriteria.Id,
+                    Name = radioCriteria.Name,
+                    ValueEvaluation = radioCriteria.ValueEvaluation,
+                    TemplateId = radioCriteria.TemplateId,
+                    Options = radioCriteria.Options,
+                    SelectedOption = radioCriteria.SelectedOption
+                };
+            }
+
+            return radioCriteriaEntity;
         }
 
 
@@ -507,6 +522,7 @@ namespace Entities2Dto
             {
                 teacherDto = new TeacherDto
                 {
+                    Id = teacher.Id,
                     Username = teacher.UserName,
                     Password = teacher.PasswordHash,
                     Templates = teacher.Templates?.ToDtos(),
@@ -638,13 +654,14 @@ namespace Entities2Dto
             {
                 lessonEntity = new LessonEntity
                 {
+                    Id = 0,
                     Classroom = lessonDto.Classroom,
                     CourseName = lessonDto.CourseName,
                     Start = lessonDto.Start,
                     End = lessonDto.End,
                     TeacherEntityId = lessonDto.TeacherId,
                     GroupNumber = lessonDto.GroupNumber,
-                    GroupYear= lessonDto.GroupYear,
+                    GroupYear= lessonDto.GroupYear, 
                 };
                 LessonMapper.Set(lessonEntity, lessonDto);
             }
@@ -792,9 +809,9 @@ namespace Entities2Dto
                     PairName = eval.PairName,
                     Date = eval.Date,
 
-                    Student = eval.Student?.ToDto(),
+                    Student = eval.Student.ToDto(),
                     Template = eval.Template?.ToDto(),
-                    Teacher = eval.Teacher?.ToDto(),
+                    Teacher = eval.Teacher.ToDto(),
 
                 };
                 EvaluationReponseMapper.Set(eval, evalDto);

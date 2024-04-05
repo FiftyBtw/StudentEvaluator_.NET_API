@@ -12,7 +12,7 @@ namespace Shared;
     /// <typeparam name="T">The type representing a group.</typeparam>
     public interface IGroupService<T> where T : class
     {
-        public Task<PageReponse<T>> GetGroups(int index,int count);
+        public Task<PageReponse<T>> GetGroups(int index = 0, int count = 10);
 
         public Task<T?> GetGroupByIds(int gyear, int gnumber);
         public Task<T?> PostGroup(T group);

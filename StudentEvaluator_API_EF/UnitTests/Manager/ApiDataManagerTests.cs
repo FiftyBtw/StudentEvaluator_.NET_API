@@ -81,7 +81,7 @@ public class ApiDataManagerTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(expectedStudents.nbElement, result.nbElement);
+        Assert.Equal(expectedStudents.NbElement, result.NbElement);
         Assert.Single(result.Data);
     }
 
@@ -147,7 +147,7 @@ public class ApiDataManagerTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(expectedGroups.nbElement, result.nbElement);
+        Assert.Equal(expectedGroups.NbElement, result.NbElement);
         Assert.Single(result.Data);
     }
     
@@ -287,7 +287,7 @@ public class ApiDataManagerTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(expectedLessons.nbElement, result.nbElement);
+        Assert.Equal(expectedLessons.NbElement, result.NbElement);
         Assert.Single(result.Data);
     }
     
@@ -330,7 +330,7 @@ public class ApiDataManagerTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(expectedLessons.nbElement, result.nbElement);
+        Assert.Equal(expectedLessons.NbElement, result.NbElement);
         Assert.Single(result.Data);
     }
     
@@ -357,7 +357,7 @@ public class ApiDataManagerTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(expectedEvaluations.nbElement, result.nbElement);
+        Assert.Equal(expectedEvaluations.NbElement, result.NbElement);
         Assert.Single(result.Data);
     }
 
@@ -476,149 +476,9 @@ public class ApiDataManagerTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(expectedEvaluations.nbElement, result.nbElement);
+        Assert.Equal(expectedEvaluations.NbElement, result.NbElement);
         Assert.Single(result.Data);
     }
-
-    /*
-    [Fact]
-    public async Task GetUsers_ReturnsUsers()
-    {
-        // Arrange
-        var expectedUsers = new PageReponse<UserDto>
-        ( 1,new List<UserDto>
-            {
-                new UserDto { Id = 1, Username = "TestUser" }
-            }
-        );
-        _mockHttpMessageHandler.Protected()
-            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),
-                ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(JsonConvert.SerializeObject(expectedUsers), Encoding.UTF8, "application/json")
-            });
-
-        // Act
-        var result = await _apiDataManager.GetUsers();
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal(expectedUsers.nbElement, result.nbElement);
-        Assert.Single(result.Data);
-    }
-
-    [Fact]
-    public async Task GetUserById_ReturnsUser()
-    {
-        // Arrange
-        var expectedUser = new UserDto { Id = 1, Username = "TestUser" };
-        _mockHttpMessageHandler.Protected()
-            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),
-                ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(JsonConvert.SerializeObject(expectedUser), Encoding.UTF8, "application/json")
-            });
-
-        // Act
-        var result = await _apiDataManager.GetUserById(1);
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal(expectedUser.Username, result.Username);
-    }
-
-    [Fact]
-    public async Task PostUser_CreatesUser_ReturnsUser()
-    {
-        // Arrange
-        var newUser = new User(1, "TestUser", "TestPassword", ["TestRole"]);
-        var expectedUserDto = new UserDto { Id = 1, Username = "TestUser", roles = ["TestRole"] };
-        _mockHttpMessageHandler.Protected()
-            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),
-                ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(JsonConvert.SerializeObject(expectedUserDto), Encoding.UTF8, "application/json")
-            });
-
-        // Act
-        var result = await _apiDataManager.PostUser(newUser);
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal(expectedUserDto.Username, result.Username);
-        Assert.Equal(expectedUserDto.Id, result.Id);
-        Assert.Equal(expectedUserDto.roles, result.Roles);
-    }
-
-    [Fact]
-    public async Task Login_UserLogsIn_ReturnsLoginResponse()
-    {
-        // Arrange
-        var loginRequest = new LoginRequest("TestUser", "TestPassword");
-        var expectedLoginResponse = new LoginResponseDto { Id = 1, Username = "TestUser", Roles = ["TestRole"] };
-        _mockHttpMessageHandler.Protected()
-            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),
-                ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(JsonConvert.SerializeObject(expectedLoginResponse), Encoding.UTF8, "application/json")
-            });
-
-        // Act
-        var result = await _apiDataManager.Login(loginRequest);
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal(expectedLoginResponse.Username, result.Username);
-        Assert.Equal(expectedLoginResponse.Id, result.Id);
-        Assert.Equal(expectedLoginResponse.Roles, result.Roles);
-    }
-
-    [Fact]
-    public async Task PutUser_UpdatesUser_ReturnsUpdatedUser()
-    {
-        // Arrange
-        var updatedUser = new User(1, "TestUser", "TestPassword", ["TestRole"]);
-        var expectedUpdatedUserDto = new UserDto { Id = 1, Username = "TestUser", roles = ["TestRole"] };
-        _mockHttpMessageHandler.Protected()
-            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),
-                ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage
-            {
-                StatusCode = HttpStatusCode.OK,
-                Content = new StringContent(JsonConvert.SerializeObject(expectedUpdatedUserDto), Encoding.UTF8, "application/json")
-            });
-
-        // Act
-        var result = await _apiDataManager.PutUser(1, updatedUser);
-
-        // Assert
-        Assert.NotNull(result);
-    }
-
-    [Fact]
-    public async Task DeleteUser_WhenSuccessful_ReturnsTrue()
-    {
-        // Arrange
-        _mockHttpMessageHandler.Protected()
-            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(),
-                ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.OK));
-
-        // Act
-        var result = await _apiDataManager.DeleteUser(1);
-
-        // Assert
-        Assert.True(result);
-    }
-    */
     
     [Fact]
     public async Task GetTemplatesByUserId_ReturnsTemplates()
@@ -644,7 +504,7 @@ public class ApiDataManagerTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(expectedTemplates.nbElement, result.nbElement);
+        Assert.Equal(expectedTemplates.NbElement, result.NbElement);
         Assert.Single(result.Data);
     }
 

@@ -11,13 +11,13 @@ namespace Shared;
     /// </summary>
     /// <typeparam name="T">The type representing a lesson.</typeparam>
     /// <typeparam name="TResponse">The type representing a response related to the lesson.</typeparam>
-    public interface ILessonService<T,TReponse> where T : class where TReponse : class
+    public interface ILessonService<T,TResponse> where T : class where TResponse : class
     {
-        public Task<PageReponse<TReponse>> GetLessons(int index, int count);
-        public Task<TReponse?> GetLessonById(long id);
-        public Task<PageReponse<TReponse>> GetLessonsByTeacherId(string userId, int index,int count);
-        public Task<TReponse?> PostLesson(T lesson);
-        public Task<TReponse?> PutLesson(long id, T lesson);
+        public Task<PageReponse<TResponse>> GetLessons(int index = 0, int count = 10);
+        public Task<TResponse?> GetLessonById(long id);
+        public Task<PageReponse<TResponse>> GetLessonsByTeacherId(string userId, int index = 0,int count = 10);
+        public Task<TResponse?> PostLesson(T lesson);
+        public Task<TResponse?> PutLesson(long id, T lesson);
         public Task<bool> DeleteLesson(long id);
     }
 

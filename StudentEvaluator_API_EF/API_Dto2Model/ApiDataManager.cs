@@ -61,7 +61,7 @@ namespace Dto2Model
             var students = await _httpClient.GetFromJsonAsync<PageReponse<StudentDto>>($"{_httpClient.BaseAddress}api/v{_version}/Students?index={index}&count={count}");
             if (students != null)
             {
-                return await Task.FromResult(new PageReponse<Student>(students.nbElement, students.Data.ToModels()));
+                return await Task.FromResult(new PageReponse<Student>(students.NbElement, students.Data.ToModels()));
             }
             return await Task.FromResult(new PageReponse<Student>(0, new List<Student>()));
         }
@@ -96,7 +96,7 @@ namespace Dto2Model
             var groups = await _httpClient.GetFromJsonAsync<PageReponse<GroupDto>>($"{_httpClient.BaseAddress}api/v{_version}/Groups?index={index}&count={count}");
             if (groups != null)
             {
-                return await Task.FromResult(new PageReponse<Group>(groups.nbElement, groups.Data.ToModels()));
+                return await Task.FromResult(new PageReponse<Group>(groups.NbElement, groups.Data.ToModels()));
             }
             return await Task.FromResult(new PageReponse<Group>(0, new List<Group>()));
         }
@@ -143,7 +143,7 @@ namespace Dto2Model
             var lessons = await _httpClient.GetFromJsonAsync<PageReponse<LessonReponseDto>>($"{_httpClient.BaseAddress}api/v{_version}/Lessons?index={index}&count={count}");
             if (lessons != null)
             {
-            return await Task.FromResult(new PageReponse<Lesson>(lessons.nbElement, lessons.Data.ToModels()));
+            return await Task.FromResult(new PageReponse<Lesson>(lessons.NbElement, lessons.Data.ToModels()));
             }
             return await Task.FromResult(new PageReponse<Lesson>(0, new List<Lesson>()));
         }
@@ -159,7 +159,7 @@ namespace Dto2Model
             var lessonsByTeacherId = await _httpClient.GetFromJsonAsync<PageReponse<LessonReponseDto>>($"{_httpClient.BaseAddress}api/v{_version}/Lessons/teacher?index={index}&count={count}");
             if (lessonsByTeacherId != null)
             {
-                return await Task.FromResult(new PageReponse<Lesson>(lessonsByTeacherId.nbElement, lessonsByTeacherId.Data.ToModels()));
+                return await Task.FromResult(new PageReponse<Lesson>(lessonsByTeacherId.NbElement, lessonsByTeacherId.Data.ToModels()));
             }
             return await Task.FromResult(new PageReponse<Lesson>(0, new List<Lesson>()));
         }
@@ -210,7 +210,7 @@ namespace Dto2Model
             var evals = await _httpClient.GetFromJsonAsync<PageReponse<EvaluationReponseDto>>($"{_httpClient.BaseAddress}api/v{_version}/Evaluations?index={index}&count={count}");
             if (evals != null)
             {
-                return await Task.FromResult(new PageReponse<Evaluation>(evals.nbElement, evals.Data.ToModels()));
+                return await Task.FromResult(new PageReponse<Evaluation>(evals.NbElement, evals.Data.ToModels()));
             }
             return await Task.FromResult(new PageReponse<Evaluation>(0, new List<Evaluation>()));
         }
@@ -226,7 +226,7 @@ namespace Dto2Model
             var evalsByTeacherId = await _httpClient.GetFromJsonAsync<PageReponse<EvaluationReponseDto>>($"{_httpClient.BaseAddress}api/v{_version}/Evaluations/teacher/?index={index}&count={count}");
             if (evalsByTeacherId != null)
             {
-                return await Task.FromResult(new PageReponse<Evaluation>(evalsByTeacherId.nbElement, evalsByTeacherId.Data.ToModels()));
+                return await Task.FromResult(new PageReponse<Evaluation>(evalsByTeacherId.NbElement, evalsByTeacherId.Data.ToModels()));
             }
             return await Task.FromResult(new PageReponse<Evaluation>(0, new List<Evaluation>()));
         }
@@ -346,7 +346,7 @@ namespace Dto2Model
             var templatesByUserId = await _httpClient.GetFromJsonAsync<PageReponse<TemplateDto>>($"{_httpClient.BaseAddress}api/v{_version}/Templates/teacher?index={index}&count={count}");
             if (templatesByUserId != null)
             {
-                return await Task.FromResult(new PageReponse<Template>(templatesByUserId.nbElement, templatesByUserId.Data.ToModels()));
+                return await Task.FromResult(new PageReponse<Template>(templatesByUserId.NbElement, templatesByUserId.Data.ToModels()));
             }
             return await Task.FromResult(new PageReponse<Template>(0, new List<Template>()));
         }
@@ -356,7 +356,7 @@ namespace Dto2Model
             var emptyTemplatesByUserId = await _httpClient.GetFromJsonAsync<PageReponse<TemplateDto>>($"{_httpClient.BaseAddress}api/v{_version}/Templates/teacher/models?index={index}&count={count}");
             if (emptyTemplatesByUserId != null)
             {
-                return await Task.FromResult(new PageReponse<Template>(emptyTemplatesByUserId.nbElement, emptyTemplatesByUserId.Data.ToModels()));
+                return await Task.FromResult(new PageReponse<Template>(emptyTemplatesByUserId.NbElement, emptyTemplatesByUserId.Data.ToModels()));
             }
             return await Task.FromResult(new PageReponse<Template>(0, new List<Template>()));
         }

@@ -290,7 +290,7 @@ public class TemplatesTests
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
         var returnedPageResponse = Assert.IsType<PageReponse<TemplateDto>>(okResult.Value);
-        Assert.Equal(pageResponse.nbElement, returnedPageResponse.nbElement);
+        Assert.Equal(pageResponse.NbElement, returnedPageResponse.NbElement);
     }
 
 

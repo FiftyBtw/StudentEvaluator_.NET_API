@@ -15,9 +15,18 @@ public class GenericRepository <TEntity> where TEntity  :  class
         this.Set = context.Set<TEntity>();
     }
     
-    public async Task<TEntity>  GetByID(object id)
+    public async Task<TEntity?> GetByIdAsync<TKey>(TKey id, params Expression<Func<TEntity, object>>[] includes)
     {
-        return await Set.FindAsync(id);
+        IQueryable<TEntity> query = Context.Set<TEntity>();
+
+        if (includes != null)
+        {
+            foreach (var includeProperty in includes)
+            {
+                query = query.Include(includeProperty);
+            }
+        }
+        return await query.FirstOrDefaultAsync(entity => EF.Property<TKey>(entity, "Id").Equals(id));
     }
 
     public virtual async  Task<IEnumerable<TEntity>> Get(
@@ -76,5 +85,10 @@ public class GenericRepository <TEntity> where TEntity  :  class
         Set.Attach(entityToUpdate);
         Context.Entry(entityToUpdate).State = EntityState.Modified;
         return Task.CompletedTask;
+    }
+
+    public IQueryable<TEntity> Query()
+    {
+        return Set;
     }
 }

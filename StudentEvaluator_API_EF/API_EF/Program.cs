@@ -68,7 +68,7 @@ builder.Services.AddSwaggerGen(swaggerGenOptions =>
     });
 });
 
-builder.Services.AddScoped<DbDataManager>(provider => new DbDataManager(new LibraryContext()));
+builder.Services.AddScoped<DbDataManager>(provider => new DbDataManager(new LibraryContext(), new UnitOfWork.UnitOfWork(new LibraryContext())));
 builder.Services.AddScoped<IStudentService<StudentDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<IGroupService<GroupDto>>(x => x.GetRequiredService<DbDataManager>());
 builder.Services.AddScoped<ICriteriaService<CriteriaDto,TextCriteriaDto,SliderCriteriaDto,RadioCriteriaDto>>(x => x.GetRequiredService<DbDataManager>());

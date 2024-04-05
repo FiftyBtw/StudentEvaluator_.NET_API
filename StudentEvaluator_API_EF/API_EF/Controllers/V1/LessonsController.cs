@@ -55,7 +55,7 @@ namespace API_EF.Controllers.V1
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("id/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> GetLessonById(long id)
         {
             _logger.LogInformation(LogEvents.GetItem, "GetLessonById");
@@ -73,7 +73,6 @@ namespace API_EF.Controllers.V1
         /// <summary>
         ///  Get all lessons of a teacher
         /// </summary>
-        /// <param name="id"></param>
         /// <param name="index"></param>
         /// <param name="count"></param>
         /// <returns></returns>
@@ -160,16 +159,10 @@ namespace API_EF.Controllers.V1
             _logger.LogInformation(LogEvents.DeleteItem, "DeleteLesson");
             if (_lessonService == null)return StatusCode(500);
 
-            else
-            {
-                bool b = await _lessonService.DeleteLesson(id);
-                if (b) return Ok(b);
-                else
-                {
-                    _logger.LogInformation(LogEvents.DeleteItemNotFound, "DeleteLesson");
-                    return NotFound();
-                }
-            }
+            bool b = await _lessonService.DeleteLesson(id);
+            if (b) return Ok(b);
+            _logger.LogInformation(LogEvents.DeleteItemNotFound, "DeleteLesson");
+            return NotFound();
         }
     }
 }

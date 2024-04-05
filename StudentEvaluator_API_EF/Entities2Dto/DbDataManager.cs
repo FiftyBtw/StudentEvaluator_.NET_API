@@ -729,4 +729,13 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
         await _unitOfWork.SaveChangesAsync();
         return true;
     }
+    
+    public async Task<TeacherDto> PostTeacher(TeacherDto teacher)
+    {
+        var teacherEntity = teacher.ToEntity();
+        await _unitOfWork.TeachersRepository.Insert(teacherEntity);
+        await _unitOfWork.SaveChangesAsync();
+        Translator.TeacherMapper.Reset();
+        return teacherEntity.ToDto();
+    }
 }

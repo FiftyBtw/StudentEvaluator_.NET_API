@@ -26,6 +26,7 @@ public class DbDataManagerTests
     {
         // Arrange
         var manager = CreateManagerWithInMemoryDb();
+        await manager.PostGroup(new GroupDto(1, 1, []));
         await manager.PostStudent(new StudentDto { Id = 1, Name = "John", Lastname = "Doe", UrlPhoto = "http://example.com/photo.jpg", GroupNumber = 1, GroupYear = 1 });
         
         // Act
@@ -53,6 +54,7 @@ public class DbDataManagerTests
     {
         // Arrange
         var manager = CreateManagerWithInMemoryDb();
+        await manager.PostGroup(new GroupDto(1, 1, []));
         await manager.PostStudent(new StudentDto { Id = 2, Name = "Jane", Lastname = "Doe", UrlPhoto = "http://example.com/photo.jpg", GroupNumber = 1, GroupYear = 1 });
 
         // Act
@@ -82,6 +84,7 @@ public class DbDataManagerTests
     {
         // Arrange
         var manager = CreateManagerWithInMemoryDb();
+        await manager.PostGroup(new GroupDto(1, 1, []));
         await manager.PostStudent(new StudentDto { Id = 1, Name = "John", Lastname = "Doe", UrlPhoto = "http://example.com/photo.jpg", GroupNumber = 1, GroupYear = 1 });
         await manager.PostStudent(new StudentDto { Id = 2, Name = "Jane", Lastname = "Doe", UrlPhoto = "http://example.com/photo.jpg", GroupNumber = 1, GroupYear = 1 });
 
@@ -98,6 +101,7 @@ public class DbDataManagerTests
     {
         // Arrange
         var manager = CreateManagerWithInMemoryDb();
+        await manager.PostGroup(new GroupDto(1, 1, []));
         await manager.PostStudent(new StudentDto { Id = 1, Name = "John", Lastname = "Doe", UrlPhoto = "http://example.com/photo.jpg", GroupNumber = 1, GroupYear = 1 });
         var studentDto = new StudentDto { Id = 1, Name = "Jane", Lastname = "Doe", UrlPhoto = "http://example.com/photo.jpg", GroupNumber = 1, GroupYear = 1 };
 
@@ -336,14 +340,18 @@ public class DbDataManagerTests
     {
         // Arrange
         var manager = CreateManagerWithInMemoryDb();
+        var teacher = await manager.PostTeacher(new TeacherDto() { Id = "1", Username = "John", Password = "InstructorPassword678$" });
+
         var criteria = new TextCriteriaDto() { Id = 1, Name = "Criteria 1", ValueEvaluation = 1, Text = "Text 1", TemplateId = 1 };
-        await manager.PostTemplate("1", new TemplateDto { Id = 1, Name = "Template 1", Criterias = [criteria] });
-        await manager.PostTemplate("1", new TemplateDto { Id = 2, Name = "Template 2", Criterias = [] });
+        await manager.PostTemplate(teacher.Id, new TemplateDto { Id = 1, Name = "Template 1", Criterias = [criteria] });
+        await manager.PostTemplate(teacher.Id, new TemplateDto { Id = 2, Name = "Template 2", Criterias = [] });
+        await manager.PostGroup(new GroupDto(1, 1, []));
+        await manager.PostStudent(new StudentDto { Id = 1, Name = "John", Lastname = "Doe", UrlPhoto = "http://example.com/photo.jpg", GroupNumber = 1, GroupYear = 1 });
         
-        await manager.PostEvaluation(new EvaluationDto { Id = 1, StudentId = 1, TemplateId = 1, TeacherId = "1", CourseName = "Entity Framework", Date = DateTime.Now, PairName = "toto", Grade = 2});
+        await manager.PostEvaluation(new EvaluationDto { Id = 1, StudentId = 1, TemplateId = 1, TeacherId = teacher.Id, CourseName = "Entity Framework", Date = DateTime.Now, PairName = "toto", Grade = 2});
 
         // Act
-        var templates = await manager.GetEmptyTemplatesByUserId("1", 0, 10);
+        var templates = await manager.GetEmptyTemplatesByUserId(teacher.Id, 0, 10);
 
         // Assert
         Assert.NotNull(templates);

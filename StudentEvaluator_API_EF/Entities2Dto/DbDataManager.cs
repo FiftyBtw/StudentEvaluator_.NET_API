@@ -244,7 +244,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
         await _unitOfWork.CriteriasRepository.Insert(textEntity);
         await _unitOfWork.SaveChangesAsync();
         Translator.TextCriteriaMapper.Reset();
-        return text;
+        return textEntity.ToDto();
     }
 
 
@@ -262,7 +262,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
         oldText.ValueEvaluation = text.ValueEvaluation;
         oldText.Text = text.Text;
         await _unitOfWork.SaveChangesAsync();
-        return text;
+        return oldText.ToDto();
     }
 
     // SliderCriteria
@@ -297,7 +297,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
         await _unitOfWork.CriteriasRepository.Insert(sliderEntity);
         await _unitOfWork.SaveChangesAsync();
         Translator.SliderCriteriaMapper.Reset();
-        return slider;
+        return sliderEntity.ToDto();
     }
 
 
@@ -316,7 +316,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
         oldSlider.ValueEvaluation = slider.ValueEvaluation;
         oldSlider.Value = slider.Value;
        await  _unitOfWork.SaveChangesAsync();
-       return slider;
+       return oldSlider.ToDto();
     }
 
     // RadioCriteria
@@ -351,7 +351,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
         await _unitOfWork.CriteriasRepository.Insert(radioEntity);
         await _unitOfWork.SaveChangesAsync();
         Translator.RadioCriteriaMapper.Reset();
-        return radio;
+        return radioEntity.ToDto();
     }
 
 
@@ -371,11 +371,11 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
         oldRadio.Options = radio.Options;
         oldRadio.SelectedOption = radio.SelectedOption;
         await _unitOfWork.SaveChangesAsync();
-        return radio;
+        return oldRadio.ToDto();
     }
+    
 
     // Template
-
 
     /// <summary>
     /// Retrieves a page of templates by user ID.

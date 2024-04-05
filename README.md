@@ -1,8 +1,6 @@
 # Web API StudentEvaluator
 
 
-[![Build Status](https://codefirst.iut.uca.fr/api/badges/benjamin.paczkowski/sae_2a_entity_framework/status.svg)](https://codefirst.iut.uca.fr/benjamin.paczkowski/sae_2a_entity_framework)
-
 # CI / CD
 <div align="center">
 

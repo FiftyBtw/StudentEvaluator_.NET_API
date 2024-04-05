@@ -29,7 +29,7 @@ public class TemplatesController : ControllerBase
     }
     
     /// <summary>
-    ///  Get all templates
+    ///  Get all templates of the user who did the request
     /// </summary>
     /// <param name="id"></param>
     /// <param name="index"></param>
@@ -64,7 +64,7 @@ public class TemplatesController : ControllerBase
     }
     
     /// <summary>
-    ///  Get all empty templates
+    ///  Get all empty templates used for creating new templates of the user who did the request
     /// </summary>
     /// <param name="id"></param>
     /// <param name="index"></param>
@@ -98,23 +98,15 @@ public class TemplatesController : ControllerBase
     /// <summary>
     ///  Get a template by its id
     /// </summary>
-    /// <param name="userId"></param>
     /// <param name="id"></param>
     /// <returns></returns>
-    [HttpGet("{id}/teacher")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetTemplateById(long id)
     {
         _logger.LogInformation(LogEvents.GetItem, "GetTemplateById");
         if (_templateService == null)return StatusCode(500);
-        
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        if (string.IsNullOrEmpty(userId))
-        {
-            return Unauthorized("User ID is missing in the token");
-        }
-
-        var data = await _templateService.GetTemplateById( id);
+        var data = await _templateService.GetTemplateById(id);
         if (data == null)
         {
             _logger.LogInformation(LogEvents.GetItem, "NoContent");
@@ -129,7 +121,6 @@ public class TemplatesController : ControllerBase
     /// <summary>
     ///  Add a template
     /// </summary>
-    /// <param name="userId"></param>
     /// <param name="template"></param>
     /// <returns></returns>
     [HttpPost]

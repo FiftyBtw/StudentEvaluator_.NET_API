@@ -437,7 +437,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
         await _unitOfWork.TemplatesRepository.Insert(templateEntity);
         await _unitOfWork.SaveChangesAsync();
         Translator.TemplateMapper.Reset();
-        return template;
+        return templateEntity.ToDto();
     }
 
 

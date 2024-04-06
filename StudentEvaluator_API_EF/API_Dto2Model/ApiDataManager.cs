@@ -154,7 +154,7 @@ namespace Dto2Model
             return await Task.FromResult(lessonById?.ToModel());
         }
 
-        public async Task<PageReponse<Lesson>> GetLessonsByTeacherId(string id, int index=0, int count = 10)
+        public async Task<PageReponse<Lesson>> GetLessonsByTeacherId(string userid, int index=0, int count = 10)
         {
             var lessonsByTeacherId = await _httpClient.GetFromJsonAsync<PageReponse<LessonReponseDto>>($"{_httpClient.BaseAddress}api/v{_version}/Lessons/teacher?index={index}&count={count}");
             if (lessonsByTeacherId != null)
@@ -221,7 +221,7 @@ namespace Dto2Model
             return await Task.FromResult(evalById?.ToModel());
         }
 
-        public async Task<PageReponse<Evaluation>> GetEvaluationsByTeacherId(string id, int index=0, int count=10)
+        public async Task<PageReponse<Evaluation>> GetEvaluationsByTeacherId(string userid, int index=0, int count=10)
         {
             var evalsByTeacherId = await _httpClient.GetFromJsonAsync<PageReponse<EvaluationReponseDto>>($"{_httpClient.BaseAddress}api/v{_version}/Evaluations/teacher?index={index}&count={count}");
             if (evalsByTeacherId != null)
@@ -268,78 +268,7 @@ namespace Dto2Model
             }
             else return await Task.FromResult(false);
         }
-        //User
-    /*
-        public async Task<PageReponse<User>> GetUsers(int index = 0, int count = 10)
-        {
-            var users = await _httpClient.GetFromJsonAsync<PageReponse<UserDto>>(
-                $"{_httpClient.BaseAddress}api/v{_version}/Users?index={index}&count={count}");
-            if (users != null)
-            {
-                return await Task.FromResult(new PageReponse<User>(users.nbElement, users.Data.ToModels()));
-            }
-            return await Task.FromResult(new PageReponse<User>(0, new List<User>()));
-        }
-    
         
-        public async Task<User?> GetUserById(long id)
-        {
-            var userById = await _httpClient.GetFromJsonAsync<UserDto>($"{_httpClient.BaseAddress}api/v{_version}/Users/{id}");
-            return await Task.FromResult(userById?.ToModel());
-        }
-
-        public async Task<User?> PostUser(User user)
-        {
-            var reponse = await _httpClient.PostAsJsonAsync($"{_httpClient.BaseAddress}api/v{_version}/Users", user.ToDto());
-            if (reponse.IsSuccessStatusCode)
-            {
-                var userRep = await reponse.Content.ReadFromJsonAsync<UserDto>();
-                if (userRep != null)
-                {
-                    return await Task.FromResult(userRep.ToModel());
-                }
-            }
-            return await Task.FromResult<User?>(null);
-        }
-
-        public async Task<LoginResponse?> Login(LoginRequest loginRequest)
-        {
-            var reponse = await _httpClient.PostAsJsonAsync($"{_httpClient.BaseAddress}api/v{_version}/Users/login", loginRequest.ToDto());
-            if (reponse.IsSuccessStatusCode)
-            {
-                var userRep = await reponse.Content.ReadFromJsonAsync<LoginResponseDto>();
-                if (userRep != null)
-                {
-                    return await Task.FromResult(userRep.ToModel());
-                }
-            }
-            return await Task.FromResult<LoginResponse?>(null);
-        }
-
-        public async Task<User?> PutUser(long id, User user)
-        {
-            var reponse = await _httpClient.PutAsJsonAsync($"{_httpClient.BaseAddress}api/v{_version}/Users/{id}", user.ToDto());
-            if (reponse.IsSuccessStatusCode)
-            {
-                var userRep = await reponse.Content.ReadFromJsonAsync<UserDto>();
-                if (userRep != null)
-                {
-                    return await Task.FromResult(userRep.ToModel());
-                }
-            }
-            return await Task.FromResult<User?>(null);
-        }
-
-        public async Task<bool> DeleteUser(long id)
-        {
-            var b = await _httpClient.DeleteAsync($"{_httpClient.BaseAddress}api/v{_version}/Users/{id}");
-            if (b.IsSuccessStatusCode)
-            {
-                return await Task.FromResult(true);
-            }
-            else return await Task.FromResult(false);
-        }
-        */
         //Template
         public async Task<PageReponse<Template>> GetTemplatesByUserId(string userId, int index=0, int count = 10)
         {

@@ -118,22 +118,6 @@ public static class Translator
         }
         return groups;
     }
-
-
-    /// <summary>
-    /// Converts a collection of <see cref="Group"/> models to a collection of <see cref="GroupEntity"/> objects.
-    /// </summary>
-    /// <param name="models">The collection of group models to convert.</param>
-    /// <returns>The converted collection of group entities.</returns>
-    public static IEnumerable<GroupEntity> ToEntities(this IEnumerable<Group> models)
-    {
-        IEnumerable<GroupEntity> groups = new List<GroupEntity>();
-        foreach (var model in models)
-        {
-            (groups as List<GroupEntity>).Add(model.ToEntity());
-        }
-        return groups;
-    }
     
     
     // Teacher 
@@ -161,36 +145,6 @@ public static class Translator
             UserName = teacher.Username,
             PasswordHash = teacher.Password,
         };
-    }
-    
-    /// <summary>
-    /// Converts a collection of <see cref="TeacherEntity"/> objects to a collection of <see cref="Teacher"/> models.
-    /// </summary>
-    /// <param name="entities">The collection of teacher entities to convert.</param>
-    /// <returns>The converted collection of teacher models.</returns>
-    public static IEnumerable<Teacher> ToModels(this IEnumerable<TeacherEntity> entities)
-    {
-        IEnumerable<Teacher> teachers = new List<Teacher>();
-        foreach (var entity in entities)
-        {
-            (teachers as List<Teacher>).Add(entity.ToModel());
-        }
-        return teachers;
-    }
-    
-    /// <summary>
-    /// Converts a collection of <see cref="Teacher"/> models to a collection of <see cref="TeacherEntity"/> objects.
-    /// </summary>
-    /// <param name="models">The collection of teacher models to convert.</param>
-    /// <returns>The converted collection of teacher entities.</returns>
-    public static IEnumerable<TeacherEntity> ToEntities(this IEnumerable<Teacher> models)
-    {
-        IEnumerable<TeacherEntity> teachers = new List<TeacherEntity>();
-        foreach (var model in models)
-        {
-            (teachers as List<TeacherEntity>).Add(model.ToEntity());
-        }
-        return teachers;
     }
     
     // Lesson
@@ -281,16 +235,6 @@ public static class Translator
         return templates;
     }
     
-    public static IEnumerable<TemplateEntity> ToEntities(this IEnumerable<Template> models)
-    {
-        IEnumerable<TemplateEntity> templates = new List<TemplateEntity>();
-        foreach (var model in models)
-        {
-            (templates as List<TemplateEntity>).Add(model.ToEntity());
-        }
-        return templates;
-    }
-    
     // Evaluation
     
     public static Evaluation ToModel(this EvaluationEntity evaluation)
@@ -331,45 +275,4 @@ public static class Translator
         }
         return evaluations;
     }
-    
-    /*
-    // User
-    
-    public static User ToModel(this UserEntity user)
-    {
-        return new User(user.Id, user.Username, user.Password, user.Roles);
-    }
-    
-    public static UserEntity ToEntity(this User user)
-    {
-        return new UserEntity
-        {
-            Id = user.Id,
-            Username = user.Username,
-            Password = user.Password,
-            Roles = user.Roles
-        };
-    }
-    
-    public static IEnumerable<User> ToModels(this IEnumerable<UserEntity> entities)
-    {
-        IEnumerable<User> users = new List<User>();
-        foreach (var entity in entities)
-        {
-            (users as List<User>).Add(entity.ToModel());
-        }
-        return users;
-    }
-    
-    public static IEnumerable<UserEntity> ToEntities(this IEnumerable<User> models)
-    {
-        IEnumerable<UserEntity> users = new List<UserEntity>();
-        foreach (var model in models)
-        {
-            (users as List<UserEntity>).Add(model.ToEntity());
-        }
-        return users;
-    }
-    */
-    
 }

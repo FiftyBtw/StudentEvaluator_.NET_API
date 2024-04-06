@@ -402,7 +402,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <returns>A task representing the asynchronous operation, returning a page response containing the empty templates.</returns>
     public async Task<PageReponse<TemplateDto>> GetEmptyTemplatesByUserId(string userId, int index, int count)
     {
-        var templates = _unitOfWork.TemplatesRepository.Get(t => t.TeacherId == userId && t.Criteria.Count == 0, index: index, count: count).Result;
+        var templates = _unitOfWork.TemplatesRepository.Get(t => t.TeacherId == userId && t.Evaluation == null , includeProperties:"Criteria,Evaluation" ,index: index, count: count).Result;
         if(templates == null) return new PageReponse<TemplateDto>(0, new List<TemplateDto>());
         Translator.TemplateMapper.Reset();
         return new PageReponse<TemplateDto>(templates.Count(), templates.Skip(index * count).Take(count).Select(t => t.ToDto()));

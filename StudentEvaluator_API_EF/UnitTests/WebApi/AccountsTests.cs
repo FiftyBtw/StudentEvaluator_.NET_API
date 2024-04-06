@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace EF_UnitTests.WebApi
 {
-    public class AccountsTests
+    public class TestsCriteriaModelConverter
     {
         private readonly Mock<UserManager<TeacherEntity>> _mockUserManager= new Mock<UserManager<TeacherEntity>>(Mock.Of<IUserStore<TeacherEntity>>(), null, null, null, null, null, null, null, null);
         private readonly Mock<ITokenService> _mockTokenService = new();
@@ -32,7 +32,7 @@ namespace EF_UnitTests.WebApi
         private readonly Mock<SignInManager<TeacherEntity>> _mockSignInManager;
         private readonly AccountController _accountsController;
 
-        public AccountsTests()
+        public TestsCriteriaModelConverter()
         {
             _mockSignInManager = new Mock<SignInManager<TeacherEntity>>(_mockUserManager.Object,mockHttpContextAccessor.Object, mockUserClaimsPrincipalFactory.Object, _identityOptions, null, null, null);
                                                             

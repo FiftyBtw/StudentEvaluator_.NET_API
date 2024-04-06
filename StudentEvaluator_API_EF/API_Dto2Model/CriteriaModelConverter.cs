@@ -16,16 +16,16 @@ namespace Dto2Model
         {
             ModelToDtoConverters = new Dictionary<Type, Func<Criteria, CriteriaDto?>>
             {
-            { typeof(SliderCriteriaDto), model => ConvertSliderToDto(model as SliderCriteria ?? throw new InvalidOperationException()) },
-            { typeof(RadioCriteriaDto), model => ConvertRadioToDto(model as RadioCriteria ?? throw new InvalidOperationException()) },
-            { typeof(TextCriteriaDto), model => ConvertTextToDto(model as TextCriteria ?? throw new InvalidOperationException()) },
+            { typeof(SliderCriteria), model => ConvertSliderToDto(model as SliderCriteria ?? throw new InvalidOperationException()) },
+            { typeof(RadioCriteria), model => ConvertRadioToDto(model as RadioCriteria ?? throw new InvalidOperationException()) },
+            { typeof(TextCriteria), model => ConvertTextToDto(model as TextCriteria ?? throw new InvalidOperationException()) },
         };
 
             DtoToModelConverters = new Dictionary<Type, Func<CriteriaDto,Criteria >>
         {
-            { typeof(SliderCriteria), dto => ConvertSliderToModel(dto as SliderCriteriaDto ?? throw new InvalidOperationException()) },
-            { typeof(RadioCriteria), dto => ConvertRadioToModel(dto as RadioCriteriaDto ?? throw new InvalidOperationException()) },
-            { typeof(TextCriteria), dto => ConvertTextToModel(dto as TextCriteriaDto ?? throw new InvalidOperationException()) }
+            { typeof(SliderCriteriaDto), dto => ConvertSliderToModel(dto as SliderCriteriaDto ?? throw new InvalidOperationException()) },
+            { typeof(RadioCriteriaDto), dto => ConvertRadioToModel(dto as RadioCriteriaDto ?? throw new InvalidOperationException()) },
+            { typeof(TextCriteriaDto), dto => ConvertTextToModel(dto as TextCriteriaDto ?? throw new InvalidOperationException()) }
         };
         }
 

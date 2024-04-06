@@ -1,5 +1,6 @@
 ﻿using Client_Model;
 using EF_DbContextLib;
+using EF_Entities;
 using EF_StubbedContextLib;
 using Microsoft.EntityFrameworkCore;
 using Shared;
@@ -192,6 +193,11 @@ namespace Model2Entities
         {
             var lessonEntity = lesson.ToEntity();
             await _libraryContext.LessonSet.AddAsync(lessonEntity);
+            var group = await _libraryContext.GroupSet.FirstOrDefaultAsync(g =>
+                g.GroupYear == lesson.GroupYear && g.GroupNumber == lesson.GroupNumber);
+            group?.Lessons.Add(lessonEntity);
+            var teacher = await _libraryContext.Set<TeacherEntity>().FirstOrDefaultAsync(t => t.Id == lesson.TeacherId);
+            teacher?.Lessons.Add(lessonEntity);
             await _libraryContext.SaveChangesAsync();
             return await Task.FromResult(_libraryContext.LessonSet.FirstOrDefault(l => l.Id == lessonEntity.Id)
                 ?.ToModel());
@@ -281,78 +287,7 @@ namespace Model2Entities
 
             return true;
         }
-    /*
-        // User 
 
-        public async Task<PageReponse<User>> GetUsers(int index = 0, int count = 10)
-        {
-            var users = _libraryContext.UserSet.ToModels();
-            return await Task.FromResult(new PageReponse<User>(users.Count(),
-                users.Skip(index * count).Take(count)));
-        }
-
-        public async Task<User?> GetUserById(long id)
-        {
-            var user = _libraryContext.UserSet.FirstOrDefault(u => u.Id == id)?.ToModel();
-            return await Task.FromResult(user);
-        }
-
-        public async Task<User?> PostUser(User user)
-        {
-            var userEntity = user.ToEntity();
-            _libraryContext.UserSet.AddAsync(userEntity);
-            _libraryContext.SaveChanges();
-            return await Task.FromResult(_libraryContext.UserSet.FirstOrDefault(u => u.Id == userEntity.Id)
-                ?.ToModel());
-        }
-
-        public async Task<User?> PutUser(long id, User user)
-        {
-            var existingUser = await _libraryContext.UserSet.FindAsync(id);
-            if (existingUser == null)
-            {
-                return null;
-            }
-
-            existingUser.Username = user.Username;
-            existingUser.Password = user.Password;
-
-            await _libraryContext.SaveChangesAsync();
-            return existingUser.ToModel();
-        }
-
-
-        public async Task<bool> DeleteUser(long id)
-        {
-            var userEntity = await _libraryContext.UserSet.FindAsync(id);
-            if (userEntity == null)
-            {
-                return false;
-            }
-
-            _libraryContext.UserSet.Remove(userEntity);
-            await _libraryContext.SaveChangesAsync();
-            return true;
-        }
-
-
-        public async Task<LoginResponse?> Login(LoginRequest loginRequest)
-        {
-            var user = _libraryContext.UserSet.FirstOrDefault(u => u.Username == loginRequest.Username);
-            if (user == null) return await Task.FromResult<LoginResponse?>(null);
-            if (user.Password != loginRequest.Password) return await Task.FromResult<LoginResponse?>(null);
-            return await Task.FromResult(new LoginResponse(user.Id, user.Username, user.Roles));
-        }
-
-        public async Task<User?> PostTeacher(Teacher teacher)
-        {
-            var userEntity = teacher.ToEntity();
-            _libraryContext.TeacherSet.AddAsync(userEntity);
-            _libraryContext.SaveChanges();
-            return await Task.FromResult(_libraryContext.TeacherSet.FirstOrDefault(u => u.Id == userEntity.Id)
-                ?.ToModel());
-        }
-        */
         // Template
 
         public async Task<PageReponse<Template>> GetTemplatesByUserId(string id, int index = 0, int count = 10)
@@ -394,10 +329,11 @@ namespace Model2Entities
             {
                 return null;
             }
+
             existingTemplate.Name = template.Name;
             existingTemplate.Criteria = template.Criterias.Select(CriteriaEntityConverter.ConvertToEntity).ToList();
             await _libraryContext.SaveChangesAsync();
-            return existingTemplate.ToModel(); 
+            return existingTemplate.ToModel();
         }
 
 
@@ -412,6 +348,15 @@ namespace Model2Entities
             _libraryContext.TemplateSet.Remove(templateEntity);
             await _libraryContext.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<Teacher> PostTeacher(Teacher teacher)
+        {
+            var teacherEntity = teacher.ToEntity();
+            await _libraryContext.Set<TeacherEntity>().AddAsync(teacherEntity);
+
+            await _libraryContext.SaveChangesAsync();
+            return teacherEntity.ToModel();
         }
     }
 }

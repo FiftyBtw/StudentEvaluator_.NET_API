@@ -182,9 +182,9 @@ namespace Model2Entities
             return await Task.FromResult(lesson);
         }
 
-        public async Task<PageReponse<Lesson>> GetLessonsByTeacherId(string userid, int index = 0, int count = 10)
+        public async Task<PageReponse<Lesson>> GetLessonsByTeacherId(string userId, int index = 0, int count = 10)
         {
-            var lessons = _libraryContext.LessonSet.Where(l => l.TeacherEntityId == userid).ToModels();
+            var lessons = _libraryContext.LessonSet.Where(l => l.TeacherEntityId == userId).ToModels();
             return await Task.FromResult(new PageReponse<Lesson>(lessons.Count(),
                 lessons.Skip(index * count).Take(count)));
         }
@@ -238,9 +238,9 @@ namespace Model2Entities
             return await Task.FromResult(evaluation);
         }
 
-        public async Task<PageReponse<Evaluation>> GetEvaluationsByTeacherId(string userid, int index = 0, int count = 10)
+        public async Task<PageReponse<Evaluation>> GetEvaluationsByTeacherId(string userId, int index = 0, int count = 10)
         {
-            var evaluations = _libraryContext.EvaluationSet.Where(e => e.TeacherId == userid).ToModels();
+            var evaluations = _libraryContext.EvaluationSet.Where(e => e.TeacherId == userId).ToModels();
             return await Task.FromResult(new PageReponse<Evaluation>(evaluations.Count(),
                 evaluations.Skip(index * count).Take(count)));
         }
@@ -290,16 +290,16 @@ namespace Model2Entities
 
         // Template
 
-        public async Task<PageReponse<Template>> GetTemplatesByUserId(string userid, int index = 0, int count = 10)
+        public async Task<PageReponse<Template>> GetTemplatesByUserId(string userId, int index = 0, int count = 10)
         {
-            var templates = _libraryContext.TemplateSet.Where(t => t.TeacherId == userid).ToModels();
+            var templates = _libraryContext.TemplateSet.Where(t => t.TeacherId == userId).ToModels();
             return await Task.FromResult(new PageReponse<Template>(templates.Count(),
                 templates.Skip(index * count).Take(count)));
         }
 
-        public async Task<PageReponse<Template>> GetEmptyTemplatesByUserId(string userid, int index = 0, int count = 10)
+        public async Task<PageReponse<Template>> GetEmptyTemplatesByUserId(string userId, int index = 0, int count = 10)
         {
-            var templates = _libraryContext.TemplateSet.Where(t => t.TeacherId == userid && t.EvaluationId == null)
+            var templates = _libraryContext.TemplateSet.Where(t => t.TeacherId == userId && t.EvaluationId == null)
                 .ToModels();
             return await Task.FromResult(new PageReponse<Template>(templates.Count(),
                 templates.Skip(index * count).Take(count)));

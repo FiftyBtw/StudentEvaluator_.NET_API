@@ -154,7 +154,7 @@ namespace Dto2Model
             return await Task.FromResult(lessonById?.ToModel());
         }
 
-        public async Task<PageReponse<Lesson>> GetLessonsByTeacherId(string userid, int index=0, int count = 10)
+        public async Task<PageReponse<Lesson>> GetLessonsByTeacherId(string userId, int index=0, int count = 10)
         {
             var lessonsByTeacherId = await _httpClient.GetFromJsonAsync<PageReponse<LessonReponseDto>>($"{_httpClient.BaseAddress}api/v{_version}/Lessons/teacher?index={index}&count={count}");
             if (lessonsByTeacherId != null)
@@ -221,7 +221,7 @@ namespace Dto2Model
             return await Task.FromResult(evalById?.ToModel());
         }
 
-        public async Task<PageReponse<Evaluation>> GetEvaluationsByTeacherId(string userid, int index=0, int count=10)
+        public async Task<PageReponse<Evaluation>> GetEvaluationsByTeacherId(string userId, int index=0, int count=10)
         {
             var evalsByTeacherId = await _httpClient.GetFromJsonAsync<PageReponse<EvaluationReponseDto>>($"{_httpClient.BaseAddress}api/v{_version}/Evaluations/teacher?index={index}&count={count}");
             if (evalsByTeacherId != null)

@@ -81,6 +81,7 @@ steps:
     when:
       branch:
         - master
+        - UnitTests
 
   - name: deploy-container
     image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest

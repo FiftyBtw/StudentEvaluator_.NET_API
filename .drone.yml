@@ -67,32 +67,32 @@ steps:
         - master
     depends_on: [ build ]
 
-  - name: docker-build-and-push
-    image: plugins/docker
-    settings:
-      dockerfile: StudentEvaluator_API_EF/Dockerfile
-      context: StudentEvaluator_API_EF
-      registry: hub.codefirst.iut.uca.fr
-      repo: hub.codefirst.iut.uca.fr/benjamin.paczkowski/sae_2a_entity_framework2
-      username:
-        from_secret: SECRET_REGISTRY_USERNAME
-      password:
-        from_secret: SECRET_REGISTRY_PASSWORD
-    when:
-      branch:
-        - master
-        - UnitTests
+#  - name: docker-build-and-push
+#    image: plugins/docker
+#    settings:
+#      dockerfile: StudentEvaluator_API_EF/Dockerfile
+#      context: StudentEvaluator_API_EF
+#      registry: hub.codefirst.iut.uca.fr
+#      repo: hub.codefirst.iut.uca.fr/benjamin.paczkowski/sae_2a_entity_framework
+#      username:
+#        from_secret: SECRET_REGISTRY_USERNAME
+#      password:
+#        from_secret: SECRET_REGISTRY_PASSWORD
+#    when:
+#      branch:
+#        - master
+#        - UnitTests
 
-  - name: deploy-container
-    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
-    environment:
-      IMAGENAME: hub.codefirst.iut.uca.fr/benjamin.paczkowski/sae_2a_entity_framework2:latest
-      CONTAINERNAME: studentevaluator-api2
-      COMMAND: create
-      OVERWRITE: true
-      CODEFIRST_CLIENTDRONE_ENV_ASPNETCORE_HTTP_PORTS: 80
-    depends_on:
-      - docker-build-and-push
+#  - name: deploy-container
+#    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
+#    environment:
+#      IMAGENAME: hub.codefirst.iut.uca.fr/benjamin.paczkowski/sae_2a_entity_framework:latest
+#      CONTAINERNAME: studentevaluator-api2
+#      COMMAND: create
+#      OVERWRITE: true
+#      CODEFIRST_CLIENTDRONE_ENV_ASPNETCORE_HTTP_PORTS: 80
+#    depends_on:
+#      - docker-build-and-push
 
 volumes:
   - name: docs

@@ -1,0 +1,33 @@
+name: .NET
+
+on:
+  push:
+    branches:
+      - master
+      - UnitTests
+  pull_request:
+    branches:
+      - master
+      - UnitTests
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore StudentEvaluator_API_EF/StudentEvaluator_API_EF.sln
+
+    - name: Build
+      run: dotnet build StudentEvaluator_API_EF/StudentEvaluator_API_EF.sln -c Release --no-restore
+
+    - name: Test
+      run: dotnet test StudentEvaluator_API_EF/StudentEvaluator_API_EF.sln --no-build --verbosity normal

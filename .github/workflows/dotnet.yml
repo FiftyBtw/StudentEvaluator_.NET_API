@@ -30,4 +30,4 @@ jobs:
       run: dotnet build StudentEvaluator_API_EF/StudentEvaluator_API_EF.sln -c Release --no-restore
 
     - name: Test
-      run: dotnet test StudentEvaluator_API_EF/StudentEvaluator_API_EF.sln --no-build --verbosity normal
+      run: dotnet test StudentEvaluator_API_EF/UnitTests/UnitTests.csproj --verbosity normal

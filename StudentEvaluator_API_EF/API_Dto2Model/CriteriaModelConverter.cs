@@ -5,8 +5,8 @@ namespace Dto2Model
 {
     public static class CriteriaModelConverter
     {
-        private static readonly Dictionary<Type, Func<Criteria, CriteriaDto?>> ModelToDtoConverters;
-        private static readonly Dictionary<Type, Func<CriteriaDto, Criteria>> DtoToModelConverters;
+        private static readonly Dictionary<Type, Func<Criteria, CriteriaDto>> _modelToDtoConverters;
+        private static readonly Dictionary<Type, Func<CriteriaDto, Criteria>> _dtoToModelConverters;
 
 
         /// <summary>
@@ -14,18 +14,18 @@ namespace Dto2Model
         /// </summary>
         static CriteriaModelConverter()
         {
-            ModelToDtoConverters = new Dictionary<Type, Func<Criteria, CriteriaDto?>>
-            {
-            { typeof(SliderCriteria), model => ConvertSliderToDto(model as SliderCriteria ?? throw new InvalidOperationException()) },
-            { typeof(RadioCriteria), model => ConvertRadioToDto(model as RadioCriteria ?? throw new InvalidOperationException()) },
-            { typeof(TextCriteria), model => ConvertTextToDto(model as TextCriteria ?? throw new InvalidOperationException()) },
+            _modelToDtoConverters = new Dictionary<Type, Func<Criteria, CriteriaDto>>
+        {
+            { typeof(SliderCriteriaDto), model => ConvertSliderToDto(model as SliderCriteria) },
+            { typeof(RadioCriteriaDto), model => ConvertRadioToDto(model as RadioCriteria) },
+            { typeof(TextCriteriaDto), model => ConvertTextToDto(model as TextCriteria) },
         };
 
-            DtoToModelConverters = new Dictionary<Type, Func<CriteriaDto,Criteria >>
+            _dtoToModelConverters = new Dictionary<Type, Func<CriteriaDto,Criteria >>
         {
-            { typeof(SliderCriteriaDto), dto => ConvertSliderToModel(dto as SliderCriteriaDto ?? throw new InvalidOperationException()) },
-            { typeof(RadioCriteriaDto), dto => ConvertRadioToModel(dto as RadioCriteriaDto ?? throw new InvalidOperationException()) },
-            { typeof(TextCriteriaDto), dto => ConvertTextToModel(dto as TextCriteriaDto ?? throw new InvalidOperationException()) }
+            { typeof(SliderCriteriaDto), dto => ConvertSliderToModel(dto as SliderCriteriaDto) },
+            { typeof(RadioCriteriaDto), dto => ConvertRadioToModel(dto as RadioCriteriaDto) },
+            { typeof(TextCriteriaDto), dto => ConvertTextToModel(dto as TextCriteriaDto) },
         };
         }
 
@@ -33,16 +33,18 @@ namespace Dto2Model
         /// <summary>
         /// Converts a criteria entity object to its corresponding DTO.
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="entity">Criteria model object.</param>
         /// <returns>Corresponding DTO object.</returns>
         public static CriteriaDto ConvertToDto(Criteria model)
         {
+            if (model == null) return null;
+
             var entityType = model.GetType();
-            if (ModelToDtoConverters.TryGetValue(entityType, out var converter))
+            if (_modelToDtoConverters.TryGetValue(entityType, out var converter))
             {
-                return converter(model) ?? throw new ArgumentException($"No converter available for {entityType.Name}");
+                return converter(model);
             }
-            
+
             throw new ArgumentException($"No converter available for {entityType.Name}");
         }
 
@@ -54,10 +56,12 @@ namespace Dto2Model
         /// <returns>Corresponding model object.</returns>
         public static Criteria ConvertToModel(CriteriaDto dto)
         {
+            if (dto == null) return null;
+
             var dtoType = dto.GetType();
-            if (DtoToModelConverters.TryGetValue(dtoType, out var converter))
+            if (_dtoToModelConverters.TryGetValue(dtoType, out var converter))
             {
-                return converter(dto) ?? throw new ArgumentException($"No converter available for {dtoType.Name}");
+                return converter(dto);
             }
 
             throw new ArgumentException($"No converter available for {dtoType.Name}");
@@ -67,6 +71,7 @@ namespace Dto2Model
         /// <summary>
         /// Converts a SliderCriteria object to its corresponding SliderCriteriaDto.
         /// </summary>
+        /// <param name="entity">The SliderCriteria object to convert.</param>
         /// <returns>The corresponding SliderCriteriaDto.</returns>
         private static SliderCriteriaDto ConvertSliderToDto(SliderCriteria model)
         {
@@ -84,7 +89,7 @@ namespace Dto2Model
         /// <summary>
         /// Converts a RadioCriteria object to its corresponding RadioCriteriaDto.
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="entity">The RadioCriteria object to convert.</param>
         /// <returns>The corresponding RadioCriteriaDto.</returns>
         private static RadioCriteriaDto ConvertRadioToDto(RadioCriteria model)
         {
@@ -103,7 +108,7 @@ namespace Dto2Model
         /// <summary>
         /// Converts a TextCriteriaEntity object to its corresponding TextCriteriaDto.
         /// </summary>
-        /// <param name="model">The TextCriteriaEntity object to convert.</param>
+        /// <param name="entity">The TextCriteriaEntity object to convert.</param>
         /// <returns>The corresponding TextCriteriaDto.</returns>
         private static TextCriteriaDto ConvertTextToDto(TextCriteria model)
         {

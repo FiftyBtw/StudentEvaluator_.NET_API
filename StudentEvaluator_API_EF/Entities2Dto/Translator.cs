@@ -556,6 +556,38 @@ namespace Entities2Dto
 
 
         /// <summary>
+        /// Extension method to convert IEnumerable of TeacherEntity to IEnumerable of TeacherDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of teacher entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of teacher DTOs.</returns>
+        public static IEnumerable<TeacherDto> ToDtos(this IEnumerable<TeacherEntity> entities)
+        {
+            IEnumerable<TeacherDto> teachers = new List<TeacherDto>();
+            foreach (var entity in entities)
+            {
+                (teachers as List<TeacherDto>).Add(entity.ToDto());
+            }
+            return teachers;
+        }
+
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of TeacherDto to IEnumerable of TeacherEntity.
+        /// </summary>
+        /// <param name="dtos">The IEnumerable of teacher DTOs to be converted.</param>
+        /// <returns>The corresponding IEnumerable of teacher entities.</returns>
+        public static IEnumerable<TeacherEntity> ToEntities(this IEnumerable<TeacherDto> dtos)
+        {
+            IEnumerable<TeacherEntity> teachers = new List<TeacherEntity>();
+            foreach (var dto in dtos)
+            {
+                (teachers as List<TeacherEntity>).Add(dto.ToEntity());
+            }
+            return teachers;
+        }
+
+
+        /// <summary>
         /// Extension method to convert LessonEntity to LessonDto.
         /// </summary>
         /// <param name="lesson">The lesson entity object to be converted.</param>
@@ -638,6 +670,22 @@ namespace Entities2Dto
         }
 
         /// <summary>
+        /// Extension method to convert IEnumerable of LessonEntity to IEnumerable of LessonDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of lesson entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of lesson DTOs.</returns>
+        public static IEnumerable<LessonDto> ToDtos(this IEnumerable<LessonEntity> entities)
+        {
+            IEnumerable<LessonDto> lessons = new List<LessonDto>();
+            foreach (var entity in entities)
+            {
+                (lessons as List<LessonDto>).Add(entity.ToDto());
+            }
+            return lessons;
+        }
+
+
+        /// <summary>
         /// Extension method to convert IEnumerable of LessonEntity to IEnumerable of LessonReponseDto.
         /// </summary>
         /// <param name="entities">The IEnumerable of lesson entities to be converted.</param>
@@ -651,6 +699,69 @@ namespace Entities2Dto
             }
             return lessons;
         }
+/*
+        /// <summary>
+        /// Extension method to convert UserEntity to UserDto.
+        /// </summary>
+        /// <param name="user">The user entity object to be converted.</param>
+        /// <returns>The corresponding user DTO object.</returns>
+        public static UserDto ToDto(this UserEntity user)
+        {
+           var userDto = UserMapper.GetDto(user);
+            if (userDto == null)
+            {
+                userDto= new UserDto
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Password = user.Password,
+                    roles = user.Roles,
+                };
+                UserMapper.Set(user, userDto);      
+            }
+            return userDto; 
+            
+        }
+
+
+        /// <summary>
+        /// Extension method to convert UserDto to UserEntity.
+        /// </summary>
+        /// <param name="user">The user DTO object to be converted.</param>
+        /// <returns>The corresponding user entity object.</returns>
+        public static UserEntity ToEntity(this UserDto user)
+        {
+            var userEntity = UserMapper.GetEntity(user);
+            if(userEntity == null)
+            {
+                userEntity= new UserEntity
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Password = user.Password,
+                    Roles = user.roles,
+                };
+                UserMapper.Set(userEntity, user);
+            }
+            return userEntity;
+        }
+
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of UserEntity to IEnumerable of UserDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of user entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of user DTOs.</returns>
+        public static IEnumerable<UserDto> ToDtos(this IEnumerable<UserEntity> entities)
+        {
+            IEnumerable<UserDto> users = new List<UserDto>();
+            foreach (var entity in entities)
+            {
+                (users as List<UserDto>).Add(entity.ToDto());
+            }
+            return users;
+        }
+*/
 
         /// <summary>
         /// Extension method to convert EvaluationEntity to EvaluationDto.
@@ -737,6 +848,53 @@ namespace Entities2Dto
             return evalEntity;
           
         }
+
+
+        /// <summary>
+        /// Extension method to convert EvaluationReponseDto to EvaluationEntity.
+        /// </summary>
+        /// <param name="evalDto">The evaluation response DTO object to be converted.</param>
+        /// <returns>The corresponding evaluation entity object.</returns>
+        public static EvaluationEntity ToEntity(this EvaluationReponseDto evalDto)
+        {
+            var evalEntity = EvaluationReponseMapper.GetEntity(evalDto);
+            if (evalEntity == null)
+            {
+                evalEntity = new EvaluationEntity
+                {
+                    Id = evalDto.Id,
+                    CourseName = evalDto.CourseName,
+                    Grade = evalDto.Grade,
+                    PairName = evalDto.PairName,
+                    Date = evalDto.Date,
+
+                    Student = evalDto.Student?.ToEntity(),
+                    Template = evalDto.Template?.ToEntity(),
+                    Teacher = evalDto.Teacher?.ToEntity(),
+
+                };
+                EvaluationReponseMapper.Set(evalEntity, evalDto);
+            }
+            return evalEntity;
+
+        }
+
+
+        /// <summary>
+        /// Extension method to convert IEnumerable of EvaluationEntity to IEnumerable of EvaluationDto.
+        /// </summary>
+        /// <param name="entities">The IEnumerable of evaluation entities to be converted.</param>
+        /// <returns>The corresponding IEnumerable of evaluation DTOs.</returns>
+        public static IEnumerable<EvaluationDto> ToDtos(this IEnumerable<EvaluationEntity> entities)
+        {
+            IEnumerable<EvaluationDto> evals = new List<EvaluationDto>();
+            foreach (var entity in entities)
+            {
+                (evals as List<EvaluationDto>).Add(entity.ToDto());
+            }
+            return evals;
+        }
+
 
         /// <summary>
         /// Extension method to convert IEnumerable of EvaluationEntity to IEnumerable of EvaluationReponseDto.

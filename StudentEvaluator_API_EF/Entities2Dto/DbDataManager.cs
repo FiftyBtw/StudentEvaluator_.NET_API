@@ -65,7 +65,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <param name="index">The index of the page.</param>
     /// <param name="count">The number of students per page.</param>
     /// <returns>A task representing the asynchronous operation with a <see cref="PageReponse{T}"/> of <see cref="StudentDto"/>.</returns>
-    public async Task<PageReponse<StudentDto>> GetStudents(int index = 0, int count = 10)
+    public async Task<PageReponse<StudentDto>> GetStudents(int index, int count )
     {
         var students = await _unitOfWork.StudentsRepository.Get(index: index, count: count);
         var studentsDto = students.ToList().ToDtos();
@@ -154,7 +154,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <param name="index">The index of the page.</param>
     /// <param name="count">The number of groups per page.</param>
     /// <returns>A task representing the asynchronous operation, returning a page response containing the groups.</returns>
-    public async Task<PageReponse<GroupDto>> GetGroups(int index = 0, int count = 10)
+    public async Task<PageReponse<GroupDto>> GetGroups(int index, int count)
     {
         var groups = await _unitOfWork.GroupsRepository.Get(includeProperties: "Students", index: index, count: count);
         var groupsDto = groups.ToList().ToDtos();
@@ -384,7 +384,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <param name="index">The index of the page.</param>
     /// <param name="count">The number of templates per page.</param>
     /// <returns>A task representing the asynchronous operation, returning a page response containing the templates.</returns>
-    public async Task<PageReponse<TemplateDto>> GetTemplatesByUserId(string userId, int index = 0, int count = 10)
+    public async Task<PageReponse<TemplateDto>> GetTemplatesByUserId(string userId, int index, int count)
     {
         var templates = await _unitOfWork.TemplatesRepository.Get(t => t.TeacherId == userId, includeProperties: "Criteria",index: index, count: count);
         var templatesDto = templates.ToList().ToDtos();
@@ -400,7 +400,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <param name="index">The index of the page.</param>
     /// <param name="count">The number of empty templates per page.</param>
     /// <returns>A task representing the asynchronous operation, returning a page response containing the empty templates.</returns>
-    public async Task<PageReponse<TemplateDto>> GetEmptyTemplatesByUserId(string userId, int index = 0, int count = 10)
+    public async Task<PageReponse<TemplateDto>> GetEmptyTemplatesByUserId(string userId, int index, int count)
     {
         var templates = _unitOfWork.TemplatesRepository.Get(t => t.TeacherId == userId && t.Evaluation == null , includeProperties:"Criteria,Evaluation" ,index: index, count: count).Result;
         if(templates == null) return new PageReponse<TemplateDto>(0, new List<TemplateDto>());
@@ -485,7 +485,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <param name="index">The index of the page.</param>
     /// <param name="count">The number of lessons per page.</param>
     /// <returns>A task representing the asynchronous operation, returning a page response containing the lessons.</returns>
-    public Task<PageReponse<LessonReponseDto>> GetLessons(int index = 0, int count = 10)
+    public Task<PageReponse<LessonReponseDto>> GetLessons(int index, int count)
     {
         var lessons = _unitOfWork.LessonsRepository.Get(includeProperties: "Teacher,Group", index: index, count: count).Result.ToList().ToReponseDtos();
         if (lessons == null) return Task.FromResult(new PageReponse<LessonReponseDto>(0, new List<LessonReponseDto>()));
@@ -588,7 +588,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <param name="index">The index of the page.</param>
     /// <param name="count">The number of lessons per page.</param>
     /// <returns>A task representing the asynchronous operation, returning a page response containing the lessons.</returns>
-    public Task<PageReponse<LessonReponseDto>> GetLessonsByTeacherId(string userId, int index = 0, int count = 10)
+    public Task<PageReponse<LessonReponseDto>> GetLessonsByTeacherId(string userId, int index, int count)
     {
         var lessons = _unitOfWork.LessonsRepository.Get(l => l.TeacherEntityId == userId, includeProperties: "Teacher,Group", index: index, count: count).Result.ToList().ToReponseDtos();
         if (lessons == null) return Task.FromResult(new PageReponse<LessonReponseDto>(0, new List<LessonReponseDto>()));
@@ -606,7 +606,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <param name="index">The index of the page.</param>
     /// <param name="count">The number of evaluations per page.</param>
     /// <returns>A task representing the asynchronous operation, returning a page response containing the evaluations.</returns>
-    public Task<PageReponse<EvaluationReponseDto>> GetEvaluations(int index = 0, int count = 10)
+    public Task<PageReponse<EvaluationReponseDto>> GetEvaluations(int index, int count)
     {
         var evals = _unitOfWork.EvaluationsRepository.Get(includeProperties: "Teacher,Template,Student", index: index, count: count).Result.ToList().ToReponseDtos();
         if(evals == null) return Task.FromResult(new PageReponse<EvaluationReponseDto>(0, new List<EvaluationReponseDto>()) );
@@ -636,7 +636,7 @@ public class DbDataManager : IStudentService<StudentDto>, IGroupService<GroupDto
     /// <param name="index">The index of the page.</param>
     /// <param name="count">The number of evaluations per page.</param>
     /// <returns>A task representing the asynchronous operation, returning a page response containing the evaluations.</returns>
-    public Task<PageReponse<EvaluationReponseDto>> GetEvaluationsByTeacherId(string userId, int index = 0, int count = 10)
+    public Task<PageReponse<EvaluationReponseDto>> GetEvaluationsByTeacherId(string userId, int index, int count)
     {
         var evals = _unitOfWork.EvaluationsRepository.Get(e => e.TeacherId == userId, includeProperties: "Teacher,Template,Student", index: index, count: count).Result.ToList().ToReponseDtos();
         if(evals == null) return Task.FromResult(new PageReponse<EvaluationReponseDto>(0, new List<EvaluationReponseDto>()) );

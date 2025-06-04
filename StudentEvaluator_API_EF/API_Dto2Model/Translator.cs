@@ -279,4 +279,46 @@ public static class Translator
         }
         return evals;
     }
+    /*
+    //Users
+    public static User ToModel(this UserDto dto)
+    {
+        return new User(dto.Id, dto.Username, dto.Password, dto.roles);
+    }
+
+    public static UserDto ToDto(this User user)
+    {
+        return new UserDto
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Password = user.Password,
+            roles = user.Roles,
+        };
+    }
+
+    public static LoginDto ToDto(this LoginRequest loginRequest)
+    {
+        return new LoginDto
+        {
+            Username = loginRequest.Username,
+            Password = loginRequest.Password,
+        };
+    }
+
+    public static LoginResponse ToModel(this LoginResponseDto loginReponse)
+    {
+        return new LoginResponse(loginReponse.Id,loginReponse.Username,loginReponse.Roles);
+    }
+
+    public static IEnumerable<User> ToModels(this IEnumerable<UserDto> dtos)
+    {
+        IEnumerable<User> users = new List<User>();
+        foreach (UserDto dto in dtos)
+        {
+            (users as List<User>).Add(dto.ToModel());
+        }
+        return users;
+    }
+    */
 }

@@ -359,14 +359,14 @@ public class DbDataManagerTests
     }
     
     // Lesson
-    /*
+    
     [Fact]
     public async Task AddLesson_AddsLessonCorrectly()
     {
         // Arrange
         var manager = CreateManagerWithInMemoryDb();
-        var lessonDto = new LessonDto { CourseName = "Entity Framework", Start = DateTime.Now, End = DateTime.Now, GroupYear = 1, GroupNumber = 1, Classroom = "Classroom 1", TeacherId = 1 };
-        await manager.PostTeacher(new TeacherDto() { Id = 1, Username = "John", Password = "Doe" });
+        var teacher = await manager.PostTeacher(new TeacherDto() { Id = "1", Username = "John", Password = "Doe" });
+        var lessonDto = new LessonDto { CourseName = "Entity Framework", Start = DateTime.Now, End = DateTime.Now, GroupYear = 1, GroupNumber = 1, Classroom = "Classroom 1", TeacherId = teacher.Id };
         await manager.PostGroup(new GroupDto { GroupYear = 1, GroupNumber = 1 });
 
         // Act
@@ -379,7 +379,7 @@ public class DbDataManagerTests
         Assert.Equal(1, addedLesson.Group.GroupYear);
         Assert.Equal(1, addedLesson.Group.GroupNumber);
         Assert.Equal("Classroom 1", addedLesson.Classroom);
-        Assert.Equal(1, addedLesson.Teacher.Id);
+        Assert.Equal(teacher.Id, addedLesson.Teacher.Id);
     }
     
     [Fact]
@@ -387,8 +387,8 @@ public class DbDataManagerTests
     {
         // Arrange
         var manager = CreateManagerWithInMemoryDb();
-        var lessonDto = new LessonDto { CourseName = "Entity Framework", Start = DateTime.Now, End = DateTime.Now, GroupYear = 1, GroupNumber = 1, Classroom = "Classroom 1", TeacherId = 1 };
-        await manager.PostTeacher(new TeacherDto() { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] });
+        var teacher = await manager.PostTeacher(new TeacherDto() { Id = "1", Username = "John", Password = "Doe" });
+        var lessonDto = new LessonDto { CourseName = "Entity Framework", Start = DateTime.Now, End = DateTime.Now, GroupYear = 1, GroupNumber = 1, Classroom = "Classroom 1", TeacherId = teacher.Id };
         await manager.PostGroup(new GroupDto { GroupYear = 1, GroupNumber = 1 });
         await manager.PostLesson(lessonDto);
 
@@ -402,9 +402,9 @@ public class DbDataManagerTests
         Assert.Equal(1, retrievedLesson.Group.GroupYear);
         Assert.Equal(1, retrievedLesson.Group.GroupNumber);
         Assert.Equal("Classroom 1", retrievedLesson.Classroom);
-        Assert.Equal(1, retrievedLesson.Teacher.Id);
+        Assert.Equal(teacher.Id, retrievedLesson.Teacher.Id);
     }
-    */
+    
     [Fact]
     public async Task GetLessonById_WhenLessonDoesNotExist_ReturnsNull()
     {
@@ -418,14 +418,14 @@ public class DbDataManagerTests
         Assert.Null(retrievedLesson);
     }
     
-    /*
+    
     [Fact]
     public async Task DeleteLesson_DeletesLessonCorrectly()
     {
         // Arrange
         var manager = CreateManagerWithInMemoryDb();
-        var lessonDto = new LessonDto { CourseName = "Entity Framework", Start = DateTime.Now, End = DateTime.Now, GroupYear = 1, GroupNumber = 1, Classroom = "Classroom 1", TeacherId = 1 };
-        await manager.PostTeacher(new TeacherDto() { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] });
+        var teacher = await manager.PostTeacher(new TeacherDto() { Id = "1", Username = "John", Password = "Doe" });
+        var lessonDto = new LessonDto { CourseName = "Entity Framework", Start = DateTime.Now, End = DateTime.Now, GroupYear = 1, GroupNumber = 1, Classroom = "Classroom 1", TeacherId = teacher.Id };
         await manager.PostGroup(new GroupDto { GroupYear = 1, GroupNumber = 1 });
         await manager.PostLesson(lessonDto);
 
@@ -436,7 +436,7 @@ public class DbDataManagerTests
         Assert.True(result);
     }
     
-    */
+    
     
     [Fact]
     public async Task DeleteLesson_WhenLessonDoesNotExist_ReturnsFalse()
@@ -451,16 +451,16 @@ public class DbDataManagerTests
         Assert.False(result);
     }
     
-    /*
+    
     [Fact]
     public async Task PutLesson_WhenLessonExists_ReturnsTrue()
     {
         // Arrange
         var manager = CreateManagerWithInMemoryDb();
-        await manager.PostTeacher(new TeacherDto() { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] });
+        var teacher = await manager.PostTeacher(new TeacherDto() { Id = "1", Username = "John", Password = "Doe" });
         await manager.PostGroup(new GroupDto { GroupYear = 1, GroupNumber = 1 });
-        await manager.PostLesson(new LessonDto { CourseName = "Entity Framework", Start = DateTime.Now, End = DateTime.Now, GroupYear = 1, GroupNumber = 1, Classroom = "Classroom 1", TeacherId = 1 });
-        var lessonDto = new LessonDto { CourseName = "Entity Framework", Start = DateTime.Now, End = DateTime.Now, GroupYear = 1, GroupNumber = 1, Classroom = "Classroom 1", TeacherId = 1 };
+        await manager.PostLesson(new LessonDto { CourseName = "Entity Framework", Start = DateTime.Now, End = DateTime.Now, GroupYear = 1, GroupNumber = 1, Classroom = "Classroom 1", TeacherId = teacher.Id });
+        var lessonDto = new LessonDto { CourseName = "Entity Framework", Start = DateTime.Now, End = DateTime.Now, GroupYear = 1, GroupNumber = 1, Classroom = "Classroom 1", TeacherId = teacher.Id};
 
         // Act
         var result = await manager.PutLesson(1, lessonDto);
@@ -472,9 +472,9 @@ public class DbDataManagerTests
         Assert.Equal(1, result.Group.GroupYear);
         Assert.Equal(1, result.Group.GroupNumber);
         Assert.Equal("Classroom 1", result.Classroom);
-        Assert.Equal(1, result.Teacher.Id);
+        Assert.Equal(teacher.Id, result.Teacher.Id);
     }
-    */
+    
     
     [Fact]
     public async Task PutLesson_WhenLessonDoesNotExist_ReturnsNull()
@@ -739,16 +739,17 @@ public class DbDataManagerTests
     }
     
     // Evaluation
-    /*
+    
     [Fact]
     public async Task AddEvaluation_AddsEvaluationCorrectly()
     {
         // Arrange
         var manager = CreateManagerWithInMemoryDb();
-        var evaluationDto = new EvaluationDto { StudentId = 1, TemplateId = 1, TeacherId = 1, CourseName = "Entity Framework", Date = DateTime.Now, PairName = "toto", Grade = 2 };
+        var teacher = await manager.PostTeacher(new TeacherDto() { Id = "1", Username = "John", Password = "Doe" });
+        var evaluationDto = new EvaluationDto { StudentId = 1, TemplateId = 1, TeacherId = teacher.Id, CourseName = "Entity Framework", Date = DateTime.Now, PairName = "toto", Grade = 2 };
+        await manager.PostGroup(new GroupDto(1, 1, []));
         await manager.PostStudent(new StudentDto { Id = 1, Name = "Jane", Lastname = "Doe", UrlPhoto = "http://example.com/photo.jpg", GroupNumber = 1, GroupYear = 1 });
-        await manager.PostTemplate(1, new TemplateDto { Id = 1, Name = "Template 1", Criterias = [] });
-        await manager.PostTeacher(new TeacherDto { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] });
+        await manager.PostTemplate(teacher.Id, new TemplateDto { Id = 1, Name = "Template 1", Criterias = [] });
 
         // Act
         var addedEvaluation = await manager.PostEvaluation(evaluationDto);
@@ -757,7 +758,7 @@ public class DbDataManagerTests
         Assert.NotNull(addedEvaluation);
         Assert.Equal(1, addedEvaluation.Student.Id);
         Assert.Equal(1, addedEvaluation.Template.Id);
-        Assert.Equal(1, addedEvaluation.Teacher.Id);
+        Assert.Equal(teacher.Id, addedEvaluation.Teacher.Id);
         Assert.Equal("Entity Framework", addedEvaluation.CourseName);
         Assert.Equal(2, addedEvaluation.Grade);
     }
@@ -767,10 +768,11 @@ public class DbDataManagerTests
     {
         // Arrange
         var manager = CreateManagerWithInMemoryDb();
-        var evaluationDto = new EvaluationDto { StudentId = 1, TemplateId = 1, TeacherId = 1, CourseName = "Entity Framework", Date = DateTime.Now, PairName = "toto", Grade = 2 };
+        var teacher = await manager.PostTeacher(new TeacherDto() { Id = "1", Username = "John", Password = "Doe" });
+        var evaluationDto = new EvaluationDto { StudentId = 1, TemplateId = 1, TeacherId = teacher.Id, CourseName = "Entity Framework", Date = DateTime.Now, PairName = "toto", Grade = 2 };
+        await manager.PostGroup(new GroupDto(1, 1, []));
         await manager.PostStudent(new StudentDto { Id = 1, Name = "Jane", Lastname = "Doe", UrlPhoto = "http://example.com/photo.jpg", GroupNumber = 1, GroupYear = 1 });
-        await manager.PostTemplate(1, new TemplateDto { Id = 1, Name = "Template 1", Criterias = [] });
-        await manager.PostTeacher(new TeacherDto { Id = 1, Username = "John", Password = "Doe", roles = ["Teacher"] });
+        await manager.PostTemplate(teacher.Id, new TemplateDto { Id = 1, Name = "Template 1", Criterias = [] });
         await manager.PostEvaluation(evaluationDto);
 
         // Act
@@ -781,11 +783,11 @@ public class DbDataManagerTests
         Assert.Equal(1, retrievedEvaluation.Student.Id);
         Assert.NotNull(retrievedEvaluation.Template);
         Assert.Equal(1, retrievedEvaluation.Template.Id);
-        Assert.Equal(1, retrievedEvaluation.Teacher.Id);
+        Assert.Equal(teacher.Id, retrievedEvaluation.Teacher.Id);
         Assert.Equal("Entity Framework", retrievedEvaluation.CourseName);
         Assert.Equal(2, retrievedEvaluation.Grade);
     }
-    */
+    
     
     [Fact]
     public async Task GetEvaluationById_WhenEvaluationDoesNotExist_ReturnsNull()

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using EF_StubbedContextLib;
 using Client_Model;
 using EF_DbContextLib;
+using EF_Entities;
 using Model2Entities;
 
 namespace EF_UnitTests.Manager;
@@ -310,4 +311,250 @@ public class DbEntitiesManagerTests
         // Assert
         Assert.Null(result);
     }
+    
+    [Fact]
+    public async Task GetTemplatesByUserId_WhenTemplatesExist_ReturnsTemplates()
+    {
+        // Arrange
+        var manager = CreateManagerWithInMemoryDb();
+        await manager.PostTemplate("1", new Template(1, "Entity Framework", new List<Criteria>()));
+        await manager.PostTemplate("1", new Template(2, "Entity Framework", new List<Criteria>()));
+
+        // Act
+        var templates = await manager.GetTemplatesByUserId("1", 0, 10);
+
+        // Assert
+        Assert.NotNull(templates);
+        Assert.Equal(2, templates.NbElement);
+    }
+    
+    [Fact]
+    public async Task GetEmptyTemplatesByUserId_WhenTemplatesExist_ReturnsTemplates()
+    {
+        // Arrange
+        var manager = CreateManagerWithInMemoryDb();
+        await manager.PostTemplate("1", new Template(1, "Entity Framework", new List<Criteria>()));
+        await manager.PostTemplate("1", new Template(2, "Entity Framework", new List<Criteria>()));
+
+        // Act
+        var templates = await manager.GetEmptyTemplatesByUserId("1", 0, 10);
+
+        // Assert
+        Assert.NotNull(templates);
+        Assert.Equal(2, templates.NbElement);
+    }
+    
+    [Fact]
+    public async Task GetTemplateById_WhenTemplateExists_ReturnsTemplate()
+    {
+        // Arrange
+        var manager = CreateManagerWithInMemoryDb();
+        await manager.PostTemplate("1", new Template(1, "Entity Framework", new List<Criteria>()));
+
+        // Act
+        var template = await manager.GetTemplateById(1);
+
+        // Assert
+        Assert.NotNull(template);
+        Assert.Equal("Entity Framework", template.Name);
+    }
+    
+    /*
+     // Lesson
+       public async Task<PageReponse<Lesson>> GetLessons(int index = 0, int count = 10)
+       {
+           var lessons = _libraryContext.LessonSet.ToModels();
+           return await Task.FromResult(new PageReponse<Lesson>(lessons.Count(),
+               lessons.Skip(index * count).Take(count)));
+       }
+       public async Task<Lesson?> GetLessonById(long id)
+       {
+           var lesson = _libraryContext.LessonSet.FirstOrDefault(l => l.Id == id)?.ToModel();
+           return await Task.FromResult(lesson);
+       }
+       public async Task<PageReponse<Lesson>> GetLessonsByTeacherId(string id, int index = 0, int count = 10)
+       {
+           var lessons = _libraryContext.LessonSet.Where(l => l.TeacherEntityId == id).ToModels();
+           return await Task.FromResult(new PageReponse<Lesson>(lessons.Count(),
+               lessons.Skip(index * count).Take(count)));
+       }
+       public async Task<Lesson?> PostLesson(LessonCreation lesson)
+       {
+           var lessonEntity = lesson.ToEntity();
+           await _libraryContext.LessonSet.AddAsync(lessonEntity);
+           await _libraryContext.SaveChangesAsync();
+           return await Task.FromResult(_libraryContext.LessonSet.FirstOrDefault(l => l.Id == lessonEntity.Id)
+               ?.ToModel());
+       }
+       public async Task<Lesson?> PutLesson(long id, LessonCreation lesson)
+       {
+           var existingLesson = await _libraryContext.LessonSet.FindAsync(id);
+           if (existingLesson == null) return null;
+           existingLesson.CourseName = lesson.CourseName;
+           await _libraryContext.SaveChangesAsync();
+           return existingLesson.ToModel();
+       }
+       public async Task<bool> DeleteLesson(long id)
+       {
+           var lesson = await _libraryContext.LessonSet.FindAsync(id);
+           if (lesson == null) return false;
+           _libraryContext.LessonSet.Remove(lesson);
+           await _libraryContext.SaveChangesAsync();
+           return true;
+       }
+       // Evaluation
+       public async Task<PageReponse<Evaluation>> GetEvaluations(int index = 0, int count = 10)
+       {
+           var evaluations = _libraryContext.EvaluationSet.ToModels();
+           return await Task.FromResult(new PageReponse<Evaluation>(evaluations.Count(),
+               evaluations.Skip(index * count).Take(count)));
+       }
+       public async Task<Evaluation?> GetEvaluationById(long id)
+       {
+           var evaluation = _libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == id)?.ToModel();
+           return await Task.FromResult(evaluation);
+       }
+       public async Task<PageReponse<Evaluation>> GetEvaluationsByTeacherId(string id, int index = 0, int count = 10)
+       {
+           var evaluations = _libraryContext.EvaluationSet.Where(e => e.TeacherId == id).ToModels();
+           return await Task.FromResult(new PageReponse<Evaluation>(evaluations.Count(),
+               evaluations.Skip(index * count).Take(count)));
+       }
+       public async Task<Evaluation?> PostEvaluation(EvaluationCreation evaluation)
+       {
+           var evaluationEntity = evaluation.ToEntity();
+           _libraryContext.EvaluationSet.AddAsync(evaluationEntity);
+           _libraryContext.SaveChanges();
+           return await Task.FromResult(_libraryContext.EvaluationSet.FirstOrDefault(e => e.Id == evaluationEntity.Id)
+               ?.ToModel());
+       }
+       public async Task<Evaluation?> PutEvaluation(long id, EvaluationCreation evaluation)
+       {
+           var existingEvaluation = await _libraryContext.EvaluationSet.FindAsync(id);
+           if (existingEvaluation == null)
+           {
+               return null;
+           }
+           existingEvaluation.CourseName = evaluation.CourseName;
+           existingEvaluation.Date = evaluation.Date;
+           existingEvaluation.Grade = evaluation.Grade;
+           existingEvaluation.PairName = evaluation.PairName;
+           existingEvaluation.TeacherId = evaluation.TeacherId;
+           existingEvaluation.TemplateId = evaluation.TemplateId;
+           existingEvaluation.StudentId = evaluation.StudentId;
+           await _libraryContext.SaveChangesAsync();
+           return existingEvaluation.ToModel();
+       }
+     */
+    
+    [Fact]
+    public async Task PostLesson_AddsLessonCorrectly()
+    {
+        // Arrange
+        var manager = CreateManagerWithInMemoryDb();
+        await manager.PostGroup(new Group (1, 1));
+        await manager.PostTeacher(new Teacher("1", "John", "Doe", []));
+        var newLesson = new LessonCreation(new DateTime(2024, 3, 16), new DateTime(2024, 3, 16), "Entity Framework", "A1", "1", 1, 1);
+
+        // Act
+        var addedLesson = await manager.PostLesson(newLesson);
+
+        // Assert
+        Assert.NotNull(addedLesson);
+        Assert.Equal("Entity Framework", addedLesson.CourseName);
+        Assert.Equal("A1", addedLesson.Classroom);
+        Assert.Equal("1", addedLesson.Teacher.Id);
+        Assert.Equal(1, addedLesson.Group.GroupYear);
+        Assert.Equal(1, addedLesson.Group.GroupNumber);
+    }
+    
+    [Fact]
+    public async Task GetLessonById_WhenLessonExists_ReturnsLesson()
+    {
+        // Arrange
+        var manager = CreateManagerWithInMemoryDb();
+        await manager.PostGroup(new Group (1, 1));
+        await manager.PostTeacher(new Teacher("1", "John", "Doe", []));
+        await manager.PostLesson(new LessonCreation(new DateTime(2024, 3, 16), new DateTime(2024, 3, 16), "Entity Framework", "A1", "1", 1, 1));
+
+        // Act
+        var lesson = await manager.GetLessonById(1);
+
+        // Assert
+        Assert.NotNull(lesson);
+        Assert.Equal("Entity Framework", lesson.CourseName);
+        Assert.Equal("A1", lesson.Classroom);
+        Assert.Equal(1, lesson.Group.GroupYear);
+        Assert.Equal(1, lesson.Group.GroupNumber);
+    }
+    
+    [Fact]
+    public async Task DeleteLesson_WhenLessonExists_ReturnsTrue()
+    {
+        // Arrange
+        var manager = CreateManagerWithInMemoryDb();
+        await manager.PostGroup(new Group (1, 1));
+        await manager.PostTeacher(new Teacher("1", "John", "Doe", []));
+        await manager.PostLesson(new LessonCreation(new DateTime(2024, 3, 16), new DateTime(2024, 3, 16), "Entity Framework", "A1", "1", 1, 1));
+
+        // Act
+        var result = await manager.DeleteLesson(1);
+
+        // Assert
+        Assert.True(result);
+    }
+    
+    [Fact]
+    public async Task PutLesson_WhenLessonExists_UpdatesLesson()
+    {
+        // Arrange
+        var manager = CreateManagerWithInMemoryDb();
+        await manager.PostGroup(new Group (1, 1));
+        await manager.PostTeacher(new Teacher("1", "John", "Doe", []));
+        await manager.PostLesson(new LessonCreation(new DateTime(2024, 3, 16), new DateTime(2024, 3, 16), "Entity Framework", "A1", "1", 1, 1));
+        var updatedLesson = new LessonCreation(new DateTime(2024, 3, 16), new DateTime(2024, 3, 16), "Entity Framework", "A1", "1", 1, 1);
+
+        // Act
+        var result = await manager.PutLesson(1, updatedLesson);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal("Entity Framework", result.CourseName);
+        Assert.Equal("A1", result.Classroom);
+        Assert.Equal(1, result.Group.GroupYear);
+        Assert.Equal(1, result.Group.GroupNumber);
+    }
+    
+    [Fact]
+    public void PutLesson_WhenLessonDoesNotExist_ReturnsNull()
+    {
+        // Arrange
+        var manager = CreateManagerWithInMemoryDb();
+        var updatedLesson = new LessonCreation(new DateTime(2024, 3, 16), new DateTime(2024, 3, 16), "Entity Framework", "A1", "1", 1, 1);
+
+        // Act
+        var result = manager.PutLesson(1, updatedLesson).Result;
+
+        // Assert
+        Assert.Null(result);
+    }
+    
+    [Fact]
+    public async Task GetLessons_WhenLessonsExist_ReturnsLessons()
+    {
+        // Arrange
+        var manager = CreateManagerWithInMemoryDb();
+        await manager.PostGroup(new Group (1, 1));
+        await manager.PostTeacher(new Teacher("1", "John", "Doe", []));
+        await manager.PostLesson(new LessonCreation(new DateTime(2024, 3, 16), new DateTime(2024, 3, 16), "Entity Framework", "A1", "1", 1, 1));
+        await manager.PostLesson(new LessonCreation(new DateTime(2024, 3, 16), new DateTime(2024, 3, 16), "Entity Framework", "A1", "1", 1, 1));
+
+        // Act
+        var lessons = await manager.GetLessons(0, 10);
+
+        // Assert
+        Assert.NotNull(lessons);
+        Assert.Equal(2, lessons.NbElement);
+    }
+    
 }

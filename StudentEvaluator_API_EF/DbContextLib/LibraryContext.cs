@@ -56,17 +56,17 @@ namespace EF_DbContextLib
         /// <summary>
         /// Method called when building the database model.
         /// </summary>
-        /// <param name="modelBuilder">The model builder used to configure the database model.</param>
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        /// <param name="builder">The model builder used to configure the database model.</param>
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
             // Clé primaire composite pour GroupEntity
-            modelBuilder.Entity<GroupEntity>()
+            builder.Entity<GroupEntity>()
                 .HasKey(g => new { g.GroupYear, g.GroupNumber });
 
             // Héritage pour CriteriaEntity et UserEntity
-            modelBuilder.Entity<CriteriaEntity>()
+            builder.Entity<CriteriaEntity>()
                 .HasDiscriminator<string>("criteria_type")
                 .HasValue<SliderCriteriaEntity>("slider")
                 .HasValue<TextCriteriaEntity>("text")
@@ -79,56 +79,56 @@ namespace EF_DbContextLib
             */
 
             // Relation entre StudentEntity et GroupEntity
-            modelBuilder.Entity<StudentEntity>()
+            builder.Entity<StudentEntity>()
                 .HasOne(s => s.Group)
                 .WithMany(g => g.Students)
                 .HasForeignKey(s => new { s.GroupYear, s.GroupNumber });
 
             // Relation entre TeacherEntity et TemplateEntity
-            modelBuilder.Entity<TeacherEntity>()
+            builder.Entity<TeacherEntity>()
                 .HasMany(t => t.Templates)
                 .WithOne(te => te.Teacher)
                 .HasForeignKey(te => te.TeacherId);
 
             // Relation entre TemplateEntity et CriteriaEntity
-            modelBuilder.Entity<TemplateEntity>()
+            builder.Entity<TemplateEntity>()
                 .HasMany(t => t.Criteria)
                 .WithOne(c => c.Template)
                 .HasForeignKey(c => c.TemplateId);
 
             // Relation un-à-un entre EvaluationEntity et TemplateEntity
-            modelBuilder.Entity<TemplateEntity>()
+            builder.Entity<TemplateEntity>()
                 .HasOne(t => t.Evaluation)
                 .WithOne(e => e.Template)
                 .HasForeignKey<TemplateEntity>(t => t.EvaluationId);
 
 
-            modelBuilder.Entity<EvaluationEntity>()
+            builder.Entity<EvaluationEntity>()
                 .HasOne(e => e.Template)
                 .WithOne(t => t.Evaluation)
                 .HasForeignKey<EvaluationEntity>(e => e.TemplateId);
 
 
             // Relation entre EvaluationEntity et TeacherEntity
-            modelBuilder.Entity<EvaluationEntity>()
+            builder.Entity<EvaluationEntity>()
                 .HasOne(e => e.Teacher)
                 .WithMany(t => t.Evaluations)
                 .HasForeignKey(e => e.TeacherId);
 
             // Relation entre EvaluationEntity et StudentEntity
-            modelBuilder.Entity<EvaluationEntity>()
+            builder.Entity<EvaluationEntity>()
                 .HasOne(e => e.Student)
                 .WithMany(s => s.Evaluations)
                 .HasForeignKey(e => e.StudentId);
 
             // Relation entre LessonEntity et GroupEntity
-            modelBuilder.Entity<LessonEntity>()
+            builder.Entity<LessonEntity>()
                 .HasOne(l => l.Group)
                 .WithMany(g => g.Lessons)
                 .HasForeignKey(l => new { l.GroupYear, l.GroupNumber });
 
             // Relation entre LessonEntity et TeacherEntity
-            modelBuilder.Entity<LessonEntity>()
+            builder.Entity<LessonEntity>()
                 .HasOne(l => l.Teacher)
                 .WithMany(t => t.Lessons)
                 .HasForeignKey(l => l.TeacherEntityId);
@@ -148,7 +148,7 @@ namespace EF_DbContextLib
                 }
             ];
 
-            modelBuilder.Entity<IdentityRole>().HasData(roles);
+            builder.Entity<IdentityRole>().HasData(roles);
             
         }
     }
